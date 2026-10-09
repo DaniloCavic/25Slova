@@ -1,0 +1,34 @@
+# Lokalno ili na serveru:  docker compose up -d --build
+# Zatim početni rečnik:    docker compose exec server npx ts-node prisma/seed.ts
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: slova
+      POSTGRES_PASSWORD: slova
+      POSTGRES_DB: slova
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  server:
+    build: .
+    depends_on: [db]
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://slova:slova@db:5432/slova?schema=public
+      JWT_SECRET: ${JWT_SECRET:?postavi JWT_SECRET}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin25}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?postavi ADMIN_PASSWORD}
+      GAME_TIMEZONE: Europe/Belgrade
+      GOOGLE_CLIENT_IDS: ${GOOGLE_CLIENT_IDS:-}
+      APPLE_CLIENT_IDS: ${APPLE_CLIENT_IDS:-}
+      SMTP_URL: ${SMTP_URL:-}
+    volumes:
+      - uploads:/app/backend/uploads
+    restart: unless-stopped
+
+volumes:
+  dbdata:
+  uploads:
