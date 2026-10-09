@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 /// Adresa servera. Za produkciju se zadaje pri izgradnji:
 ///   flutter build apk --dart-define=API_URL=https://api.25slova.rs
@@ -8,7 +8,8 @@ const _fromEnv = String.fromEnvironment('API_URL');
 
 String get apiBaseUrl {
   if (_fromEnv.isNotEmpty) return _fromEnv;
-  return Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+  if (kIsWeb) return 'http://localhost:3000';
+  return defaultTargetPlatform == TargetPlatform.android ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
 }
 
 String? absoluteUrl(String? path) {
