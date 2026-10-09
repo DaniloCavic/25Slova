@@ -93,12 +93,12 @@ cd mobile && flutter test                  # azbuka, tabla, izbor slova
 
 Gde specifikacija ostavlja izbor, primenjeno je sledeće (sve se lako menja):
 
-1. **Naplata partije** — tokeni se oduzimaju tek kada je protivnik pronađen, oba igrača u istoj transakciji. Ako se server restartuje usred partije, partija se poništava i tokeni vraćaju.
-2. **„Broj validnih reči“** — broj nizova (od 12) u kojima postoji validna reč. Tako je najveća nagrada tačno 60 × 12 ÷ 7,2 = 100.
+1. **Naplata partije** (potvrđeno) — tokeni se oduzimaju tek kada je protivnik pronađen, oba igrača u istoj transakciji. Ako se server restartuje usred partije, partija se poništava i tokeni vraćaju.
+2. **„Broj validnih reči“** (potvrđeno) — broj nizova (od 12) u kojima postoji validna reč. Tako je najveća nagrada tačno 60 × 12 ÷ 7,2 = 100.
 3. **Zaokruživanje nagrade** — na najbliži ceo broj.
-4. **Početna slova** — ista slova na istim poljima za oba igrača (fer start); slova se biraju po učestalosti u srpskom (retka Đ, Dž, F ređe ispadaju).
+4. **Početna slova** (potvrđeno) — ista slova na istim poljima za oba igrača (fer start); slova se biraju po učestalosti u srpskom (retka Đ, Dž, F ređe ispadaju).
 5. **Ko prvi bira slovo** — nasumično.
-6. **Protivnikova tabla** — skrivena dok partija traje, otkriva se na kraju.
+6. **Protivnikova tabla** (potvrđeno) — skrivena dok partija traje, otkriva se na kraju.
 7. **Pobeda zbog gubitka života ili predaje** — pobednik dobija nagradu po formuli za svoju trenutnu tablu, gubitnik −10.
 8. **Negativan saldo** — dozvoljen (specifikacija ne zabranjuje); takav igrač je Level 1.
 9. **Najbolja tabla** — globalni rekord + posebni za 1, 3 i 5 početnih slova; računaju se samo partije završene popunjavanjem tabli; kod istog rezultata rekord zadržava onaj ko ga je prvi postigao; istorija ostaje u bazi.
