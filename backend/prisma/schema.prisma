@@ -1,0 +1,218 @@
+// 25 Slova — šema baze podataka (PostgreSQL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum TokenTxType {
+  DAILY_REWARD
+  MATCH_ENTRY
+  MATCH_REFUND
+  AD_REWARD
+  PURCHASE
+  ADMIN_ADJUST
+  SIGNUP_BONUS
+}
+
+enum PointsReason {
+  WIN
+  LOSS
+  ADMIN_ADJUST
+}
+
+enum MatchMode {
+  RANDOM
+  PRIVATE
+}
+
+enum MatchStatus {
+  WAITING // privatna partija čeka drugog igrača
+  ACTIVE
+  FINISHED
+  CANCELLED
+  ABORTED // prekinuta greškom servera — tokeni vraćeni
+}
+
+enum MatchEndReason {
+  BOARDS_FULL
+  LIVES_LOST
+  RESIGNED
+}
+
+enum MedalPeriod {
+  MONTH
+  YEAR
+}
+
+model User {
+  id                 String    @id @default(uuid())
+  username           String    @unique
+  usernameLower      String    @unique
+  fullName           String
+  gender             Gender?
+  birthDate          DateTime? @db.Date
+  email              String?   @unique
+  phone              String?
+  passwordHash       String?
+  googleId           String?   @unique
+  appleId            String?   @unique
+  avatarUrl          String?
+  role               Role      @default(USER)
+  isBlocked          Boolean   @default(false)
+  blockedReason      String?
+  blockedAt          DateTime?
+  tokens             Int       @default(0)
+  totalPoints        Int       @default(0)
+  lastDailyRewardDay String? // "YYYY-MM-DD" u vremenskoj zoni igre
+  lastSeenAt         DateTime?
+  deletedAt          DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  tokenTransactions TokenTransaction[]
+  pointsEvents      PointsEvent[]
+  matchPlayers      MatchPlayer[]
+  medals            Medal[]
+  passwordResets    PasswordReset[]
+  wordsAdded        Word[]
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash  String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+/// Svaka promena tokena je posebna transakcija (preporuka iz specifikacije, 5.3).
+model TokenTransaction {
+  id           String      @id @default(uuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         TokenTxType
+  amount       Int
+  balanceAfter Int
+  /// Jedinstvena referenca (npr. transakcija reklame ili kupovine) — sprečava dupliranje.
+  externalRef  String?     @unique
+  matchId      String?
+  note         String?
+  createdAt    DateTime    @default(now())
+
+  @@index([userId, createdAt])
+}
+
+/// Svaka promena poena. Mesečni i godišnji saldo se računaju iz ovih zapisa,
+/// pa nije potreban "reset" — novi mesec prirodno počinje od nule.
+model PointsEvent {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  delta     Int
+  reason    PointsReason
+  matchId   String?
+  monthKey  String // "2026-10"
+  yearKey   String // "2026"
+  createdAt DateTime     @default(now())
+
+  @@index([monthKey, userId])
+  @@index([yearKey, userId])
+  @@index([userId])
+}
+
+model Word {
+  id        String   @id @default(uuid())
+  /// Reč ćirilicom, velikim slovima (Љ, Њ, Џ su po jedno slovo).
+  word      String   @unique
+  length    Int
+  addedById String?
+  addedBy   User?    @relation(fields: [addedById], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([length])
+}
+
+model Match {
+  id         String          @id @default(uuid())
+  mode       MatchMode
+  /// 1, 2 ili 3 — određuje broj početnih slova (1/3/5) i vreme poteza (30/45/60 s)
+  type       Int
+  status     MatchStatus
+  code       String?         @unique
+  codeExpiresAt DateTime?
+  /// Pozicije i slova postavljena na početku (ista za oba igrača)
+  initialCells Json?
+  /// Stanje partije u toku (za oporavak i reviziju)
+  state      Json?
+  endReason  MatchEndReason?
+  winnerId   String?
+  isDraw     Boolean         @default(false)
+  createdAt  DateTime        @default(now())
+  startedAt  DateTime?
+  endedAt    DateTime?
+
+  players MatchPlayer[]
+
+  @@index([status])
+}
+
+model MatchPlayer {
+  id          String   @id @default(uuid())
+  matchId     String
+  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seat        Int // 0 ili 1
+  board       Json?
+  score       Int      @default(0)
+  wordsCount  Int      @default(0)
+  words       Json?
+  livesLeft   Int      @default(3)
+  pointsDelta Int      @default(0)
+  initialLetters Int   @default(0)
+  createdAt   DateTime @default(now())
+
+  @@unique([matchId, seat])
+  @@unique([matchId, userId])
+  @@index([score, wordsCount])
+}
+
+model Medal {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  period    MedalPeriod
+  periodKey String // "2026-10" ili "2026"
+  place     Int // 1, 2, 3
+  points    Int
+  createdAt DateTime    @default(now())
+
+  @@unique([period, periodKey, place])
+  @@index([userId])
+}
+
+/// Podešavanja koja admin menja bez novog izdanja (npr. rasponi uparivanja).
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

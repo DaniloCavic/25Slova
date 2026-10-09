@@ -1,0 +1,49 @@
+# Početni rečnik igre 25 Slova (latinica; server pretvara u ćirilicu).
+# Samo reči od 2 do 5 slova (Lj, Nj, Dž su po jedno slovo), u nominativu jednine ili množine.
+# Linije koje počinju sa # se preskaču. Admin dopunjava rečnik kroz admin panel.
+as ar ep ud um os so il go vo
+bak bal ban bar bas bat bek bes bič bik bol bor bod bog bok bos bus cev car čaj čep čin čir čun ćup ćuk ćud
+dah dan dar deo dim dom dno dug duh đak đon džak džem džep džip džin fen fes gas gaz gol grb grm hir hor hod hit hum
+ime iva jad jak jaz jež jed jug kal kap kec kej kip kit kod koš krv kum kut lak lan lav led lek let lik lim lov luk lug
+mač mak mat med mir miš mol mor muk mulj nar nos noj nož nov oko osa pad par pas pir pod pol pop pot puž rad raj rak rat
+red rep rez rob rod rog roj rok rov rub san sat sef sin sir sit sok som sto sud šal šah šar šef šik šok šum tas tek tip
+tok ton top tor tuš val vek vez vid vir vol vrh vuk zec zid zov zub žal žar žig žir žut čas čar noć peć moć nit laž reč
+uho uvo leš muž put trn ugao voz crv konj kći srp kuk brk div trg vrt raž los ris kos meč
+baba bara duga guma jela kaša kosa lava luka mama ruka riba sova soba vila voda zima žaba zora kost čast mast zver smrt
+selo polje more nebo drvo jaje zrno pero sito vino meso srce lice pivo jato leto seme rame vime tele pile dete bure grlo
+čelo telo delo okno jelo piće bilje veče čudo
+brod brat broj blok cvet deda dlan drug dvor glas grad grom hleb hlad hram kraj krst krug list mlin mrav most orao otac
+ovan plod prst sneg svet štap štit tron ugalj ujak zmaj čvor đavo kralj knez gost slon sloj smeh stan stub trag trik trud
+znak zvuk žbun zbor plug pauk jare roda ševa kuna srna soko kiša munja brdo breg lala lipa vrba kora seno klas mapa evro
+cena kolo ples film java nada vera gnev plač vrat šaka peta koža leđa usna vena krov sala kafa kapa kesa koza kula lula
+mina muva noga ovca pega pena pita raža reka rosa ruža suza šala šapa šuma tama tuga usta vaza veza žena žica čaša duša
+gora igla igra jama buba boja kofa krpa kada tava ćebe papa baka kuma tetka keks supa voće dinja ovas park kola auto ulje
+veče želja volja
+avion bunar jarac jelen kamen kanal kapak kofer lanac lonac lopov nokat novac oblak papir pesak petao potok pupak šator
+tanjir tigar venac vepar vetar zamak zakon zubar život čamac čekić čovek ćilim bašta bitka brada breza čizma daska drama
+glava grana greda guska iskra karta klupa knjiga krava kreda kruna kuća kugla lampa lopta majka maska mačka magla metla
+mreža pčela pesma plata ploča ptica slama slika smola snaga staza stena škola tabla tačka torba trava truba ulica vatra
+vrana vrata zemlja zmija žetva čorba ćerka mleko testo sunce zlato blato jutro vreme pleme prase jagnje krilo mesto slovo
+pismo sedlo lišće cveće banka bager cigla crkva dečak farma golub hotel jezik kafić kolač komad konac kopno korak korpa
+kotao kupus labud lepak lovac ludak mačak mesec metal metar motor odmor orman ormar osmeh pakao palac papak pasulj pekar
+pepeo perje pisac plast pojas posao ranac ručak sapun seljak sklad sobar sokol stado sused šešir šljiva talas tepih toranj
+tunel vreća zamka zanat zvono žurka čelik čičak čuvar kokoš patka ćurka zebra šaran štuka krpelj vidra dabar bizon ždral
+čaplja galeb mazga šećer torta višnja limun badem tikva ječam sirće biber burek ćevap sarma gulaš ajvar pršut lakat grudi
+trbuh pluća jetra mozak mišić obraz obrva dlaka ključ brava šolja šerpa četka češalj ekser taksi metro pošta muzej ljubav
+sreća strah sumnja misao ideja šansa oblik podne jesen minut tetka stric lekar kovač ribar pevač vitez junak heroj anđeo
+monah izvor obala hrast smrča bukva javor jasen koren olovo bakar marka dinar račun gusle frula bubanj harfa poraz kocka
+kaput jakna suknja dugme
+# geografski nazivi
+sava drina tisa tamiš ibar lim niš pirot bor čačak užice zemun vršac šabac budva kotor tivat ulcinj rim pariz beč prag
+oslo kijev kipar malta kuba peru čile kina iran irak japan nil volga dunav krk hvar brač vis avala tara rtanj ozren ovčar
+vranje ruma senta bečej split tuzla bihać ohrid bitolj atina
+# množina
+konji psi dani noći ruke kuće reke ribe oči uši ljudi deca braća vuci ovce koze krave mačke ptice knjige škole polja sela
+mora jaja zubi snovi gosti kosti reči
+# pridevi (nominativ)
+beo crn crven plav žut zelen siv mlad star mali velik dobar loš lep ružan slab brz spor tih glup strog drag mio bled čist
+mek tvrd topao suv mokar gorak slan kiseo ljut tup oštar pun ceo živ mrtav zdrav bolan vedar mudar lud lenj tužan gord
+nag težak širok uzak dubok visok nizak debeo tanak ravan krut gust redak skup svež trul zreo sirov kriv prav
+lepa mala nova stara mlada crna bela plava žuta siva jaka laka puna živa ljuta mila draga
+lepo novo staro crno belo plavo žuto sivo puno živo
+lepi novi stari mladi crni beli plavi žuti
