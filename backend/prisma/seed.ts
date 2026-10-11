@@ -10,7 +10,15 @@ import { MAX_WORD_LENGTH, MIN_WORD_LENGTH } from '../src/game/engine/rules';
 
 async function main() {
   const prisma = new PrismaClient();
-  const file = process.argv[2] || path.join(__dirname, 'seed', 'words-sr.txt');
+  const args = process.argv.slice(2);
+  // --if-empty: uvozi samo ako je rečnik prazan (koristi se pri svakom pokretanju na serveru,
+  // da se ne bi vraćale reči koje je admin obrisao).
+  if (args.includes('--if-empty') && (await prisma.word.count()) > 0) {
+    console.log('Rečnik već postoji — početni uvoz preskočen.');
+    await prisma.$disconnect();
+    return;
+  }
+  const file = args.find((a) => !a.startsWith('--')) || path.join(__dirname, 'seed', 'words-sr.txt');
   const text = fs
     .readFileSync(file, 'utf8')
     .split('\n')
