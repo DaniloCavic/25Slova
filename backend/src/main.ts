@@ -44,6 +44,16 @@ async function bootstrap() {
     app.useStaticAssets(adminDist, { prefix: '/admin' });
   }
 
+  // Web verzija igre (Flutter web build) na /igra — za iPhone i računar bez instalacije.
+  const webDist = path.resolve(process.env.WEB_DIST || path.join(__dirname, '..', '..', 'web'));
+  if (fs.existsSync(webDist)) {
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.method === 'GET' && (req.path === '/' || req.path === '/igra')) return res.redirect('/igra/');
+      next();
+    });
+    app.useStaticAssets(webDist, { prefix: '/igra' });
+  }
+
   await ensureAdmin(app.get(PrismaService));
   const port = Number(process.env.PORT || 3000);
   await app.listen(port, '0.0.0.0');

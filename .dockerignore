@@ -3,4 +3,7 @@
 **/.env
 backend/.env
 backend/uploads
-mobile
+mobile/build
+mobile/.dart_tool
+mobile/android
+mobile/ios

@@ -9,6 +9,8 @@ const productionUrl = 'https://25slova-production.up.railway.app';
 
 String get apiBaseUrl {
   if (_fromEnv.isNotEmpty) return _fromEnv;
+  // Web verzija se servira sa istog servera, pa koristi istu adresu.
+  if (kIsWeb && kReleaseMode) return Uri.base.origin;
   // Izgrađena (release) aplikacija se uvek povezuje na pravi server.
   if (kReleaseMode) return productionUrl;
   if (kIsWeb) return 'http://localhost:3000';
