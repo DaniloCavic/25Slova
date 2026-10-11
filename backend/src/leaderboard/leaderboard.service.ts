@@ -26,8 +26,18 @@ export class LeaderboardService implements OnApplicationBootstrap {
    * pa su rezultati prethodnih perioda uvek dostupni (key = "2026-09" ili "2026").
    * Pri istom broju poena ispred je onaj ko je do njih stigao ranije.
    */
-  private async rows(period: Period, key: string | null, limit: number, onlyUserId?: string): Promise<Row[]> {
-    const userFilter = onlyUserId ? Prisma.sql`AND r."userId" = ${onlyUserId}` : Prisma.empty;
+  private async rows(
+    period: Period,
+    key: string | null,
+    limit: number,
+    onlyUserId?: string,
+    search?: string,
+  ): Promise<Row[]> {
+    // Mesto se računa na celoj listi, a tek onda se filtrira — pretraga pokazuje pravo mesto igrača.
+    const pattern = search ? `%${search.replace(/[\\%_]/g, (c) => `\\${c}`)}%` : null;
+    const userFilter = Prisma.sql`${onlyUserId ? Prisma.sql`AND r."userId" = ${onlyUserId}` : Prisma.empty} ${
+      pattern ? Prisma.sql`AND r.username ILIKE ${pattern}` : Prisma.empty
+    }`;
     if (period === 'total') {
       return this.prisma.$queryRaw<Row[]>`
         SELECT * FROM (
@@ -51,9 +61,10 @@ export class LeaderboardService implements OnApplicationBootstrap {
       ) r WHERE true ${userFilter} ORDER BY rank LIMIT ${limit}`;
   }
 
-  async leaderboard(period: Period, key: string | undefined, userId?: string) {
+  async leaderboard(period: Period, key: string | undefined, userId?: string, search?: string) {
     const k = period === 'total' ? null : key || (period === 'month' ? monthKey() : yearKey());
-    const top = await this.rows(period, k, 100);
+    const q = search?.trim().slice(0, 30) || undefined;
+    const top = await this.rows(period, k, q ? 50 : 100, undefined, q);
     const mine = userId ? (await this.rows(period, k, 1, userId))[0] ?? null : null;
     const view = (r: Row) => ({
       rank: r.rank,
@@ -63,7 +74,7 @@ export class LeaderboardService implements OnApplicationBootstrap {
       level: levelForPoints(r.totalPoints),
       points: r.points,
     });
-    return { period, key: k, items: top.map(view), me: mine ? view(mine) : null };
+    return { period, key: k, search: q ?? null, items: top.map(view), me: mine ? view(mine) : null };
   }
 
   /** Medalje za prva tri mesta. Idempotentno — za već nagrađen period ne radi ništa. */
