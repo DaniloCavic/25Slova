@@ -34,3 +34,17 @@ export function previousMonthKey(date = new Date()) {
 export function previousYearKey(date = new Date()) {
   return String(Number(parts(date).y) - 1);
 }
+
+/** ISO nedelja (ponedeljak–nedelja) u vremenskoj zoni igre, npr. "2026-W42". */
+export function weekKey(date = new Date()) {
+  const { y, m, d } = parts(date);
+  const local = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d)));
+  const dow = local.getUTCDay() || 7; // 1 = ponedeljak … 7 = nedelja
+  local.setUTCDate(local.getUTCDate() + 4 - dow); // četvrtak iste ISO nedelje
+  const isoYear = local.getUTCFullYear();
+  const week = Math.ceil(((local.getTime() - Date.UTC(isoYear, 0, 1)) / 86_400_000 + 1) / 7);
+  return `${isoYear}-W${String(week).padStart(2, '0')}`;
+}
+export function previousWeekKey(date = new Date()) {
+  return weekKey(new Date(date.getTime() - 7 * 86_400_000));
+}

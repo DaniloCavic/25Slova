@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import '../widgets/common.dart';
 
 /// Čekanje protivnika (nasumično) ili prijatelja (privatni kod).
 /// Kada partija počne, AppState sam otvara ekran partije.
@@ -57,8 +58,8 @@ class _WaitingScreenState extends State<WaitingScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _cancel(app);
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text(isPrivate ? 'Privatna partija' : 'Traženje protivnika')),
+      child: GameScaffold(
+        title: isPrivate ? 'Privatna partija' : 'Traženje protivnika',
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -78,7 +79,7 @@ class _WaitingScreenState extends State<WaitingScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: panel,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: brandBlue, width: 2)),
                       child: Text(app.privateCode!,
@@ -89,20 +90,19 @@ class _WaitingScreenState extends State<WaitingScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text('Dodirni kod da ga kopiraš.',
-                      textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
+                      textAlign: TextAlign.center, style: TextStyle(color: textMuted)),
                   if (remaining != null && !remaining.isNegative)
                     Text('Kod važi još ${remaining.inMinutes}:${(remaining.inSeconds % 60).toString().padLeft(2, '0')}',
-                        textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54)),
+                        textAlign: TextAlign.center, style: const TextStyle(color: textMuted)),
                 ] else ...[
                   const Text('Tražimo protivnika sličnog levela…',
                       textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 8),
-                  Text('Čekanje: ${waited}s',
-                      textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54)),
+                  Text('Čekanje: ${waited}s', textAlign: TextAlign.center, style: const TextStyle(color: textMuted)),
                 ],
                 const SizedBox(height: 16),
                 const Text('Tokeni (10) se naplaćuju tek kada partija počne.',
-                    textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontSize: 12)),
+                    textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 12)),
                 const SizedBox(height: 32),
                 OutlinedButton(onPressed: () => _cancel(app), child: const Text('Otkaži')),
               ]),

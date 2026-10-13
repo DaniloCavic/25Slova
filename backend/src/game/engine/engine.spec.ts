@@ -190,3 +190,12 @@ describe('tok partije', () => {
     expect(computeResult(s, isWord).winner).toBe(0);
   });
 });
+
+describe('napredak levela', () => {
+  it('vraća granice trenutnog i sledećeg levela', () => {
+    const { levelProgress } = jest.requireActual('./rules');
+    expect(levelProgress(295)).toEqual({ level: 2, min: 101, next: 501 });
+    expect(levelProgress(0)).toEqual({ level: 1, min: 0, next: 101 });
+    expect(levelProgress(600_000)).toEqual({ level: 10, min: 500_001, next: null });
+  });
+});

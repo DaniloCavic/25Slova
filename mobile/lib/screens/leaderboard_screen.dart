@@ -10,18 +10,31 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Rang-liste'),
-            bottom: const TabBar(
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white70,
-              indicatorColor: Colors.white,
-              tabs: [Tab(text: 'Mesečna'), Tab(text: 'Godišnja')],
+        length: 3,
+        initialIndex: 1,
+        child: GameScaffold(
+          title: 'Rang-liste',
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(54),
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: panel,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: panelBorder),
+              ),
+              child: TabBar(
+                indicator: BoxDecoration(gradient: blueGradient, borderRadius: BorderRadius.circular(10)),
+                tabs: const [
+                  Tab(text: 'Nedeljna', height: 36),
+                  Tab(text: 'Mesečna', height: 36),
+                  Tab(text: 'Godišnja', height: 36)
+                ],
+              ),
             ),
           ),
-          body: const TabBarView(children: [_Board('month'), _Board('year')]),
+          body: const TabBarView(children: [_Board('week'), _Board('month'), _Board('year')]),
         ),
       );
 }
@@ -89,8 +102,6 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
           decoration: InputDecoration(
             hintText: 'Pretraži igrača',
             prefixIcon: const Icon(Icons.search),
-            filled: true,
-            fillColor: Colors.white,
             suffixIcon: searching ? IconButton(icon: const Icon(Icons.clear), onPressed: _clearSearch) : null,
           ),
         ),
@@ -108,8 +119,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               if (data['key'] != null)
                 Padding(
                   padding: const EdgeInsets.all(6),
-                  child: Text(widget.period == 'month' ? 'Mesec ${data['key']}' : 'Godina ${data['key']}',
-                      style: const TextStyle(color: Colors.black54)),
+                  child: Text(_periodTitle(data['key'] as String), style: const TextStyle(color: textMuted)),
                 ),
               Expanded(
                 child: items.isEmpty
@@ -141,9 +151,10 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               if (me != null && !items.any((r) => r['userId'] == me['userId']))
                 Container(
                   decoration: const BoxDecoration(
-                    color: Colors.white,
-                    border: Border(top: BorderSide(color: Color(0xFFD5DAE3))),
+                    color: bgBottom,
+                    border: Border(top: BorderSide(color: panelBorder)),
                   ),
+                  padding: const EdgeInsets.only(top: 6),
                   child: SafeArea(top: false, child: _row(me, highlight: true)),
                 ),
             ]);
@@ -153,26 +164,60 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
     ]);
   }
 
+  String _periodTitle(String key) => switch (widget.period) {
+        'week' => 'Nedelja ${key.split('-W').last}. · ${key.split('-W').first}',
+        'month' => 'Mesec ${key.substring(5)}/${key.substring(0, 4)}',
+        _ => 'Godina $key',
+      };
+
   Widget _row(Map r, {bool highlight = false}) {
     final rank = r['rank'] as int;
-    return ListTile(
-      tileColor: highlight ? cellSelected : null,
-      leading: SizedBox(
-        width: 84,
+    final first = rank == 1;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: Panel(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        gradient:
+            first ? LinearGradient(colors: [const Color(0xFF8A6A12).withOpacity(0.9), const Color(0xFF3B3410)]) : null,
+        color: highlight ? panelLight : null,
+        borderColor: first ? gold : (highlight ? cellSelected : panelBorder),
         child: Row(children: [
           SizedBox(
             width: 40,
             child: rank <= 3
-                ? Icon(Icons.emoji_events, color: medalColor(rank))
-                : Text('$rank.', style: const TextStyle(fontWeight: FontWeight.bold)),
+                ? Center(
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: medalColor(rank),
+                        border: Border.all(color: Colors.white70, width: 2),
+                        boxShadow: [BoxShadow(color: medalColor(rank).withOpacity(0.6), blurRadius: 8)],
+                      ),
+                      child: Text('$rank',
+                          style: const TextStyle(fontWeight: FontWeight.w900, color: goldText, fontSize: 16)),
+                    ),
+                  )
+                : Text('$rank',
+                    textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
           ),
+          const SizedBox(width: 6),
+          UserAvatar(url: r['avatarUrl'], name: r['username'] ?? '', radius: 20, ring: first),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(r['username'] ?? '',
+                  overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800)),
+              Text('Level ${r['level']}', style: TextStyle(color: first ? gold : textMuted, fontSize: 12)),
+            ]),
+          ),
+          Text('${r['points']}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: first ? gold : Colors.white)),
           const SizedBox(width: 4),
-          UserAvatar(url: r['avatarUrl'], name: r['username'] ?? '', radius: 18),
         ]),
       ),
-      title: Text(r['username'] ?? ''),
-      subtitle: Text('Level ${r['level']}${rank <= 3 ? ' · $rank. mesto' : ''}'),
-      trailing: Text('${r['points']}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 }

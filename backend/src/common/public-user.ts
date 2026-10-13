@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
-import { levelForPoints } from '../game/engine/rules';
+import { levelForPoints, levelProgress } from '../game/engine/rules';
 
 /** Podaci koje vlasnik naloga vidi o sebi. */
-export function selfView(u: User, extra: { monthlyPoints: number; yearlyPoints: number }) {
+export function selfView(u: User, extra: { weeklyPoints: number; monthlyPoints: number; yearlyPoints: number }) {
   return {
     id: u.id,
     username: u.username,
@@ -15,9 +15,11 @@ export function selfView(u: User, extra: { monthlyPoints: number; yearlyPoints: 
     role: u.role,
     tokens: u.tokens,
     totalPoints: u.totalPoints,
+    weeklyPoints: extra.weeklyPoints,
     monthlyPoints: extra.monthlyPoints,
     yearlyPoints: extra.yearlyPoints,
     level: levelForPoints(u.totalPoints),
+    levelProgress: levelProgress(u.totalPoints),
     hasPassword: !!u.passwordHash,
     linkedGoogle: !!u.googleId,
     linkedApple: !!u.appleId,

@@ -14,8 +14,8 @@ export class LeaderboardController {
     @Query('key') key?: string,
     @Query('search') search?: string,
   ) {
-    const p: Period = period === 'year' || period === 'total' ? period : 'month';
-    const k = key && /^\d{4}(-\d{2})?$/.test(key) ? key : undefined;
+    const p: Period = period === 'week' || period === 'year' ? period : 'month';
+    const k = key && /^\d{4}(-W?\d{2})?$/.test(key) ? key : undefined;
     return this.lb.leaderboard(p, k, user.id, search);
   }
 

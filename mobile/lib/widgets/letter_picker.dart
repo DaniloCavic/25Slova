@@ -19,33 +19,39 @@ class LetterPicker extends StatelessWidget {
       crossAxisCount: 10,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      childAspectRatio: 0.9,
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      childAspectRatio: 0.85,
       children: [
         for (final l in letters)
-          Material(
-            color: selected == l ? brandBlue : Colors.white,
-            borderRadius: BorderRadius.circular(6),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(6),
-              onTap: enabled ? () => onPick(l) : null,
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: const Color(0xFFD5DAE3)),
-                ),
-                child: FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(3),
-                    child: Text(
-                      showLetter(l, script),
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: selected == l ? Colors.white : (enabled ? const Color(0xFF1C2230) : Colors.grey),
+          GestureDetector(
+            onTap: enabled ? () => onPick(l) : null,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                gradient: selected == l
+                    ? goldGradient
+                    : const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.white, Color(0xFFDDE3EE)],
                       ),
+                borderRadius: BorderRadius.circular(8),
+                border:
+                    Border.all(color: selected == l ? const Color(0xFFFFE9A6) : const Color(0xFFB9C3D6), width: 1.2),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.35), offset: const Offset(0, 2), blurRadius: 2)
+                ],
+              ),
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: Text(
+                    showLetter(l, script),
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                      color: enabled ? const Color(0xFF16233F) : Colors.grey,
                     ),
                   ),
                 ),

@@ -2,10 +2,10 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { MedalPeriod, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { GAME_TZ, monthKey, previousMonthKey, previousYearKey, yearKey } from '../common/time';
+import { GAME_TZ, monthKey, previousMonthKey, previousWeekKey, previousYearKey, weekKey, yearKey } from '../common/time';
 import { levelForPoints } from '../game/engine/rules';
 
-export type Period = 'month' | 'year' | 'total';
+export type Period = 'week' | 'month' | 'year' | 'total';
 
 interface Row {
   userId: string;
@@ -47,7 +47,8 @@ export class LeaderboardService implements OnApplicationBootstrap {
           WHERE u."deletedAt" IS NULL AND u."isBlocked" = false AND u.role = 'USER'
         ) r WHERE true ${userFilter} ORDER BY rank LIMIT ${limit}`;
     }
-    const col = period === 'month' ? Prisma.sql`"monthKey"` : Prisma.sql`"yearKey"`;
+    const col =
+      period === 'week' ? Prisma.sql`"weekKey"` : period === 'month' ? Prisma.sql`"monthKey"` : Prisma.sql`"yearKey"`;
     return this.prisma.$queryRaw<Row[]>`
       SELECT * FROM (
         SELECT u.id AS "userId", u.username, u."avatarUrl", u."totalPoints", s.points::int AS points,
@@ -62,7 +63,8 @@ export class LeaderboardService implements OnApplicationBootstrap {
   }
 
   async leaderboard(period: Period, key: string | undefined, userId?: string, search?: string) {
-    const k = period === 'total' ? null : key || (period === 'month' ? monthKey() : yearKey());
+    const current = { week: weekKey, month: monthKey, year: yearKey } as const;
+    const k = period === 'total' ? null : key || current[period]();
     const q = search?.trim().slice(0, 30) || undefined;
     const top = await this.rows(period, k, q ? 50 : 100, undefined, q);
     const mine = userId ? (await this.rows(period, k, 1, userId))[0] ?? null : null;
@@ -81,7 +83,8 @@ export class LeaderboardService implements OnApplicationBootstrap {
   async awardMedals(period: MedalPeriod, key: string) {
     const exists = await this.prisma.medal.count({ where: { period, periodKey: key } });
     if (exists) return 0;
-    const top = (await this.rows(period === 'MONTH' ? 'month' : 'year', key, 3)).filter((r) => r.points > 0);
+    const p: Period = period === 'WEEK' ? 'week' : period === 'MONTH' ? 'month' : 'year';
+    const top = (await this.rows(p, key, 3)).filter((r) => r.points > 0);
     if (!top.length) return 0;
     await this.prisma.medal.createMany({
       data: top.map((r) => ({ userId: r.userId, period, periodKey: key, place: r.rank, points: r.points })),
@@ -89,6 +92,12 @@ export class LeaderboardService implements OnApplicationBootstrap {
     });
     this.log.log(`Dodeljene medalje za ${period} ${key}: ${top.map((r) => r.username).join(', ')}`);
     return top.length;
+  }
+
+  /** Svakog ponedeljka u 00:05 (vreme igre): medalje za prošlu nedelju. */
+  @Cron('5 0 * * 1', { timeZone: GAME_TZ })
+  async closeWeek() {
+    await this.awardMedals('WEEK', previousWeekKey());
   }
 
   /** Prvog u mesecu u 00:05 (vreme igre): medalje za prošli mesec, a 1. januara i za prošlu godinu. */
@@ -100,6 +109,7 @@ export class LeaderboardService implements OnApplicationBootstrap {
 
   /** Ako je server bio ugašen u trenutku zatvaranja perioda — nadoknadi pri pokretanju. */
   async onApplicationBootstrap() {
+    await this.awardMedals('WEEK', previousWeekKey()).catch((e) => this.log.error(e));
     await this.awardMedals('MONTH', previousMonthKey()).catch((e) => this.log.error(e));
     await this.awardMedals('YEAR', previousYearKey()).catch((e) => this.log.error(e));
   }

@@ -34,7 +34,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(body: LetterPicker(script: Script.latin, selected: null, onPick: (l) => picked = l)),
     ));
-    expect(find.byType(InkWell), findsNWidgets(30));
+    expect(find.byType(GestureDetector), findsNWidgets(30));
     await tester.tap(find.text('Dž'));
     expect(picked, 'Џ');
   });

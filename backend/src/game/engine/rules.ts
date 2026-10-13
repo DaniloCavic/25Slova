@@ -49,3 +49,11 @@ export function levelForPoints(totalPoints: number): number {
   }
   return 1;
 }
+
+/** Napredak ka sledećem levelu: od koliko poena počinje trenutni i sledeći level. */
+export function levelProgress(totalPoints: number) {
+  const level = levelForPoints(totalPoints);
+  const min = level === 1 ? 0 : LEVEL_THRESHOLDS.find((t) => t.level === level)!.min;
+  const next = LEVEL_THRESHOLDS.find((t) => t.level === level + 1)?.min ?? null;
+  return { level, min, next };
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
+import '../widgets/common.dart';
 import 'register_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Text(
                     'Prijava preko Google i Apple naloga stiže u sledećoj verziji.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                    style: TextStyle(color: textMuted, fontSize: 12),
                   ),
                 ],
               ),
@@ -93,29 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
 class _Logo extends StatelessWidget {
   const _Logo();
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (final (i, l) in ['2', '5', 'S', 'L', 'O', 'V', 'A'].indexed)
-              Container(
-                margin: const EdgeInsets.all(2),
-                width: 38,
-                height: 38,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: i < 2 ? brandRed : brandBlue,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(l, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-              ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        const Text('Igra rečima za dva igrača', style: TextStyle(color: Colors.black54)),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => const Column(children: [
+        SlovaLogo(size: 0.85),
+        SizedBox(height: 12),
+        Text('Igra rečima za dva igrača', style: TextStyle(color: textMuted)),
+      ]);
 }

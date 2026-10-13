@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import 'waiting_screen.dart';
+import 'private_game_screen.dart';
 import 'leaderboard_screen.dart';
 import 'best_board_screen.dart';
 import 'profile_screen.dart';
@@ -19,177 +22,111 @@ class HomeScreen extends StatelessWidget {
   void _go(BuildContext context, Widget screen) => Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
 
   Future<void> _playRandom(BuildContext context) async {
-    final app = context.read<AppState>();
-    final err = await app.joinQueue();
+    final err = await context.read<AppState>().joinQueue();
     if (!context.mounted) return;
     if (err != null) return showError(context, err);
     _go(context, const WaitingScreen());
   }
 
-  Future<void> _privateGame(BuildContext context) async {
-    final choice = await showModalBottomSheet<String>(
-      context: context,
-      builder: (_) => SafeArea(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          ListTile(
-            leading: const Icon(Icons.add_circle_outline),
-            title: const Text('Kreiraj partiju i pošalji kod'),
-            onTap: () => Navigator.pop(context, 'create'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.login),
-            title: const Text('Unesi kod prijatelja'),
-            onTap: () => Navigator.pop(context, 'join'),
-          ),
-        ]),
-      ),
+  void _invite(BuildContext context) {
+    const link = '$productionUrl/igra';
+    Clipboard.setData(const ClipboardData(
+      text: 'Igraj sa mnom 25 Slova — igru rečima na srpskom! Otvori $link i napravi nalog.',
+    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Poziv je kopiran — nalepi ga prijatelju u Viber, WhatsApp ili poruku.')),
     );
-    if (!context.mounted || choice == null) return;
-    final app = context.read<AppState>();
-    if (choice == 'create') {
-      final err = await app.createPrivate();
-      if (!context.mounted) return;
-      if (err != null) return showError(context, err);
-      _go(context, const WaitingScreen());
-    } else {
-      final code = await showDialog<String>(context: context, builder: (_) => const _CodeDialog());
-      if (code == null || code.isEmpty) return;
-      final err = await app.joinPrivate(code);
-      if (err != null && context.mounted) showError(context, err);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final u = app.user ?? {};
-    final tokens = (u['tokens'] ?? 0) as int;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('25 Slova'),
-        actions: [
-          if (!app.socketConnected)
-            const Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: Tooltip(message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: Colors.white70)),
-            ),
-          IconButton(icon: const Icon(Icons.settings), onPressed: () => _go(context, const SettingsScreen())),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: app.refreshMe,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: InkWell(
-                onTap: () => _go(context, const ProfileScreen()),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(children: [
-                    UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 28),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(u['username'] ?? '', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('Level ${u['level'] ?? 1} · ${u['totalPoints'] ?? 0} poena',
-                            style: const TextStyle(color: Colors.black54)),
-                      ]),
-                    ),
-                    GestureDetector(onTap: () => _go(context, const TokensScreen()), child: TokenChip(tokens)),
-                  ]),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 64,
-              child: FilledButton.icon(
-                onPressed: () => _playRandom(context),
-                icon: const Icon(Icons.play_arrow, size: 30),
-                label: const Text('Igraj — nasumični protivnik', style: TextStyle(fontSize: 18)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: () => _privateGame(context),
-              icon: const Icon(Icons.group),
-              label: const Text('Igraj sa prijateljem (kod)'),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text('Partija košta $matchCost tokena. Tip partije (1, 3 ili 5 početnih slova) je nasumičan.',
-                  textAlign: TextAlign.center, style: TextStyle(color: Colors.black54, fontSize: 12)),
-            ),
-            const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.6,
+    final total = (u['totalPoints'] ?? 0) as int;
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: RefreshIndicator(
+            onRefresh: app.refreshMe,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
               children: [
-                _Tile(Icons.leaderboard, 'Rang-liste', () => _go(context, const LeaderboardScreen())),
-                _Tile(Icons.emoji_events, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
-                _Tile(Icons.toll, 'Tokeni', () => _go(context, const TokensScreen())),
-                _Tile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
-                _Tile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),
-                _Tile(Icons.settings, 'Podešavanja', () => _go(context, const SettingsScreen())),
+                Row(children: [
+                  TokenChip((u['tokens'] ?? 0) as int, onTap: () => _go(context, const TokensScreen())),
+                  const Spacer(),
+                  if (!app.socketConnected)
+                    const Padding(
+                      padding: EdgeInsets.only(right: 6),
+                      child: Tooltip(message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: textMuted)),
+                    ),
+                  GestureDetector(
+                    onTap: () => _go(context, const ProfileScreen()),
+                    child: Row(children: [
+                      UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
+                      const SizedBox(width: 8),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(u['username'] ?? '', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                        Text('Level ${u['level'] ?? 1}',
+                            style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
+                        const SizedBox(height: 3),
+                        LevelBar(progress: u['levelProgress'], totalPoints: total, width: 70),
+                      ]),
+                    ]),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () => _go(context, const SettingsScreen()),
+                  ),
+                ]),
+                const SizedBox(height: 18),
+                const Center(child: SlovaLogo()),
+                const SizedBox(height: 26),
+                GoldButton(
+                  label: 'IGRAJ',
+                  subtitle: 'nasumični protivnik',
+                  icon: Icons.play_arrow_rounded,
+                  height: 72,
+                  onPressed: () => _playRandom(context),
+                ),
+                const SizedBox(height: 12),
+                BlueButton(
+                  label: 'IGRAJ SA PRIJATELJEM',
+                  subtitle: 'pošalji ili unesi kod',
+                  icon: Icons.group,
+                  height: 64,
+                  onPressed: () => _go(context, const PrivateGameScreen()),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    'Partija košta $matchCost tokena · broj početnih slova (1, 3 ili 5) je nasumičan',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: textMuted, fontSize: 12),
+                  ),
+                ),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 1.75,
+                  children: [
+                    MenuTile(Icons.emoji_events, 'Rang-liste', () => _go(context, const LeaderboardScreen())),
+                    MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen())),
+                    MenuTile(Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
+                    MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen()),
+                        iconColor: Colors.white),
+                    MenuTile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),
+                    MenuTile(Icons.group_add, 'Pozovi prijatelje', () => _invite(context), iconColor: Colors.white),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
-}
-
-class _Tile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  const _Tile(this.icon, this.label, this.onTap);
-
-  @override
-  Widget build(BuildContext context) => Card(
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(icon, color: brandBlue, size: 30),
-            const SizedBox(height: 6),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-          ]),
-        ),
-      );
-}
-
-class _CodeDialog extends StatefulWidget {
-  const _CodeDialog();
-  @override
-  State<_CodeDialog> createState() => _CodeDialogState();
-}
-
-class _CodeDialogState extends State<_CodeDialog> {
-  final _c = TextEditingController();
-  @override
-  Widget build(BuildContext context) => AlertDialog(
-        title: const Text('Kod partije'),
-        content: TextField(
-          controller: _c,
-          autofocus: true,
-          textCapitalization: TextCapitalization.characters,
-          decoration: const InputDecoration(hintText: 'npr. K7PM2Q'),
-          style: const TextStyle(fontSize: 22, letterSpacing: 4),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Otkaži')),
-          FilledButton(
-            style: FilledButton.styleFrom(minimumSize: const Size(88, 40)),
-            onPressed: () => Navigator.pop(context, _c.text.trim().toUpperCase()),
-            child: const Text('Uđi'),
-          ),
-        ],
-      );
 }

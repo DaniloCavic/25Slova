@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../widgets/common.dart';
@@ -71,7 +72,7 @@ class _TokensScreenState extends State<TokensScreen> {
                     '${t['amount'] > 0 ? '+' : ''}${t['amount']}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: t['amount'] > 0 ? Colors.green.shade700 : Colors.red.shade700,
+                      color: t['amount'] > 0 ? success : danger,
                     ),
                   ),
                 ),

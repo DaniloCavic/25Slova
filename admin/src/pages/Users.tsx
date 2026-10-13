@@ -214,7 +214,7 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
           <button className="secondary" onClick={onClose}>Zatvori</button>
         </div>
         <p className="muted">
-          Level {u.level} · ukupno {u.totalPoints} p · ovaj mesec {u.monthlyPoints} p · ova godina {u.yearlyPoints} p · {u.tokens} tokena
+          Level {u.level} · ukupno {u.totalPoints} p · ova nedelja {u.weeklyPoints} p · ovaj mesec {u.monthlyPoints} p · ova godina {u.yearlyPoints} p · {u.tokens} tokena
           <br />
           Pol: {GENDER[u.gender] ?? '—'} · Google: {u.linkedGoogle ? 'da' : 'ne'} · Apple: {u.linkedApple ? 'da' : 'ne'} · poslednji put: {fmtDate(u.lastSeenAt)}
           {u.isBlocked && <><br /><span className="error">Blokiran {fmtDate(u.blockedAt)}{u.blockedReason ? ` — ${u.blockedReason}` : ''}</span></>}

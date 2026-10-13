@@ -55,6 +55,7 @@ enum MatchEndReason {
 }
 
 enum MedalPeriod {
+  WEEK
   MONTH
   YEAR
 }
@@ -130,10 +131,12 @@ model PointsEvent {
   delta     Int
   reason    PointsReason
   matchId   String?
+  weekKey   String       @default("") // "2026-W42" (ISO nedelja, ponedeljak–nedelja)
   monthKey  String // "2026-10"
   yearKey   String // "2026"
   createdAt DateTime     @default(now())
 
+  @@index([weekKey, userId])
   @@index([monthKey, userId])
   @@index([yearKey, userId])
   @@index([userId])
@@ -201,7 +204,7 @@ model Medal {
   userId    String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   period    MedalPeriod
-  periodKey String // "2026-10" ili "2026"
+  periodKey String // "2026-W42", "2026-10" ili "2026"
   place     Int // 1, 2, 3
   points    Int
   createdAt DateTime    @default(now())
