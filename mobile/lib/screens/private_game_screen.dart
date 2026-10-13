@@ -72,9 +72,9 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
           borderColor: active ? const Color(0xFF4F80E0) : panelBorder,
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: Column(children: [
-            Icon(icon, color: Colors.white),
+            Icon(icon, color: active ? Colors.white : textMain),
             const SizedBox(height: 6),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
+            Text(label, style: TextStyle(fontWeight: FontWeight.w700, color: active ? Colors.white : null)),
           ]),
         ),
       );
@@ -101,18 +101,18 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
             _tab('Unesi kod', Icons.group, !_sendTab, () => setState(() => _sendTab = false)),
           ]),
           const SizedBox(height: 28),
-          const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(Icons.smartphone, color: gold, size: 70),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Icon(Icons.smartphone, color: gold, size: 70),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(Icons.send_rounded, color: Colors.white, size: 34),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(Icons.send_rounded, color: textMain, size: 34),
             ),
-            Icon(Icons.smartphone, color: gold, size: 70),
+            const Icon(Icons.smartphone, color: gold, size: 70),
           ]),
           const SizedBox(height: 24),
           if (_sendTab) ...[
             if (code == null) ...[
-              const Text('Napravi kod i pošalji ga prijatelju. Partija počinje čim on unese kod.',
+              Text('Napravi kod i pošalji ga prijatelju. Partija počinje čim on unese kod.',
                   textAlign: TextAlign.center, style: TextStyle(color: textMuted)),
               const SizedBox(height: 20),
               GoldButton(label: 'NAPRAVI KOD', onPressed: _busy ? null : () => _create(app)),
@@ -135,7 +135,7 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
               const SizedBox(height: 8),
               if (left != null && !left.isNegative)
                 Text('Kod važi još ${left.inMinutes}:${(left.inSeconds % 60).toString().padLeft(2, '0')}',
-                    textAlign: TextAlign.center, style: const TextStyle(color: textMuted)),
+                    textAlign: TextAlign.center, style: TextStyle(color: textMuted)),
               const SizedBox(height: 16),
               Row(children: [
                 Expanded(
@@ -161,9 +161,9 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
                 ),
               ]),
               const SizedBox(height: 22),
-              const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5)),
-                SizedBox(width: 10),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5)),
+                const SizedBox(width: 10),
                 Text('Čekamo prijatelja…', style: TextStyle(color: textMuted)),
               ]),
               TextButton(onPressed: () => _leave(app), child: const Text('Otkaži')),
@@ -185,7 +185,7 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
             GoldButton(label: 'UĐI U PARTIJU', onPressed: _busy ? null : () => _join(app)),
           ],
           const SizedBox(height: 18),
-          const Text('Partija košta 10 tokena, naplaćuje se kad počne.',
+          Text('Partija košta 10 tokena, naplaćuje se kad počne.',
               textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 12)),
         ]),
       ),

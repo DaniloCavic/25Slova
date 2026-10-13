@@ -78,7 +78,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         Text('${p['username']}',
             overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
-        Text('Level ${p['level']}', style: const TextStyle(color: textMuted, fontSize: 12)),
+        Text('Level ${p['level']}', style: TextStyle(color: textMuted, fontSize: 12)),
         const SizedBox(height: 4),
         Lives(p['lives'] as int, size: 16),
       ],
@@ -190,8 +190,7 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                   const SizedBox(height: 8),
                   Row(children: [
-                    Text('${opp['username']}: ${opp['filled']}/25',
-                        style: const TextStyle(color: textMuted, fontSize: 13)),
+                    Text('${opp['username']}: ${opp['filled']}/25', style: TextStyle(color: textMuted, fontSize: 13)),
                     const Spacer(),
                     Text('Potez ${(myPlaced + 1).clamp(1, totalMoves)}/$totalMoves',
                         style: const TextStyle(fontWeight: FontWeight.w700)),

@@ -19,7 +19,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 
 **Igra**
 - Tabla 5 × 5 po igraču; 1, 3 ili 5 početnih nasumičnih slova (ista polja i slova za oba igrača); tip partije je nasumičan.
-- Srpska azbuka od 30 slova — Lj, Nj i Dž su jedno slovo i jedno polje. Igrač bira prikaz latinicom ili ćirilicom.
+- Srpska azbuka od 30 slova — Lj, Nj i Dž su jedno slovo i jedno polje. Slova se prikazuju latinicom; tamni i svetli režim prikaza.
 - Naizmenični potezi: igrač bira slovo i polje, protivnik isto slovo postavlja na svoju tablu i bira sledeće.
 - Serverski tajmer (30/45/60 s), 3 života, istek vremena = −1 život, gubitak sva 3 = poraz; vreme teče i bez veze.
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.

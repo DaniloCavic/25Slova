@@ -87,16 +87,18 @@ class _ResultScreenState extends State<ResultScreen> {
             delta == 0 ? 'Saldo poena nepromenjen' : '${fmtSignedPoints(delta)} poena',
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.w800, color: delta > 0 ? gold : (delta < 0 ? danger : textMuted)),
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: delta > 0 ? goldAccent : (delta < 0 ? danger : textMuted)),
           ),
           Text('$reason  ·  Ukupno ${fmtPoints(r['totalPoints'])} · Level ${r['level']}',
-              textAlign: TextAlign.center, style: const TextStyle(color: textMuted, fontSize: 13)),
+              textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 13)),
           const SizedBox(height: 16),
           Panel(
             child: IntrinsicHeight(
               child: Row(children: [
                 Expanded(child: _PlayerScore(data: me, winner: outcome == 'WIN')),
-                const VerticalDivider(color: panelBorder, width: 20),
+                VerticalDivider(color: panelBorder, width: 20),
                 Expanded(child: _PlayerScore(data: opp, winner: outcome == 'LOSS')),
               ]),
             ),
@@ -131,13 +133,12 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            if (lines.every((l) => l['word'] == null))
-              const Text('Nema validnih reči.', style: TextStyle(color: textMuted)),
+            if (lines.every((l) => l['word'] == null)) Text('Nema validnih reči.', style: TextStyle(color: textMuted)),
             Wrap(spacing: 6, runSpacing: 6, children: [
               for (final l in lines.where((l) => l['word'] != null))
                 Chip(
                   label: Text('${showWord(l['word'], app.script)} · ${l['points']}'),
-                  avatar: Text(_lineName(l), style: const TextStyle(fontSize: 11, color: textMuted)),
+                  avatar: Text(_lineName(l), style: TextStyle(fontSize: 11, color: textMuted)),
                 ),
             ]),
           ],
@@ -166,7 +167,7 @@ class _PlayerScore extends StatelessWidget {
         Text('${data['username']}',
             overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700)),
         Text('${data['points']}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
-        Text('poena · ${data['wordsCount']} reči', style: const TextStyle(color: textMuted, fontSize: 12)),
+        Text('poena · ${data['wordsCount']} reči', style: TextStyle(color: textMuted, fontSize: 12)),
         const SizedBox(height: 4),
         Lives(data['lives'] as int, size: 14),
       ]);

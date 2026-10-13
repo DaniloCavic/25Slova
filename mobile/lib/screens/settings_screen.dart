@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../letters.dart';
 import '../state/app_state.dart';
 import 'rules_screen.dart';
 
@@ -13,19 +12,19 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Podešavanja')),
       body: ListView(children: [
-        const ListTile(title: Text('Pismo slova na tabli', style: TextStyle(fontWeight: FontWeight.bold))),
-        RadioListTile<Script>(
-          title: const Text('Latinica (A B C Č Ć …)'),
-          value: Script.latin,
-          groupValue: app.script,
-          onChanged: (s) => app.setScript(s!),
-        ),
-        RadioListTile<Script>(
-          title: const Text('Ćirilica (А Б В Г Д …)'),
-          value: Script.cyrillic,
-          groupValue: app.script,
-          onChanged: (s) => app.setScript(s!),
-        ),
+        const ListTile(title: Text('Izgled', style: TextStyle(fontWeight: FontWeight.bold))),
+        for (final (mode, label, icon) in [
+          ('dark', 'Tamni režim', Icons.dark_mode),
+          ('light', 'Svetli režim', Icons.light_mode),
+          ('system', 'Prema podešavanju telefona', Icons.brightness_auto),
+        ])
+          RadioListTile<String>(
+            title: Text(label),
+            secondary: Icon(icon),
+            value: mode,
+            groupValue: app.themeMode,
+            onChanged: (m) => app.setThemeMode(m!),
+          ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.menu_book),

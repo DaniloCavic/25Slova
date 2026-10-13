@@ -4,6 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../api.dart';
 import '../config.dart';
 import '../letters.dart';
+import '../theme.dart';
 import '../screens/game_screen.dart';
 import '../screens/result_screen.dart';
 
@@ -17,7 +18,15 @@ class AppState extends ChangeNotifier {
 
   AuthStatus status = AuthStatus.loading;
   Map<String, dynamic>? user;
-  Script script = Script.latin;
+
+  /// Slova se prikazuju latinicom (ćirilica je samo interni zapis na serveru).
+  final Script script = Script.latin;
+
+  /// Režim prikaza: 'dark', 'light' ili 'system' (prema podešavanju telefona pri pokretanju).
+  String themeMode = 'dark';
+
+  /// Menja se pri promeni režima — ceo prikaz se tada ponovo iscrtava novim bojama.
+  int themeVersion = 0;
 
   io.Socket? _socket;
   bool socketConnected = false;
@@ -44,7 +53,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
-    script = prefs.getString('script') == 'cyrillic' ? Script.cyrillic : Script.latin;
+    _applyTheme(prefs.getString('themeMode') ?? 'dark');
     final token = prefs.getString('token');
     if (token == null) {
       status = AuthStatus.loggedOut;
@@ -68,11 +77,20 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  Future<void> setScript(Script s) async {
-    script = s;
+  void _applyTheme(String mode) {
+    themeMode = mode;
+    final brightness = mode == 'system'
+        ? WidgetsBinding.instance.platformDispatcher.platformBrightness
+        : (mode == 'light' ? Brightness.light : Brightness.dark);
+    pal = brightness == Brightness.light ? lightPalette : darkPalette;
+    themeVersion++;
+  }
+
+  Future<void> setThemeMode(String mode) async {
+    _applyTheme(mode);
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('script', s == Script.cyrillic ? 'cyrillic' : 'latin');
+    await prefs.setString('themeMode', mode);
   }
 
   void toast(String msg) {

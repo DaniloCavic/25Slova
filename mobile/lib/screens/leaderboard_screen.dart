@@ -119,7 +119,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               if (data['key'] != null)
                 Padding(
                   padding: const EdgeInsets.all(6),
-                  child: Text(_periodTitle(data['key'] as String), style: const TextStyle(color: textMuted)),
+                  child: Text(_periodTitle(data['key'] as String), style: TextStyle(color: textMuted)),
                 ),
               Expanded(
                 child: items.isEmpty
@@ -150,7 +150,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               // Moje mesto je uvek vidljivo na dnu kad nisam u prikazanoj listi.
               if (me != null && !items.any((r) => r['userId'] == me['userId']))
                 Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: bgBottom,
                     border: Border(top: BorderSide(color: panelBorder)),
                   ),
@@ -177,8 +177,11 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Panel(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        gradient:
-            first ? LinearGradient(colors: [const Color(0xFF8A6A12).withOpacity(0.9), const Color(0xFF3B3410)]) : null,
+        gradient: first
+            ? (isDark
+                ? LinearGradient(colors: [const Color(0xFF8A6A12).withOpacity(0.9), const Color(0xFF3B3410)])
+                : const LinearGradient(colors: [Color(0xFFFFF1C4), Color(0xFFFFE08A)]))
+            : null,
         color: highlight ? panelLight : null,
         borderColor: first ? gold : (highlight ? cellSelected : panelBorder),
         child: Row(children: [
@@ -210,11 +213,11 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(r['username'] ?? '',
                   overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800)),
-              Text('Level ${r['level']}', style: TextStyle(color: first ? gold : textMuted, fontSize: 12)),
+              Text('Level ${r['level']}', style: TextStyle(color: first ? goldAccent : textMuted, fontSize: 12)),
             ]),
           ),
           Text(fmtPoints(r['points']),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: first ? gold : Colors.white)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: first ? goldAccent : textMain)),
           const SizedBox(width: 4),
         ]),
       ),

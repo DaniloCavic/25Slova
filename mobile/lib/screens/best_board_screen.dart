@@ -74,11 +74,11 @@ class _BestBoardScreenState extends State<BestBoardScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Row(children: [
-                Icon(Icons.square, color: cellInitial),
-                Text(' početna nasumična slova   '),
+              Row(children: [
+                const Icon(Icons.square, color: cellInitial),
+                const Text(' početna nasumična slova   '),
                 Icon(Icons.square, color: cellWord),
-                Text(' reči'),
+                const Text(' reči'),
               ]),
               const SizedBox(height: 8),
               Wrap(spacing: 6, children: [

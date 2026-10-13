@@ -17,7 +17,10 @@ class SlovaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.read<AppState>();
+    // Pri promeni režima (tamni/svetli) aplikacija se ponovo iscrtava novim bojama.
+    final themeVersion = context.select<AppState, int>((s) => s.themeVersion);
     return MaterialApp(
+      key: ValueKey(themeVersion),
       title: '25 Slova',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),

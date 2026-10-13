@@ -53,40 +53,46 @@ class HomeScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
               children: [
-                Row(children: [
-                  TokenChip((u['tokens'] ?? 0) as int, onTap: () => _go(context, const TokensScreen())),
-                  const Spacer(),
-                  if (!app.socketConnected)
-                    const Padding(
-                      padding: EdgeInsets.only(right: 6),
-                      child: Tooltip(message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: textMuted)),
-                    ),
-                  GestureDetector(
-                    onTap: () => _go(context, const ProfileScreen()),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.35),
-                        borderRadius: BorderRadius.circular(30),
+                // Gornja traka je preko tamne slike, pa je tekst uvek beo (i u svetlom režimu).
+                DefaultTextStyle.merge(
+                  style: const TextStyle(color: Colors.white),
+                  child: Row(children: [
+                    TokenChip((u['tokens'] ?? 0) as int, onTap: () => _go(context, const TokensScreen())),
+                    const Spacer(),
+                    if (!app.socketConnected)
+                      const Padding(
+                        padding: EdgeInsets.only(right: 6),
+                        child: Tooltip(message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: Colors.white70)),
                       ),
-                      child: Row(children: [
-                        UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
-                        const SizedBox(width: 8),
-                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(u['username'] ?? '', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                          Text('Level ${u['level'] ?? 1}',
-                              style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
-                          const SizedBox(height: 3),
-                          LevelBar(progress: u['levelProgress'], totalPoints: total, width: 70),
+                    GestureDetector(
+                      onTap: () => _go(context, const ProfileScreen()),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.35),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(children: [
+                          UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
+                          const SizedBox(width: 8),
+                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(u['username'] ?? '',
+                                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                            Text('Level ${u['level'] ?? 1}',
+                                style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
+                            const SizedBox(height: 3),
+                            LevelBar(
+                                progress: u['levelProgress'], totalPoints: total, width: 70, textColor: Colors.white70),
+                          ]),
                         ]),
-                      ]),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () => _go(context, const SettingsScreen()),
-                  ),
-                ]),
+                    IconButton(
+                      icon: const Icon(Icons.settings, color: Colors.white),
+                      onPressed: () => _go(context, const SettingsScreen()),
+                    ),
+                  ]),
+                ),
                 // Prostor za logo sa pozadinske slike.
                 SizedBox(height: (PictureBackground.logoBottom(context) - 70).clamp(120.0, 600.0)),
                 GoldButton(
@@ -104,8 +110,8 @@ class HomeScreen extends StatelessWidget {
                   height: 64,
                   onPressed: () => _go(context, const PrivateGameScreen()),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     'Partija košta $matchCost tokena · broj početnih slova (1, 3 ili 5) je nasumičan',
                     textAlign: TextAlign.center,
@@ -123,10 +129,9 @@ class HomeScreen extends StatelessWidget {
                     MenuTile(Icons.emoji_events, 'Rang-liste', () => _go(context, const LeaderboardScreen())),
                     MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen())),
                     MenuTile(Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
-                    MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen()),
-                        iconColor: Colors.white),
+                    MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
                     MenuTile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),
-                    MenuTile(Icons.group_add, 'Pozovi prijatelje', () => _invite(context), iconColor: Colors.white),
+                    MenuTile(Icons.group_add, 'Pozovi prijatelje', () => _invite(context)),
                   ],
                 ),
               ],

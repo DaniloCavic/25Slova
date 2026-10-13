@@ -10,7 +10,7 @@ class AppBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(gradient: backgroundGradient),
+        decoration: BoxDecoration(gradient: backgroundGradient),
         child: child,
       );
 }
@@ -43,13 +43,13 @@ class PictureBackground extends StatelessWidget {
               width: w,
               child: Stack(fit: StackFit.expand, children: [
                 Image.asset('assets/images/pozadina.jpg', fit: BoxFit.cover, alignment: Alignment.topCenter),
-                const DecoratedBox(
+                DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: [0, 0.62, 0.8, 1],
-                      colors: [Colors.transparent, Colors.transparent, Color(0xCC07142E), bgBottom],
+                      stops: const [0, 0.62, 0.8, 1],
+                      colors: [Colors.transparent, Colors.transparent, const Color(0xCC07142E), bgBottom],
                     ),
                   ),
                 ),
@@ -224,7 +224,8 @@ class BlueButton extends StatelessWidget {
                         Text(label,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3)),
-                        if (subtitle != null) Text(subtitle!, style: const TextStyle(color: textMuted, fontSize: 13)),
+                        if (subtitle != null)
+                          Text(subtitle!, style: const TextStyle(color: Color(0xFFC9D8F5), fontSize: 13)),
                       ],
                     ),
                   ),
@@ -288,7 +289,7 @@ class UserAvatar extends StatelessWidget {
       backgroundImage: abs != null ? NetworkImage(abs) : null,
       child: abs == null
           ? Text(name.isEmpty ? '?' : name[0].toUpperCase(),
-              style: TextStyle(fontSize: radius * 0.9, color: Colors.white, fontWeight: FontWeight.bold))
+              style: TextStyle(fontSize: radius * 0.9, color: textMain, fontWeight: FontWeight.bold))
           : null,
     );
     if (!ring) return avatar;
@@ -355,7 +356,8 @@ class LevelBar extends StatelessWidget {
   final Map<String, dynamic>? progress;
   final num totalPoints;
   final double width;
-  const LevelBar({super.key, required this.progress, required this.totalPoints, this.width = 120});
+  final Color? textColor;
+  const LevelBar({super.key, required this.progress, required this.totalPoints, this.width = 120, this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +379,7 @@ class LevelBar extends StatelessWidget {
       ),
       const SizedBox(width: 8),
       Text(max == null ? 'MAX' : '${fmtPointsShort(totalPoints)}/$max',
-          style: const TextStyle(fontSize: 12, color: textMuted, fontWeight: FontWeight.w600)),
+          style: TextStyle(fontSize: 12, color: textColor ?? textMuted, fontWeight: FontWeight.w600)),
     ]);
   }
 }
@@ -460,8 +462,8 @@ class TimerRing extends StatelessWidget {
           ),
           Column(mainAxisSize: MainAxisSize.min, children: [
             Text('$seconds',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: urgent ? danger : Colors.white)),
-            const Text('s', style: TextStyle(fontSize: 11, color: textMuted, height: 0.8)),
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: urgent ? danger : textMain)),
+            Text('s', style: TextStyle(fontSize: 11, color: textMuted, height: 0.8)),
           ]),
         ]),
       );
@@ -553,11 +555,11 @@ class LevelTable extends StatelessWidget {
             ),
             child: Row(children: [
               Text('Level $level',
-                  style: TextStyle(fontWeight: FontWeight.w800, color: level == current ? gold : Colors.white)),
+                  style: TextStyle(fontWeight: FontWeight.w800, color: level == current ? goldAccent : textMain)),
               const Spacer(),
               Text(to == null ? 'više od ${_thousands(from - 1)}' : '${_thousands(from)} – ${_thousands(to)}',
                   style: const TextStyle(fontWeight: FontWeight.w600)),
-              const Text('  poena', style: TextStyle(color: textMuted, fontSize: 12)),
+              Text('  poena', style: TextStyle(color: textMuted, fontSize: 12)),
             ]),
           ),
       ]);
@@ -573,7 +575,7 @@ void showLevelsSheet(BuildContext context, {int? current}) {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Text('Leveli', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
           const SizedBox(height: 4),
-          const Text('Level zavisi od ukupnog broja poena.', style: TextStyle(color: textMuted)),
+          Text('Level zavisi od ukupnog broja poena.', style: TextStyle(color: textMuted)),
           const SizedBox(height: 12),
           LevelTable(current: current),
         ]),

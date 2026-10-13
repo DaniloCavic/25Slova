@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text('Napravi nalog'),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Prijava preko Google i Apple naloga stiže u sledećoj verziji.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: textMuted, fontSize: 12),

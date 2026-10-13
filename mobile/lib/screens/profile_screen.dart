@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(u['username'] ?? '',
             textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
         Text('Level ${u['level'] ?? 1}',
-            textAlign: TextAlign.center, style: const TextStyle(color: gold, fontWeight: FontWeight.w700)),
+            textAlign: TextAlign.center, style: TextStyle(color: goldAccent, fontWeight: FontWeight.w700)),
         const SizedBox(height: 8),
         Center(
           child: GestureDetector(
@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               LevelBar(progress: u['levelProgress'], totalPoints: total, width: 160),
               const SizedBox(width: 6),
-              const Icon(Icons.info_outline, size: 18, color: textMuted),
+              Icon(Icons.info_outline, size: 18, color: textMuted),
             ]),
           ),
         ),
@@ -162,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icon(Icons.military_tech,
                               size: 40, color: count(place) > 0 ? medalColor(place) : textMuted.withOpacity(0.35)),
                           Text(['Zlatne', 'Srebrne', 'Bronzane'][place - 1],
-                              style: const TextStyle(fontSize: 12, color: textMuted)),
+                              style: TextStyle(fontSize: 12, color: textMuted)),
                           Text('${count(place)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                         ]),
                       ),
@@ -171,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ]),
               const SizedBox(height: 8),
               if (medals.isEmpty)
-                const Text('Uđi među prva tri na nedeljnoj, mesečnoj ili godišnjoj listi i osvoji medalju!',
+                Text('Uđi među prva tri na nedeljnoj, mesečnoj ili godišnjoj listi i osvoji medalju!',
                     style: TextStyle(color: textMuted, fontSize: 13))
               else
                 Wrap(spacing: 6, runSpacing: 6, children: [
@@ -184,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 18),
               const Text('Poslednje partije', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
               const SizedBox(height: 8),
-              if (matches.isEmpty) const Text('Još nema odigranih partija.', style: TextStyle(color: textMuted)),
+              if (matches.isEmpty) Text('Još nema odigranih partija.', style: TextStyle(color: textMuted)),
               for (final m in matches)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 6),
@@ -205,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text('protiv ${m['opponent'] ?? '—'}', style: const TextStyle(fontWeight: FontWeight.w700)),
                           Text('${m['myScore']} : ${m['opponentScore']} poena',
-                              style: const TextStyle(color: textMuted, fontSize: 13)),
+                              style: TextStyle(color: textMuted, fontSize: 13)),
                         ]),
                       ),
                       Text(fmtSignedPoints(m['pointsDelta']),
@@ -257,7 +257,7 @@ class _Stat extends StatelessWidget {
               const SizedBox(height: 4),
               FittedBox(
                   child: Text('${value ?? 0}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900))),
-              Text(label, style: const TextStyle(fontSize: 11, color: textMuted)),
+              Text(label, style: TextStyle(fontSize: 11, color: textMuted)),
             ]),
           ),
         ),
@@ -402,7 +402,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             decoration: const InputDecoration(labelText: 'Telefon'),
             keyboardType: TextInputType.phone),
         const SizedBox(height: 6),
-        const Text('E-mail i telefon ne vide drugi igrači.', style: TextStyle(color: textMuted, fontSize: 12)),
+        Text('E-mail i telefon ne vide drugi igrači.', style: TextStyle(color: textMuted, fontSize: 12)),
         if (_error != null)
           Padding(
               padding: const EdgeInsets.only(top: 12), child: Text(_error!, style: const TextStyle(color: brandRed))),
