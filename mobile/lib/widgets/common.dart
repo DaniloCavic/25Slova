@@ -15,6 +15,54 @@ class AppBackground extends StatelessWidget {
       );
 }
 
+/// Ilustrovana pozadina (noć, planine, reka) sa logom — gornji deo početnog ekrana i prijave.
+/// Slika zauzima punu širinu (do 700 px), a donji deo se pretapa u tamnoplavu.
+class PictureBackground extends StatelessWidget {
+  final Widget child;
+  const PictureBackground({super.key, required this.child});
+
+  static const _aspect = 1.5; // slika je 1024 × 1536
+  static double imageWidth(BuildContext context) => MediaQuery.of(context).size.width.clamp(0.0, 700.0);
+
+  /// Visina do koje se pruža logo na slici (ispod nje počinje sadržaj).
+  static double logoBottom(BuildContext context) => imageWidth(context) * _aspect * 0.655;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = imageWidth(context);
+    return Container(
+      color: bgBottom,
+      child: Stack(children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: w * _aspect,
+          child: Center(
+            child: SizedBox(
+              width: w,
+              child: Stack(fit: StackFit.expand, children: [
+                Image.asset('assets/images/pozadina.jpg', fit: BoxFit.cover, alignment: Alignment.topCenter),
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0, 0.62, 0.8, 1],
+                      colors: [Colors.transparent, Colors.transparent, Color(0xCC07142E), bgBottom],
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+          ),
+        ),
+        child,
+      ]),
+    );
+  }
+}
+
 /// Scaffold sa pozadinom igre i providnim gornjim delom.
 class GameScaffold extends StatelessWidget {
   final String? title;

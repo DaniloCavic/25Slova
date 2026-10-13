@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
     final app = context.watch<AppState>();
     final u = app.user ?? {};
     final total = (u['totalPoints'] ?? 0) as int;
-    return AppBackground(
+    return PictureBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
@@ -62,26 +62,32 @@ class HomeScreen extends StatelessWidget {
                     ),
                   GestureDetector(
                     onTap: () => _go(context, const ProfileScreen()),
-                    child: Row(children: [
-                      UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
-                      const SizedBox(width: 8),
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(u['username'] ?? '', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                        Text('Level ${u['level'] ?? 1}',
-                            style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
-                        const SizedBox(height: 3),
-                        LevelBar(progress: u['levelProgress'], totalPoints: total, width: 70),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.35),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(children: [
+                        UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
+                        const SizedBox(width: 8),
+                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text(u['username'] ?? '', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                          Text('Level ${u['level'] ?? 1}',
+                              style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
+                          const SizedBox(height: 3),
+                          LevelBar(progress: u['levelProgress'], totalPoints: total, width: 70),
+                        ]),
                       ]),
-                    ]),
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.settings, color: Colors.white),
                     onPressed: () => _go(context, const SettingsScreen()),
                   ),
                 ]),
-                const SizedBox(height: 18),
-                const Center(child: SlovaLogo()),
-                const SizedBox(height: 26),
+                // Prostor za logo sa pozadinske slike.
+                SizedBox(height: (PictureBackground.logoBottom(context) - 70).clamp(120.0, 600.0)),
                 GoldButton(
                   label: 'IGRAJ',
                   subtitle: 'nasumični protivnik',
