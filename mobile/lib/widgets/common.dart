@@ -79,7 +79,7 @@ class GameScaffold extends StatelessWidget {
           appBar: title == null && actions == null && !showBack
               ? null
               : AppBar(
-                  title: title == null ? null : Text(title!),
+                  title: title == null ? null : ScreenTitle(title!),
                   automaticallyImplyLeading: showBack,
                   actions: actions,
                   bottom: bottom,
@@ -87,6 +87,36 @@ class GameScaffold extends StatelessWidget {
           body: body,
         ),
       );
+}
+
+/// Naslov ekrana: velika slova, kontura (outline) — isti stil na svim ekranima.
+class ScreenTitle extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  const ScreenTitle(this.text, {super.key, this.fontSize = 21});
+
+  @override
+  Widget build(BuildContext context) {
+    // Samo kontura slova, unutrašnjost providna (vidi se pozadina).
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        text.toUpperCase(),
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.6,
+          height: 1.1,
+          foreground: Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1.0
+            ..strokeJoin = StrokeJoin.round
+            ..color = isDark ? Colors.white : const Color(0xFF1E4FA8),
+        ),
+      ),
+    );
+  }
 }
 
 /// Tamni panel sa ivicom (kartica).

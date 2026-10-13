@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     const gap = SizedBox(height: 12);
     return Scaffold(
-      appBar: AppBar(title: const Text('Novi nalog')),
+      appBar: AppBar(title: const ScreenTitle('Novi nalog')),
       body: Form(
         key: _form,
         child: ListView(

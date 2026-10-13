@@ -21,7 +21,7 @@ class _BestBoardScreenState extends State<BestBoardScreen> {
   Widget build(BuildContext context) {
     final script = context.watch<AppState>().script;
     return Scaffold(
-      appBar: AppBar(title: const Text('Najbolja tabla ikad')),
+      appBar: AppBar(title: const ScreenTitle('Najbolja tabla ikad')),
       body: FutureBuilder(
         future: _f,
         builder: (context, snap) {

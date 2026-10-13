@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import 'rules_screen.dart';
@@ -10,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Podešavanja')),
+      appBar: AppBar(title: const ScreenTitle('Podešavanja')),
       body: ListView(children: [
         const ListTile(title: Text('Izgled', style: TextStyle(fontWeight: FontWeight.bold))),
         for (final (mode, label, icon) in [

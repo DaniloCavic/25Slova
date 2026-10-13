@@ -362,7 +362,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     const gap = SizedBox(height: 12);
     return Scaffold(
-      appBar: AppBar(title: const Text('Lični podaci')),
+      appBar: AppBar(title: const ScreenTitle('Lični podaci')),
       body: ListView(padding: const EdgeInsets.all(20), children: [
         TextField(controller: _username, decoration: const InputDecoration(labelText: 'Korisničko ime')),
         gap,

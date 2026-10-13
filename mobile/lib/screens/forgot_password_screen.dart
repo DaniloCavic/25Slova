@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -39,7 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final api = context.read<AppState>().api;
     return Scaffold(
-      appBar: AppBar(title: const Text('Zaboravljena lozinka')),
+      appBar: AppBar(title: const ScreenTitle('Zaboravljena lozinka')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [

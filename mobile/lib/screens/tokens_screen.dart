@@ -28,7 +28,7 @@ class _TokensScreenState extends State<TokensScreen> {
     final app = context.watch<AppState>();
     final tokens = app.user?['tokens'] ?? 0;
     return Scaffold(
-      appBar: AppBar(title: const Text('Tokeni')),
+      appBar: AppBar(title: const ScreenTitle('Tokeni')),
       body: ListView(padding: const EdgeInsets.all(16), children: [
         Center(child: Transform.scale(scale: 1.4, child: TokenChip(tokens))),
         const SizedBox(height: 16),

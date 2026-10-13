@@ -46,7 +46,7 @@ class RulesScreen extends StatelessWidget {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(title: const Text('Pravila igre')),
+      appBar: AppBar(title: const ScreenTitle('Pravila igre')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
