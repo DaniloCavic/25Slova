@@ -3,7 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { MedalPeriod, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GAME_TZ, monthKey, previousMonthKey, previousWeekKey, previousYearKey, weekKey, yearKey } from '../common/time';
-import { levelForPoints } from '../game/engine/rules';
+import { levelForCents, toPoints } from '../game/engine/rules';
 
 export type Period = 'week' | 'month' | 'year' | 'total';
 
@@ -73,8 +73,8 @@ export class LeaderboardService implements OnApplicationBootstrap {
       userId: r.userId,
       username: r.username,
       avatarUrl: r.avatarUrl,
-      level: levelForPoints(r.totalPoints),
-      points: r.points,
+      level: levelForCents(r.totalPoints),
+      points: toPoints(r.points),
     });
     return { period, key: k, search: q ?? null, items: top.map(view), me: mine ? view(mine) : null };
   }
@@ -133,7 +133,7 @@ export class LeaderboardService implements OnApplicationBootstrap {
       r && {
         username: r.user.username,
         avatarUrl: r.user.avatarUrl,
-        level: levelForPoints(r.user.totalPoints),
+        level: levelForCents(r.user.totalPoints),
         board: r.board,
         points: r.score,
         wordsCount: r.wordsCount,

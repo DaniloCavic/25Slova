@@ -1,5 +1,5 @@
 import { toCyrillic, toLatin, letterCount } from './alphabet';
-import { levelForPoints, winReward } from './rules';
+import { levelForPoints, levelTable, winRewardCents } from './rules';
 import { scoreBoard, scoreLine, LINES, Board } from './scoring';
 import {
   applyMove,
@@ -47,10 +47,19 @@ describe('pravila', () => {
     expect(levelForPoints(500_000)).toBe(9);
     expect(levelForPoints(500_001)).toBe(10);
   });
-  it('nagrada pobedniku = poeni × reči ÷ 7,2', () => {
-    expect(winReward(60, 12)).toBe(100);
-    expect(winReward(36, 10)).toBe(50);
-    expect(winReward(0, 0)).toBe(0);
+  it('nagrada pobedniku = poeni × reči ÷ 7,2, na dve decimale (u stotinkama)', () => {
+    expect(winRewardCents(60, 12)).toBe(10000);
+    expect(winRewardCents(36, 10)).toBe(5000);
+    expect(winRewardCents(37, 11)).toBe(5653); // 56,527… → 56,53
+    expect(winRewardCents(13, 5)).toBe(903); // 9,027… → 9,03
+    expect(winRewardCents(0, 0)).toBe(0);
+  });
+  it('tabela levela: svaki level se završava na …00, sledeći počinje od …01', () => {
+    const t = levelTable();
+    expect(t[0]).toEqual({ level: 1, from: 0, to: 100 });
+    expect(t[1]).toEqual({ level: 2, from: 101, to: 500 });
+    expect(t[2]).toEqual({ level: 3, from: 501, to: 2000 });
+    expect(t[9]).toEqual({ level: 10, from: 500001, to: null });
   });
 });
 
@@ -149,7 +158,7 @@ describe('tok partije', () => {
     expect(s.endReason).toBe('LIVES_LOST');
     const res = computeResult(s, isWord);
     expect(res.winner).toBe(a === 0 ? 1 : 0);
-    expect(res.pointsDelta[a]).toBe(-10);
+    expect(res.pointsDelta[a]).toBe(-1000);
   });
 
   it('partija se završava kad se obe table popune', () => {
@@ -194,8 +203,8 @@ describe('tok partije', () => {
 describe('napredak levela', () => {
   it('vraća granice trenutnog i sledećeg levela', () => {
     const { levelProgress } = jest.requireActual('./rules');
-    expect(levelProgress(295)).toEqual({ level: 2, min: 101, next: 501 });
-    expect(levelProgress(0)).toEqual({ level: 1, min: 0, next: 101 });
-    expect(levelProgress(600_000)).toEqual({ level: 10, min: 500_001, next: null });
+    expect(levelProgress(295)).toEqual({ level: 2, min: 101, max: 500, next: 501 });
+    expect(levelProgress(0)).toEqual({ level: 1, min: 0, max: 100, next: 101 });
+    expect(levelProgress(600_000)).toEqual({ level: 10, min: 500_001, max: null, next: null });
   });
 });

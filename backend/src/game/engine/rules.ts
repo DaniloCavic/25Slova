@@ -7,6 +7,15 @@ export const MATCH_ENTRY_COST = 10;
 export const DAILY_REWARD = 30;
 export const AD_REWARD = 5;
 export const LOSS_PENALTY = 10;
+
+/**
+ * Poeni se u bazi čuvaju u stotim delovima (kao novac u parama), da bi dve decimale
+ * uvek bile tačne: 36,11 poena = 3611. Sve funkcije ispod sa "Cents" rade sa stotinkama.
+ */
+export const POINTS_SCALE = 100;
+export const LOSS_PENALTY_CENTS = LOSS_PENALTY * POINTS_SCALE;
+export const toPoints = (cents: number) => cents / POINTS_SCALE;
+export const toCents = (points: number) => Math.round(points * POINTS_SCALE);
 export const MIN_WORD_LENGTH = 2;
 export const MAX_WORD_LENGTH = 5;
 
@@ -23,11 +32,11 @@ export function randomMatchType(rand: () => number = Math.random): MatchType {
 }
 
 /**
- * Nagrada pobedniku: (poeni × broj validnih reči) ÷ 7,2, zaokruženo na ceo broj.
- * Maksimum: 60 × 12 ÷ 7,2 = 100.
+ * Nagrada pobedniku: (poeni × broj validnih reči) ÷ 7,2, na dve decimale (u stotinkama).
+ * Maksimum: 60 × 12 ÷ 7,2 = 100,00.
  */
-export function winReward(points: number, words: number): number {
-  return Math.round((points * words) / 7.2);
+export function winRewardCents(points: number, words: number): number {
+  return Math.round((points * words * POINTS_SCALE) / 7.2);
 }
 
 /** Leveli prema ukupnom saldu poena (odeljak 6.2). */
@@ -55,5 +64,20 @@ export function levelProgress(totalPoints: number) {
   const level = levelForPoints(totalPoints);
   const min = level === 1 ? 0 : LEVEL_THRESHOLDS.find((t) => t.level === level)!.min;
   const next = LEVEL_THRESHOLDS.find((t) => t.level === level + 1)?.min ?? null;
-  return { level, min, next };
+  // Level se završava na …00, a sledeći počinje od …01 (npr. Level 2: 101–500).
+  return { level, min, max: next === null ? null : next - 1, next };
+}
+
+export const levelForCents = (cents: number) => levelForPoints(toPoints(cents));
+
+/** Tabela levela za prikaz igračima. */
+export function levelTable() {
+  return [...LEVEL_THRESHOLDS].reverse().reduce<{ level: number; from: number; to: number | null }[]>(
+    (acc, t, i, arr) => {
+      if (i === 0) acc.push({ level: 1, from: 0, to: t.min - 1 });
+      acc.push({ level: t.level, from: t.min, to: arr[i + 1] ? arr[i + 1].min - 1 : null });
+      return acc;
+    },
+    [],
+  );
 }

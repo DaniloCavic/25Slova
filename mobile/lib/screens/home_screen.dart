@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../state/app_state.dart';
@@ -28,13 +28,14 @@ class HomeScreen extends StatelessWidget {
     _go(context, const WaitingScreen());
   }
 
+  /// Otvara sistemski meni za deljenje (Viber, WhatsApp, SMS, Instagram, Telegram…).
   void _invite(BuildContext context) {
     const link = '$productionUrl/igra';
-    Clipboard.setData(const ClipboardData(
-      text: 'Igraj sa mnom 25 Slova — igru rečima na srpskom! Otvori $link i napravi nalog.',
-    ));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Poziv je kopiran — nalepi ga prijatelju u Viber, WhatsApp ili poruku.')),
+    final box = context.findRenderObject() as RenderBox?;
+    Share.share(
+      'Hajde da igramo 25 Slova — igru rečima na srpskom! Otvori $link i napravi nalog.',
+      subject: '25 Slova',
+      sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
     );
   }
 
@@ -42,7 +43,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final u = app.user ?? {};
-    final total = (u['totalPoints'] ?? 0) as int;
+    final total = (u['totalPoints'] ?? 0) as num;
     return PictureBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,

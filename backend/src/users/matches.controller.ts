@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { CurrentUser } from '../common/auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
+import { toPoints } from '../game/engine/rules';
 
 @Controller('matches')
 export class MatchesController {
@@ -38,7 +39,7 @@ export class MatchesController {
         myWords: r.wordsCount,
         opponent: opp?.user.username ?? null,
         opponentScore: opp?.score ?? null,
-        pointsDelta: r.pointsDelta,
+        pointsDelta: toPoints(r.pointsDelta),
         endedAt: r.match.endedAt,
       };
     });

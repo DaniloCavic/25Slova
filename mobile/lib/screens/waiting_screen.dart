@@ -95,8 +95,7 @@ class _WaitingScreenState extends State<WaitingScreen> {
                     Text('Kod važi još ${remaining.inMinutes}:${(remaining.inSeconds % 60).toString().padLeft(2, '0')}',
                         textAlign: TextAlign.center, style: const TextStyle(color: textMuted)),
                 ] else ...[
-                  const Text('Tražimo protivnika sličnog levela…',
-                      textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
+                  const Text('Tražimo protivnika…', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 8),
                   Text('Čekanje: ${waited}s', textAlign: TextAlign.center, style: const TextStyle(color: textMuted)),
                 ],

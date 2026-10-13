@@ -1,5 +1,5 @@
 import { isLetter, Letter, randomWeightedLetter } from './alphabet';
-import { CELL_COUNT, LIVES_PER_MATCH, MATCH_TYPES, MatchType, winReward, LOSS_PENALTY } from './rules';
+import { CELL_COUNT, LIVES_PER_MATCH, MATCH_TYPES, MatchType, winRewardCents, LOSS_PENALTY_CENTS } from './rules';
 import { Board, BoardScore, scoreBoard } from './scoring';
 
 export type Seat = 0 | 1;
@@ -161,6 +161,7 @@ export function applyResign(state: MatchState, seat: Seat): MatchState {
 export interface MatchResult {
   scores: [BoardScore, BoardScore];
   winner: Seat | null; // null = nerešeno
+  /** Promena salda u stotinkama poena (3611 = +36,11). */
   pointsDelta: [number, number];
 }
 
@@ -186,8 +187,8 @@ export function computeResult(state: MatchState, isWord: (w: string) => boolean)
   const pointsDelta: [number, number] = [0, 0];
   if (winner !== null) {
     const w = scores[winner];
-    pointsDelta[winner] = winReward(w.points, w.wordsCount);
-    pointsDelta[other(winner)] = -LOSS_PENALTY;
+    pointsDelta[winner] = winRewardCents(w.points, w.wordsCount);
+    pointsDelta[other(winner)] = -LOSS_PENALTY_CENTS;
   }
   return { scores, winner, pointsDelta };
 }

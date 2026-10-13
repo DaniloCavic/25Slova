@@ -258,7 +258,7 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
                 <button disabled={!Number(tokens)} onClick={() => act(() => api('POST', `/admin/users/${id}/tokens`, { amount: Number(tokens), note }), 'Tokeni izmenjeni.')}>Primeni tokene</button>
               </div>
               <div className="row" style={{ marginTop: 8 }}>
-                <input type="number" placeholder="± poena" value={points} onChange={(e) => setPoints(e.target.value)} style={{ width: 120 }} />
+                <input type="number" step="0.01" placeholder="± poena" value={points} onChange={(e) => setPoints(e.target.value)} style={{ width: 120 }} />
                 <button disabled={!Number(points)} onClick={() => act(() => api('POST', `/admin/users/${id}/points`, { amount: Number(points) }), 'Poeni izmenjeni.')}>Primeni poene</button>
                 <span className="muted">Menja ukupni, mesečni i godišnji saldo.</span>
               </div>

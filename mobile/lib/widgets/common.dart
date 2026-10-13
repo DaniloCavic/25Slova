@@ -158,20 +158,29 @@ class GoldButton extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(18),
             onTap: onPressed,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              if (icon != null) ...[Icon(icon, color: goldText, size: height * 0.5), const SizedBox(width: 10)],
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: subtitle == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-                children: [
-                  Text(label,
-                      style: TextStyle(
-                          color: goldText, fontSize: height * 0.32, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
-                  if (subtitle != null)
-                    Text(subtitle!, style: const TextStyle(color: goldText, fontSize: 13, fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: subtitle == null ? 0 : 18),
+              child: Row(
+                  mainAxisAlignment: subtitle == null ? MainAxisAlignment.center : MainAxisAlignment.start,
+                  children: [
+                    if (icon != null) ...[Icon(icon, color: goldText, size: height * 0.5), const SizedBox(width: 12)],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: subtitle == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                      children: [
+                        Text(label,
+                            style: TextStyle(
+                                color: goldText,
+                                fontSize: height * 0.32,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5)),
+                        if (subtitle != null)
+                          Text(subtitle!,
+                              style: const TextStyle(color: goldText, fontSize: 13, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ]),
+            ),
           ),
         ),
       ),
@@ -344,15 +353,15 @@ class CoinIcon extends StatelessWidget {
 /// Traka napretka ka sledećem levelu (npr. 295/500).
 class LevelBar extends StatelessWidget {
   final Map<String, dynamic>? progress;
-  final int totalPoints;
+  final num totalPoints;
   final double width;
   const LevelBar({super.key, required this.progress, required this.totalPoints, this.width = 120});
 
   @override
   Widget build(BuildContext context) {
-    final min = (progress?['min'] ?? 0) as int;
-    final next = progress?['next'] as int?;
-    final value = next == null ? 1.0 : ((totalPoints - min) / (next - min)).clamp(0.0, 1.0);
+    final min = (progress?['min'] ?? 0) as num;
+    final max = progress?['max'] as num?;
+    final value = max == null ? 1.0 : ((totalPoints - min) / (max + 1 - min)).clamp(0.0, 1.0);
     return Row(mainAxisSize: MainAxisSize.min, children: [
       SizedBox(
         width: width,
@@ -367,7 +376,7 @@ class LevelBar extends StatelessWidget {
         ),
       ),
       const SizedBox(width: 8),
-      Text(next == null ? 'MAX' : '$totalPoints/$next',
+      Text(max == null ? 'MAX' : '${fmtPointsShort(totalPoints)}/$max',
           style: const TextStyle(fontSize: 12, color: textMuted, fontWeight: FontWeight.w600)),
     ]);
   }
@@ -469,11 +478,109 @@ Color medalColor(int place) => place == 1
         ? const Color(0xFFC9D3E3)
         : const Color(0xFFD08A4E);
 
-String periodName(String period) => switch (period) {
-      'WEEK' => 'nedelja',
-      'MONTH' => 'mesec',
-      _ => 'godina',
+const monthNames = [
+  'Januar',
+  'Februar',
+  'Mart',
+  'April',
+  'Maj',
+  'Jun',
+  'Jul',
+  'Avgust',
+  'Septembar',
+  'Oktobar',
+  'Novembar',
+  'Decembar',
+];
+
+/// "2026-10" → "Oktobar 2026."
+String monthLabel(String key) {
+  final parts = key.split('-');
+  final m = int.tryParse(parts.length > 1 ? parts[1] : '') ?? 1;
+  return '${monthNames[(m - 1).clamp(0, 11)]} ${parts[0]}.';
+}
+
+/// Opis perioda medalje: "Oktobar 2026.", "Godina 2026.", "Nedelja 2026-W42".
+String medalPeriodLabel(String period, String key) => switch (period) {
+      'MONTH' => monthLabel(key),
+      'YEAR' => 'Godina $key.',
+      _ => 'Nedelja $key',
     };
+
+/// Poeni sa dve decimale i zarezom: 36.1 → "36,10".
+String fmtPoints(num? v) => (v ?? 0).toStringAsFixed(2).replaceAll('.', ',');
+
+/// Kao fmtPoints, ali bez ",00" kad je ceo broj (za uske prikaze).
+String fmtPointsShort(num? v) {
+  final x = v ?? 0;
+  return x == x.roundToDouble() ? x.round().toString() : fmtPoints(x);
+}
+
+/// "+36,11" / "-10,00" / "0,00"
+String fmtSignedPoints(num? v) => '${(v ?? 0) > 0 ? '+' : ''}${fmtPoints(v)}';
+
+/// Leveli prema ukupnom saldu (isto kao na serveru): svaki se završava na …00, sledeći počinje od …01.
+const levelRanges = <(int, int, int?)>[
+  (1, 0, 100),
+  (2, 101, 500),
+  (3, 501, 2000),
+  (4, 2001, 5000),
+  (5, 5001, 15000),
+  (6, 15001, 50000),
+  (7, 50001, 100000),
+  (8, 100001, 200000),
+  (9, 200001, 500000),
+  (10, 500001, null),
+];
+
+String _thousands(int n) => n.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]}.');
+
+/// Tabela levela (od–do poena), sa istaknutim trenutnim levelom.
+class LevelTable extends StatelessWidget {
+  final int? current;
+  const LevelTable({super.key, this.current});
+
+  @override
+  Widget build(BuildContext context) => Column(children: [
+        for (final (level, from, to) in levelRanges)
+          Container(
+            margin: const EdgeInsets.only(bottom: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+            decoration: BoxDecoration(
+              color: level == current ? gold.withOpacity(0.18) : panel,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: level == current ? gold : panelBorder),
+            ),
+            child: Row(children: [
+              Text('Level $level',
+                  style: TextStyle(fontWeight: FontWeight.w800, color: level == current ? gold : Colors.white)),
+              const Spacer(),
+              Text(to == null ? 'više od ${_thousands(from - 1)}' : '${_thousands(from)} – ${_thousands(to)}',
+                  style: const TextStyle(fontWeight: FontWeight.w600)),
+              const Text('  poena', style: TextStyle(color: textMuted, fontSize: 12)),
+            ]),
+          ),
+      ]);
+}
+
+void showLevelsSheet(BuildContext context, {int? current}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (_) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          const Text('Leveli', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 4),
+          const Text('Level zavisi od ukupnog broja poena.', style: TextStyle(color: textMuted)),
+          const SizedBox(height: 12),
+          LevelTable(current: current),
+        ]),
+      ),
+    ),
+  );
+}
 
 /// „1 početno slovo“, „3 početna slova“, „5 početnih slova“.
 String initialLettersLabel(int n) => switch (n) {

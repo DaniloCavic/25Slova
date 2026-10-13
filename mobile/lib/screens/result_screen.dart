@@ -31,7 +31,7 @@ class _ResultScreenState extends State<ResultScreen> {
     final app = context.watch<AppState>();
     final r = widget.result;
     final outcome = r['outcome'] as String;
-    final delta = r['pointsDelta'] as int;
+    final delta = r['pointsDelta'] as num;
     final me = Map<String, dynamic>.from(r['me']);
     final opp = Map<String, dynamic>.from(r['opponent']);
     final shown = _showOpponent ? opp : me;
@@ -84,12 +84,12 @@ class _ResultScreenState extends State<ResultScreen> {
           Text(app.user?['username'] ?? '',
               textAlign: TextAlign.center, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
           Text(
-            delta == 0 ? 'Saldo poena nepromenjen' : '${delta > 0 ? '+' : ''}$delta poena',
+            delta == 0 ? 'Saldo poena nepromenjen' : '${fmtSignedPoints(delta)} poena',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.w800, color: delta > 0 ? gold : (delta < 0 ? danger : textMuted)),
           ),
-          Text('$reason  ·  Ukupno ${r['totalPoints']} · Level ${r['level']}',
+          Text('$reason  ·  Ukupno ${fmtPoints(r['totalPoints'])} · Level ${r['level']}',
               textAlign: TextAlign.center, style: const TextStyle(color: textMuted, fontSize: 13)),
           const SizedBox(height: 16),
           Panel(

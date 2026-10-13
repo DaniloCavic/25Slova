@@ -78,7 +78,7 @@ model User {
   blockedReason      String?
   blockedAt          DateTime?
   tokens             Int       @default(0)
-  totalPoints        Int       @default(0)
+  totalPoints        Int       @default(0) // u stotinkama poena (3611 = 36,11)
   lastDailyRewardDay String? // "YYYY-MM-DD" u vremenskoj zoni igre
   lastSeenAt         DateTime?
   deletedAt          DateTime?
@@ -128,7 +128,7 @@ model PointsEvent {
   id        String       @id @default(uuid())
   userId    String
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  delta     Int
+  delta     Int // u stotinkama poena
   reason    PointsReason
   matchId   String?
   weekKey   String       @default("") // "2026-W42" (ISO nedelja, ponedeljak–nedelja)
@@ -190,7 +190,7 @@ model MatchPlayer {
   wordsCount  Int      @default(0)
   words       Json?
   livesLeft   Int      @default(3)
-  pointsDelta Int      @default(0)
+  pointsDelta Int      @default(0) // u stotinkama poena
   initialLetters Int   @default(0)
   createdAt   DateTime @default(now())
 

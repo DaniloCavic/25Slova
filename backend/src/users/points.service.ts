@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PointsReason, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { monthKey, weekKey, yearKey } from '../common/time';
+import { toPoints } from '../game/engine/rules';
 
 @Injectable()
 export class PointsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Promena ukupnog, mesečnog i godišnjeg salda (jedan zapis važi za sva tri). */
+  /** Promena ukupnog, nedeljnog, mesečnog i godišnjeg salda; delta je u stotinkama poena. */
   async apply(
     tx: Prisma.TransactionClient,
     userId: string,
@@ -30,6 +31,10 @@ export class PointsService {
       this.prisma.pointsEvent.aggregate({ _sum: { delta: true }, where: { userId, monthKey: monthKey(now) } }),
       this.prisma.pointsEvent.aggregate({ _sum: { delta: true }, where: { userId, yearKey: yearKey(now) } }),
     ]);
-    return { weeklyPoints: w._sum.delta ?? 0, monthlyPoints: m._sum.delta ?? 0, yearlyPoints: y._sum.delta ?? 0 };
+    return {
+      weeklyPoints: toPoints(w._sum.delta ?? 0),
+      monthlyPoints: toPoints(m._sum.delta ?? 0),
+      yearlyPoints: toPoints(y._sum.delta ?? 0),
+    };
   }
 }

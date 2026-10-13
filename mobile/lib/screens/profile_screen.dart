@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final u = app.user ?? {};
-    final total = (u['totalPoints'] ?? 0) as int;
+    final total = (u['totalPoints'] ?? 0) as num;
     return GameScaffold(
       title: 'Moj profil',
       body: ListView(padding: const EdgeInsets.all(16), children: [
@@ -122,13 +122,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text('Level ${u['level'] ?? 1}',
             textAlign: TextAlign.center, style: const TextStyle(color: gold, fontWeight: FontWeight.w700)),
         const SizedBox(height: 8),
-        Center(child: LevelBar(progress: u['levelProgress'], totalPoints: total, width: 180)),
+        Center(
+          child: GestureDetector(
+            onTap: () => showLevelsSheet(context, current: u['level'] as int?),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              LevelBar(progress: u['levelProgress'], totalPoints: total, width: 160),
+              const SizedBox(width: 6),
+              const Icon(Icons.info_outline, size: 18, color: textMuted),
+            ]),
+          ),
+        ),
         const SizedBox(height: 16),
         Row(children: [
-          _Stat(Icons.emoji_events, 'Ukupno', u['totalPoints']),
-          _Stat(Icons.date_range, 'Nedelja', u['weeklyPoints']),
-          _Stat(Icons.calendar_month, 'Mesec', u['monthlyPoints']),
-          _Stat(Icons.bar_chart, 'Godina', u['yearlyPoints']),
+          _Stat(Icons.emoji_events, 'Ukupno', fmtPointsShort(u['totalPoints'])),
+          _Stat(Icons.date_range, 'Nedelja', fmtPointsShort(u['weeklyPoints'])),
+          _Stat(Icons.calendar_month, 'Mesec', fmtPointsShort(u['monthlyPoints'])),
+          _Stat(Icons.bar_chart, 'Godina', fmtPointsShort(u['yearlyPoints'])),
           _Stat(Icons.monetization_on, 'Tokeni', u['tokens']),
         ]),
         const SizedBox(height: 18),
@@ -169,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   for (final m in medals.take(12))
                     Chip(
                       avatar: Icon(Icons.military_tech, color: medalColor(m['place'])),
-                      label: Text('${m['place']}. mesto · ${periodName(m['period'])} ${m['periodKey']}'),
+                      label: Text('${m['place']}. mesto · ${medalPeriodLabel(m['period'], m['periodKey'])}'),
                     ),
                 ]),
               const SizedBox(height: 18),
@@ -199,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: const TextStyle(color: textMuted, fontSize: 13)),
                         ]),
                       ),
-                      Text('${m['pointsDelta'] > 0 ? '+' : ''}${m['pointsDelta']}',
+                      Text(fmtSignedPoints(m['pointsDelta']),
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 17,

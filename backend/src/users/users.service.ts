@@ -6,6 +6,7 @@ import * as path from 'path';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { selfView } from '../common/public-user';
+import { toPoints } from '../game/engine/rules';
 import { PointsService } from './points.service';
 import { ChangePasswordDto, UpdateProfileDto } from './dto';
 
@@ -138,10 +139,11 @@ export class UsersService {
   }
 
   async medals(userId: string) {
-    return this.prisma.medal.findMany({
+    const rows = await this.prisma.medal.findMany({
       where: { userId },
-      orderBy: [{ periodKey: 'desc' }, { place: 'asc' }],
+      orderBy: [{ createdAt: 'desc' }, { place: 'asc' }],
       select: { id: true, period: true, periodKey: true, place: true, points: true },
     });
+    return rows.map((m) => ({ ...m, points: toPoints(m.points) }));
   }
 }

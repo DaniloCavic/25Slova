@@ -7,7 +7,7 @@ import { TokensService } from '../tokens/tokens.service';
 import { PointsService } from '../users/points.service';
 import { DictionaryService } from '../words/dictionary.service';
 import { SettingsService } from '../settings/settings.service';
-import { levelForPoints, MATCH_ENTRY_COST, MATCH_TYPES, randomMatchType } from './engine/rules';
+import { levelForCents, MATCH_ENTRY_COST, MATCH_TYPES, randomMatchType, toPoints } from './engine/rules';
 import {
   applyMove,
   applyResign,
@@ -126,7 +126,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   private playerInfo(u: User): PlayerInfo {
-    return { userId: u.id, username: u.username, avatarUrl: u.avatarUrl, level: levelForPoints(u.totalPoints) };
+    return { userId: u.id, username: u.username, avatarUrl: u.avatarUrl, level: levelForCents(u.totalPoints) };
   }
 
   private assertFree(user: User) {
@@ -468,9 +468,9 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
         matchId: rt.matchId,
         outcome: result.winner === null ? 'DRAW' : result.winner === seat ? 'WIN' : 'LOSS',
         endReason: s.endReason,
-        pointsDelta: result.pointsDelta[seat],
-        totalPoints: total,
-        level: levelForPoints(total),
+        pointsDelta: toPoints(result.pointsDelta[seat]),
+        totalPoints: toPoints(total),
+        level: levelForCents(total),
         initialCells: s.initialCells.map((c) => c.cell),
         me: this.boardResult(s, result, seat as Seat, rt.players[seat]),
         opponent: this.boardResult(s, result, opp, rt.players[opp]),

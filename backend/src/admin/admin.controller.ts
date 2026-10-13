@@ -13,7 +13,7 @@ import { GameService } from '../game/game.service';
 import { SettingsService, MatchmakingSettings } from '../settings/settings.service';
 import { DictionaryService } from '../words/dictionary.service';
 import { dayKey, monthKey } from '../common/time';
-import { levelForPoints } from '../game/engine/rules';
+import { levelForCents, toCents, toPoints } from '../game/engine/rules';
 import { IsEmail } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -65,6 +65,18 @@ class AdjustDto {
   note?: string;
 }
 
+/** Poeni mogu imati dve decimale (npr. 12,50). */
+class AdjustPointsDto {
+  @Type(() => Number)
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Poeni mogu imati najviše dve decimale.' })
+  amount: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(300)
+  note?: string;
+}
+
 class MatchmakingDto implements Partial<MatchmakingSettings> {
   @IsOptional() @IsNumber() initialLevelRange?: number;
   @IsOptional() @IsNumber() expandEverySeconds?: number;
@@ -100,8 +112,8 @@ export class AdminController {
       blockedReason: u.blockedReason,
       blockedAt: u.blockedAt,
       tokens: u.tokens,
-      totalPoints: u.totalPoints,
-      level: levelForPoints(u.totalPoints),
+      totalPoints: toPoints(u.totalPoints),
+      level: levelForCents(u.totalPoints),
       linkedGoogle: !!u.googleId,
       linkedApple: !!u.appleId,
       lastSeenAt: u.lastSeenAt,
@@ -172,7 +184,7 @@ export class AdminController {
         outcome: m.match.isDraw ? 'DRAW' : m.match.winnerId ? (m.match.winnerId === id ? 'WIN' : 'LOSS') : null,
         score: m.score,
         wordsCount: m.wordsCount,
-        pointsDelta: m.pointsDelta,
+        pointsDelta: toPoints(m.pointsDelta),
         endedAt: m.match.endedAt,
       })),
     };
@@ -241,10 +253,10 @@ export class AdminController {
   }
 
   @Post('users/:id/points')
-  async adjustPoints(@Param('id') id: string, @Body() dto: AdjustDto) {
+  async adjustPoints(@Param('id') id: string, @Body() dto: AdjustPointsDto) {
     await this.getUser(id);
     if (!dto.amount) throw new BadRequestException('Iznos ne može biti 0.');
-    await this.prisma.$transaction((tx) => this.points.apply(tx, id, dto.amount, 'ADMIN_ADJUST'));
+    await this.prisma.$transaction((tx) => this.points.apply(tx, id, toCents(dto.amount), 'ADMIN_ADJUST'));
     return this.adminView(await this.getUser(id));
   }
 

@@ -166,8 +166,8 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
 
   String _periodTitle(String key) => switch (widget.period) {
         'week' => 'Nedelja ${key.split('-W').last}. · ${key.split('-W').first}',
-        'month' => 'Mesec ${key.substring(5)}/${key.substring(0, 4)}',
-        _ => 'Godina $key',
+        'month' => monthLabel(key),
+        _ => 'Godina $key.',
       };
 
   Widget _row(Map r, {bool highlight = false}) {
@@ -213,7 +213,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               Text('Level ${r['level']}', style: TextStyle(color: first ? gold : textMuted, fontSize: 12)),
             ]),
           ),
-          Text('${r['points']}',
+          Text(fmtPoints(r['points']),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: first ? gold : Colors.white)),
           const SizedBox(width: 4),
         ]),

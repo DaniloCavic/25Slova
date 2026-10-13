@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/common.dart';
 
 class RulesScreen extends StatelessWidget {
   const RulesScreen({super.key});
@@ -33,7 +34,7 @@ class RulesScreen extends StatelessWidget {
       ('Pobednik', 'Pobeđuje igrač sa više poena; ako su poeni isti — onaj sa više reči; ako je i to isto — nerešeno.'),
       (
         'Saldo',
-        'Pobednik dobija (poeni × broj reči) ÷ 7,2 poena na ukupni, mesečni i godišnji saldo. Poraz oduzima 10 poena. Nerešeno ne menja saldo.'
+        'Pobednik dobija (poeni × broj reči) ÷ 7,2 poena na ukupni, nedeljni, mesečni i godišnji saldo, na dve decimale (npr. 36,11). Poraz oduzima 10 poena. Nerešeno ne menja saldo.'
       ),
       (
         'Tokeni',
@@ -41,7 +42,7 @@ class RulesScreen extends StatelessWidget {
       ),
       (
         'Medalje',
-        'Prva tri mesta na mesečnoj i godišnjoj rang-listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu.'
+        'Prva tri mesta na nedeljnoj, mesečnoj i godišnjoj rang-listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu. Pri istom broju poena ispred je igrač koji je do njih stigao ranije.'
       ),
     ];
     return Scaffold(
@@ -60,6 +61,12 @@ class RulesScreen extends StatelessWidget {
             ),
           const Text('Primer: OROGT donosi 3 poena (ROG), a GORTS 5 poena jer se unazad čita STROG.',
               style: TextStyle(fontStyle: FontStyle.italic)),
+          const SizedBox(height: 20),
+          const Text('Leveli', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          const Text('Level zavisi od ukupnog broja poena:', style: TextStyle(height: 1.4)),
+          const SizedBox(height: 8),
+          const LevelTable(),
         ],
       ),
     );

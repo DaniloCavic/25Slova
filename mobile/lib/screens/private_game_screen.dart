@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -140,9 +142,10 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
                   child: OutlinedButton.icon(
                     icon: const Icon(Icons.ios_share),
                     label: const Text('Podeli'),
-                    onPressed: () => _copy(
-                      'Hajde da igramo 25 Slova! Uđi u „Igraj sa prijateljem“ → „Unesi kod“ i upiši: $code',
-                      'Poruka sa kodom je kopirana — nalepi je prijatelju.',
+                    onPressed: () => Share.share(
+                      'Hajde da igramo 25 Slova! U igri otvori „Igraj sa prijateljem“ → „Unesi kod“ i upiši: $code\n'
+                      'Nemaš igru? Otvori $productionUrl/igra',
+                      subject: '25 Slova — kod za partiju',
                     ),
                   ),
                 ),
