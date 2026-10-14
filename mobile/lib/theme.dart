@@ -69,10 +69,11 @@ Color get goldAccent => isDark ? gold : const Color(0xFFA86A00);
 
 /// Font celog teksta u aplikaciji.
 const appFontFamily = 'Raleway';
+const _lnum = [FontFeature.liningFigures()];
 
 /// Raleway podrazumevano ima „stare“ brojeve različite visine; za poene i tokene koristimo ravne.
 TextTheme _liningFigures(TextTheme t) {
-  const f = [FontFeature.liningFigures()];
+  const f = _lnum;
   TextStyle? fix(TextStyle? s) => s?.copyWith(fontFeatures: f);
   return t.copyWith(
     displayLarge: fix(t.displayLarge),
@@ -132,8 +133,8 @@ ThemeData buildTheme() {
     error: danger,
   );
   // Ceo tekst u aplikaciji je Raleway Bold (naslovi ekrana zadržavaju svoj font).
-  final base = ThemeData(
-      colorScheme: scheme, useMaterial3: true, brightness: pal.brightness, fontFamily: appFontFamily);
+  final base =
+      ThemeData(colorScheme: scheme, useMaterial3: true, brightness: pal.brightness, fontFamily: appFontFamily);
   return base.copyWith(
     scaffoldBackgroundColor: bgBottom,
     textTheme: _liningFigures(base.textTheme.apply(bodyColor: textMain, displayColor: textMain)),
@@ -143,7 +144,8 @@ ThemeData buildTheme() {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: textMain),
+      titleTextStyle: TextStyle(
+          fontFamily: appFontFamily, fontFeatures: _lnum, fontSize: 20, fontWeight: FontWeight.w700, color: textMain),
     ),
     cardTheme: CardTheme(
       color: panel,
@@ -157,9 +159,9 @@ ThemeData buildTheme() {
       filled: true,
       fillColor: panel,
       isDense: true,
-      labelStyle: TextStyle(color: textMuted),
-      hintStyle: TextStyle(color: textMuted),
-      helperStyle: TextStyle(color: textMuted),
+      labelStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMuted),
+      hintStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMuted),
+      helperStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMuted),
       prefixIconColor: textMuted,
       suffixIconColor: textMuted,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: panelBorder)),
@@ -176,7 +178,12 @@ ThemeData buildTheme() {
         disabledForegroundColor: textMuted,
         minimumSize: const Size.fromHeight(52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, letterSpacing: 0.5),
+        textStyle: const TextStyle(
+            fontFamily: appFontFamily,
+            fontFeatures: _lnum,
+            fontSize: 17,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.5),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -186,7 +193,8 @@ ThemeData buildTheme() {
         side: BorderSide(color: panelBorder, width: 1.5),
         minimumSize: const Size.fromHeight(50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        textStyle:
+            const TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, fontSize: 16, fontWeight: FontWeight.w700),
       ),
     ),
     textButtonTheme:
@@ -196,11 +204,11 @@ ThemeData buildTheme() {
       unselectedLabelColor: textMuted,
       indicatorSize: TabBarIndicatorSize.tab,
       dividerColor: Colors.transparent,
-      labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+      labelStyle: const TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, fontWeight: FontWeight.w700),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: panelLight,
-      contentTextStyle: TextStyle(color: textMain),
+      contentTextStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMain),
       behavior: SnackBarBehavior.floating,
     ),
     dialogTheme: DialogTheme(
@@ -213,7 +221,7 @@ ThemeData buildTheme() {
     chipTheme: ChipThemeData(
       backgroundColor: panelLight,
       side: BorderSide(color: panelBorder),
-      labelStyle: TextStyle(color: textMain),
+      labelStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMain),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(color: gold),

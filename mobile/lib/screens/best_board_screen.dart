@@ -38,6 +38,7 @@ class _BestBoardScreenState extends State<BestBoardScreen> {
                 ButtonSegment(value: '3', label: Text('3 slova')),
                 ButtonSegment(value: '5', label: Text('5 slova')),
               ],
+              showSelectedIcon: false,
               selected: {_tab},
               onSelectionChanged: (s) => setState(() => _tab = s.first),
             ),
