@@ -14,6 +14,8 @@ export const LOSS_PENALTY = 10;
  */
 export const POINTS_SCALE = 100;
 export const LOSS_PENALTY_CENTS = LOSS_PENALTY * POINTS_SCALE;
+/** Pobeda zato što je protivnik predao ili izgubio sva tri života: fiksno 25 poena. */
+export const FORFEIT_WIN_CENTS = 25 * POINTS_SCALE;
 export const toPoints = (cents: number) => cents / POINTS_SCALE;
 export const toCents = (points: number) => Math.round(points * POINTS_SCALE);
 export const MIN_WORD_LENGTH = 2;

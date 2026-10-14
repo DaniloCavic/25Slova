@@ -42,7 +42,8 @@ class PictureBackground extends StatelessWidget {
             child: SizedBox(
               width: w,
               child: Stack(fit: StackFit.expand, children: [
-                Image.asset('assets/images/pozadina.jpg', fit: BoxFit.cover, alignment: Alignment.topCenter),
+                Image.asset(isDark ? 'assets/images/pozadina.jpg' : 'assets/images/pozadina_svetla.jpg',
+                    fit: BoxFit.cover, alignment: Alignment.topCenter),
                 DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -342,7 +343,7 @@ class TokenChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
+            color: headerChipColor,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(color: panelBorder),
           ),

@@ -154,79 +154,176 @@ class _GameScreenState extends State<GameScreen> {
               if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
               IconButton(tooltip: 'Predaj', icon: const Icon(Icons.flag_outlined), onPressed: () => _resign(app)),
             ],
-            body: SafeArea(
-              top: false,
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
-                children: [
-                  Panel(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Row(children: [
-                      _player(me, active: myTurn, alignRight: false),
-                      TimerRing(seconds: secs, fraction: left / turnMs, urgent: secs <= 10),
-                      _player(opp, active: !myTurn, alignRight: true),
-                    ]),
-                  ),
-                  const SizedBox(height: 10),
-                  Panel(
-                    gradient: myTurn ? blueGradient : null,
-                    borderColor: myTurn ? const Color(0xFF4F80E0) : panelBorder,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                    child: Text(status,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w800, color: myTurn ? Colors.white : textMuted)),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: BoardGrid(
-                      board: me['board'] as List,
-                      script: script,
-                      initialCells: Set<int>.from(m['initialCells'] as List),
-                      selected: _cell,
-                      previewLetter: choose ? _letter : current,
-                      onTap: myTurn ? (i) => setState(() => _cell = i) : null,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(children: [
-                    Text('${opp['username']}: ${opp['filled']}/25', style: TextStyle(color: textMuted, fontSize: 13)),
-                    const Spacer(),
-                    Text('Potez ${(myPlaced + 1).clamp(1, totalMoves)}/$totalMoves',
-                        style: const TextStyle(fontWeight: FontWeight.w700)),
-                  ]),
-                  const SizedBox(height: 10),
-                  if (myTurn && choose)
-                    LetterPicker(script: script, selected: _letter, onPick: (l) => setState(() => _letter = l)),
-                  if (myTurn && !choose)
-                    Center(
-                      child: Container(
-                        width: 76,
-                        height: 76,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          gradient: goldGradient,
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: const Color(0xFFFFE9A6), width: 2),
-                        ),
-                        child: Text(showLetter(current, script),
-                            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: goldText)),
+            body: LifeLostOverlay(
+                lifeLost: app.lifeLost,
+                child: SafeArea(
+                  top: false,
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 16),
+                    children: [
+                      Panel(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Row(children: [
+                          _player(me, active: myTurn, alignRight: false),
+                          TimerRing(seconds: secs, fraction: left / turnMs, urgent: secs <= 10),
+                          _player(opp, active: !myTurn, alignRight: true),
+                        ]),
                       ),
-                    ),
-                  const SizedBox(height: 14),
-                  if (myTurn)
-                    GoldButton(
-                      label:
-                          _cell == null ? 'IZABERI POLJE' : (choose && _letter == null ? 'IZABERI SLOVO' : 'POTVRDI'),
-                      height: 58,
-                      onPressed: canConfirm ? () => _confirm(app, m) : null,
-                    ),
-                ],
-              ),
-            ),
+                      const SizedBox(height: 10),
+                      Panel(
+                        gradient: myTurn ? blueGradient : null,
+                        borderColor: myTurn ? const Color(0xFF4F80E0) : panelBorder,
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                        child: Text(status,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w800, color: myTurn ? Colors.white : textMuted)),
+                      ),
+                      const SizedBox(height: 10),
+                      Center(
+                        child: BoardGrid(
+                          board: me['board'] as List,
+                          script: script,
+                          initialCells: Set<int>.from(m['initialCells'] as List),
+                          selected: _cell,
+                          previewLetter: choose ? _letter : current,
+                          onTap: myTurn ? (i) => setState(() => _cell = i) : null,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(children: [
+                        Text('${opp['username']}: ${opp['filled']}/25',
+                            style: TextStyle(color: textMuted, fontSize: 13)),
+                        const Spacer(),
+                        Text('Potez ${(myPlaced + 1).clamp(1, totalMoves)}/$totalMoves',
+                            style: const TextStyle(fontWeight: FontWeight.w700)),
+                      ]),
+                      const SizedBox(height: 10),
+                      if (myTurn && choose)
+                        LetterPicker(script: script, selected: _letter, onPick: (l) => setState(() => _letter = l)),
+                      if (myTurn && !choose)
+                        Center(
+                          child: Container(
+                            width: 76,
+                            height: 76,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              gradient: goldGradient,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: const Color(0xFFFFE9A6), width: 2),
+                            ),
+                            child: Text(showLetter(current, script),
+                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: goldText)),
+                          ),
+                        ),
+                      const SizedBox(height: 14),
+                      if (myTurn)
+                        GoldButton(
+                          label: _cell == null
+                              ? 'IZABERI POLJE'
+                              : (choose && _letter == null ? 'IZABERI SLOVO' : 'POTVRDI'),
+                          height: 58,
+                          onPressed: canConfirm ? () => _confirm(app, m) : null,
+                        ),
+                    ],
+                  ),
+                )),
           ),
         );
       },
     );
+  }
+}
+
+/// Velika poruka na sredini ekrana kad neko izgubi život (istek vremena).
+class LifeLostOverlay extends StatefulWidget {
+  final ValueNotifier<({bool mine, int livesLeft, DateTime at})?> lifeLost;
+  final Widget child;
+  const LifeLostOverlay({super.key, required this.lifeLost, required this.child});
+
+  @override
+  State<LifeLostOverlay> createState() => _LifeLostOverlayState();
+}
+
+class _LifeLostOverlayState extends State<LifeLostOverlay> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 2600));
+  ({bool mine, int livesLeft, DateTime at})? _event;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.lifeLost.addListener(_onEvent);
+  }
+
+  void _onEvent() {
+    final e = widget.lifeLost.value;
+    if (e == null || DateTime.now().difference(e.at).inSeconds > 3) return;
+    setState(() => _event = e);
+    _c.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    widget.lifeLost.removeListener(_onEvent);
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      widget.child,
+      if (_event != null)
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _c,
+            builder: (context, _) {
+              final t = _c.value;
+              if (t == 0 || t == 1) return const SizedBox.shrink();
+              // Brzo se pojavi, kratko stoji, polako nestane.
+              final opacity = t < 0.12 ? t / 0.12 : (t > 0.75 ? (1 - t) / 0.25 : 1.0);
+              final scale = t < 0.12 ? 0.6 + 0.4 * Curves.easeOutBack.transform(t / 0.12) : 1.0;
+              final e = _event!;
+              return Container(
+                color: Colors.black.withOpacity(0.45 * opacity),
+                alignment: Alignment.center,
+                child: Opacity(
+                  opacity: opacity.clamp(0.0, 1.0),
+                  child: Transform.scale(
+                    scale: scale,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 32),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+                      decoration: BoxDecoration(
+                        color: panel,
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(color: danger, width: 2.5),
+                        boxShadow: [BoxShadow(color: danger.withOpacity(0.5), blurRadius: 30)],
+                      ),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.heart_broken, color: danger, size: 72),
+                        const SizedBox(height: 8),
+                        Text(
+                          e.mine ? 'ISTEKLO VREME!' : 'PROTIVNIKU JE ISTEKLO VREME',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: danger),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          e.mine ? 'Izgubio si jedan život' : 'Protivnik je izgubio jedan život',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: textMain, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 10),
+                        Lives(e.livesLeft, size: 30),
+                      ]),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+    ]);
   }
 }

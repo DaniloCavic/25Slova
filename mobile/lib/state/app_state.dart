@@ -22,7 +22,7 @@ class AppState extends ChangeNotifier {
   /// Slova se prikazuju latinicom (ćirilica je samo interni zapis na serveru).
   final Script script = Script.latin;
 
-  /// Režim prikaza: 'dark', 'light' ili 'system' (prema podešavanju telefona pri pokretanju).
+  /// Režim prikaza: 'dark' (podrazumevano) ili 'light'.
   String themeMode = 'dark';
 
   /// Menja se pri promeni režima — ceo prikaz se tada ponovo iscrtava novim bojama.
@@ -30,6 +30,9 @@ class AppState extends ChangeNotifier {
 
   io.Socket? _socket;
   bool socketConnected = false;
+
+  /// Poslednji izgubljen život u partiji (ko i koliko je ostalo) — za animaciju na ekranu partije.
+  final lifeLost = ValueNotifier<({bool mine, int livesLeft, DateTime at})?>(null);
 
   /// Trenutna partija (stanje iz ugla ovog igrača) — null ako nije u partiji.
   final match = ValueNotifier<Map<String, dynamic>?>(null);
@@ -78,11 +81,9 @@ class AppState extends ChangeNotifier {
   }
 
   void _applyTheme(String mode) {
+    if (mode != 'light') mode = 'dark'; // podrazumevano tamni režim
     themeMode = mode;
-    final brightness = mode == 'system'
-        ? WidgetsBinding.instance.platformDispatcher.platformBrightness
-        : (mode == 'light' ? Brightness.light : Brightness.dark);
-    pal = brightness == Brightness.light ? lightPalette : darkPalette;
+    pal = mode == 'light' ? lightPalette : darkPalette;
     themeVersion++;
   }
 
@@ -207,8 +208,8 @@ class AppState extends ChangeNotifier {
     s.on('match:life-lost', (data) {
       final m = match.value;
       if (m == null) return;
-      final mine = data['seat'] == m['mySeat'];
-      toast(mine ? 'Isteklo vreme — izgubili ste život!' : 'Protivniku je isteklo vreme i izgubio je život.');
+      // Ekran partije prikazuje veliku poruku na sredini ekrana.
+      lifeLost.value = (mine: data['seat'] == m['mySeat'], livesLeft: data['livesLeft'] as int, at: DateTime.now());
     });
     s.on('match:end', (data) {
       match.value = null;

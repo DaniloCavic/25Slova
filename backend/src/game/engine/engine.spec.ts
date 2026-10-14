@@ -159,6 +159,7 @@ describe('tok partije', () => {
     const res = computeResult(s, isWord);
     expect(res.winner).toBe(a === 0 ? 1 : 0);
     expect(res.pointsDelta[a]).toBe(-1000);
+    expect(res.pointsDelta[a === 0 ? 1 : 0]).toBe(2500); // fiksno 25 poena
   });
 
   it('partija se završava kad se obe table popune', () => {
@@ -196,7 +197,9 @@ describe('tok partije', () => {
 
   it('predaja daje pobedu protivniku', () => {
     const s = applyResign(createMatchState(2, 0), 1);
-    expect(computeResult(s, isWord).winner).toBe(0);
+    const r = computeResult(s, isWord);
+    expect(r.winner).toBe(0);
+    expect(r.pointsDelta).toEqual([2500, -1000]);
   });
 });
 

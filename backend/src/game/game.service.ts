@@ -466,6 +466,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       const total = totals.find((t) => t.id === p.userId)?.totalPoints ?? 0;
       this.emitUser(p.userId, 'match:end', {
         matchId: rt.matchId,
+        mode: rt.mode,
         outcome: result.winner === null ? 'DRAW' : result.winner === seat ? 'WIN' : 'LOSS',
         endReason: s.endReason,
         pointsDelta: toPoints(result.pointsDelta[seat]),

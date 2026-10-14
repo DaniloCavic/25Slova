@@ -61,6 +61,9 @@ Color get success => pal.success;
 Color get cellWord => pal.success;
 bool get isDark => pal.brightness == Brightness.dark;
 
+/// Neprovidna pozadina za traku sa tokenima i imenom na početnom ekranu (preko slike).
+Color get headerChipColor => isDark ? const Color(0xFF0A1530) : const Color(0xFF1E4FA8);
+
 /// Zlatna za tekst: na svetloj podlozi tamnija da bi bila čitljiva.
 Color get goldAccent => isDark ? gold : const Color(0xFFA86A00);
 

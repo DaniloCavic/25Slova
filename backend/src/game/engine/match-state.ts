@@ -1,5 +1,5 @@
 import { isLetter, Letter, randomWeightedLetter } from './alphabet';
-import { CELL_COUNT, LIVES_PER_MATCH, MATCH_TYPES, MatchType, winRewardCents, LOSS_PENALTY_CENTS } from './rules';
+import { CELL_COUNT, LIVES_PER_MATCH, MATCH_TYPES, MatchType, winRewardCents, LOSS_PENALTY_CENTS, FORFEIT_WIN_CENTS } from './rules';
 import { Board, BoardScore, scoreBoard } from './scoring';
 
 export type Seat = 0 | 1;
@@ -187,7 +187,8 @@ export function computeResult(state: MatchState, isWord: (w: string) => boolean)
   const pointsDelta: [number, number] = [0, 0];
   if (winner !== null) {
     const w = scores[winner];
-    pointsDelta[winner] = winRewardCents(w.points, w.wordsCount);
+    // Predaja ili gubitak sva tri života: pobedniku fiksno 25 poena.
+    pointsDelta[winner] = state.forfeitedBy !== undefined ? FORFEIT_WIN_CENTS : winRewardCents(w.points, w.wordsCount);
     pointsDelta[other(winner)] = -LOSS_PENALTY_CENTS;
   }
   return { scores, winner, pointsDelta };

@@ -17,7 +17,6 @@ class SettingsScreen extends StatelessWidget {
         for (final (mode, label, icon) in [
           ('dark', 'Tamni režim', Icons.dark_mode),
           ('light', 'Svetli režim', Icons.light_mode),
-          ('system', 'Prema podešavanju telefona', Icons.brightness_auto),
         ])
           RadioListTile<String>(
             title: Text(label),

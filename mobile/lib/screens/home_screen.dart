@@ -69,7 +69,8 @@ class HomeScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.35),
+                          color: headerChipColor,
+                          border: Border.all(color: Colors.white24),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Row(children: [
@@ -87,9 +88,14 @@ class HomeScreen extends StatelessWidget {
                         ]),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.settings, color: Colors.white),
-                      onPressed: () => _go(context, const SettingsScreen()),
+                    const SizedBox(width: 6),
+                    Material(
+                      color: headerChipColor,
+                      shape: const CircleBorder(side: BorderSide(color: Colors.white24)),
+                      child: IconButton(
+                        icon: const Icon(Icons.settings, color: Colors.white),
+                        onPressed: () => _go(context, const SettingsScreen()),
+                      ),
                     ),
                   ]),
                 ),
