@@ -268,7 +268,7 @@ class BlueButton extends StatelessWidget {
       );
 }
 
-/// Kvadratna pločica menija (Rang-liste, Tokeni…).
+/// Kvadratna pločica menija (RANG LISTE, TOKENI…) — natpis velikim slovima.
 class MenuTile extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -283,7 +283,8 @@ class MenuTile extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, color: iconColor, size: 34),
           const SizedBox(height: 8),
-          Text(label, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+          Text(label.toUpperCase(),
+              textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
         ]),
       );
 }

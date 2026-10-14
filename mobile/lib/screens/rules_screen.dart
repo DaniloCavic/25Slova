@@ -42,7 +42,7 @@ class RulesScreen extends StatelessWidget {
       ),
       (
         'Medalje',
-        'Prva tri mesta na nedeljnoj, mesečnoj i godišnjoj rang-listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu. Pri istom broju poena ispred je igrač koji je do njih stigao ranije.'
+        'Prva tri mesta na nedeljnoj, mesečnoj i godišnjoj rang listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu. Pri istom broju poena ispred je igrač koji je do njih stigao ranije.'
       ),
     ];
     return Scaffold(

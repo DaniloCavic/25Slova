@@ -8,7 +8,7 @@ a na kraju se broje reči u redovima, kolonama i dijagonalama.
 
 | Folder | Šta je | Tehnologija |
 |---|---|---|
-| `backend/` | Server: nalozi, tokeni, rečnik, partije u realnom vremenu, rang-liste, admin API | NestJS (TypeScript), PostgreSQL (Prisma), Socket.IO |
+| `backend/` | Server: nalozi, tokeni, rečnik, partije u realnom vremenu, rang liste, admin API | NestJS (TypeScript), PostgreSQL (Prisma), Socket.IO |
 | `admin/` | Admin panel u pregledaču (server ga servira na `/admin`) | React + Vite |
 | `mobile/` | Mobilna aplikacija — jedan kod za Android i iPhone | Flutter |
 
@@ -32,10 +32,10 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - E-mail i telefon se ne prikazuju drugim igračima.
 - Server je spreman za Google i Apple prijavu (provera tokena, dopuna profila, povezivanje bez preuzimanja tuđeg naloga).
 
-**Tokeni, poeni, rang-liste**
+**Tokeni, poeni, rang liste**
 - Svaka promena tokena je posebna transakcija. Dnevna nagrada 30 tokena (najviše jednom dnevno, zaštićeno i od istovremenih zahteva).
 - Partija košta 10 tokena po igraču. Nagrada za reklamu (5 tokena) preko AdMob serverske provere potpisa.
-- Ukupni, mesečni i godišnji saldo; leveli 1–10; mesečna i godišnja rang-lista sa pretragom igrača; istorija prethodnih perioda.
+- Ukupni, mesečni i godišnji saldo; leveli 1–10; mesečna i godišnja rang lista sa pretragom igrača; istorija prethodnih perioda.
 - Medalje za 1., 2. i 3. mesto na kraju meseca i godine (automatski, i nadoknadi ako je server bio ugašen).
 - „Najbolja tabla ikad“ — ukupno i posebno za 1, 3 i 5 početnih slova, sa označenim početnim slovima.
 
@@ -106,7 +106,7 @@ Gde specifikacija ostavlja izbor, primenjeno je sledeće (sve se lako menja):
 11. **Dan, mesec i godina** — računaju se po vremenu u Srbiji (`Europe/Belgrade`), ne po satu telefona.
 12. **Registracija** — e-mail je obavezan (potreban za zaboravljenu lozinku), telefon nije; korisničko ime 5–20 znakova, bilo koji znakovi; lozinka najmanje 8 znakova sa slovom i brojem.
 13. **Brisanje naloga** — lični podaci se trajno brišu, a odigrane partije ostaju anonimne (da protivnicima ne nestanu iz istorije).
-14. **Rang-liste** — samo mesečna i godišnja (ukupna je izbačena na zahtev), sa pretragom igrača po imenu; pretraga pokazuje pravo mesto igrača na listi.
+14. **Rang liste** — samo mesečna i godišnja (ukupna je izbačena na zahtev), sa pretragom igrača po imenu; pretraga pokazuje pravo mesto igrača na listi.
 15. **Rečnik** — čuvaju se samo reči od 2 do 5 slova (duže ne mogu stati u niz). Unos latinicom se pretvara u ćirilicu; reči kod kojih „nj/lj/dž“ nisu jedno slovo (npr. „injekcija“) unose se ćirilicom.
 16. **Google/Apple nalog sa istim e-mailom** kao postojeći nalog se ne spaja automatski (zaštita od preuzimanja naloga); korisnik se prijavi lozinkom i poveže nalog iz profila.
 17. **Privatni kod** — 6 znakova, važi 10 minuta (podesivo); igrač koji je napravio kod mora biti u aplikaciji kada se drugi pridruži.

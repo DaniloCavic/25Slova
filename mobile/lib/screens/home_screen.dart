@@ -57,35 +57,44 @@ class HomeScreen extends StatelessWidget {
                 DefaultTextStyle.merge(
                   style: const TextStyle(color: Colors.white),
                   child: Row(children: [
-                    TokenChip((u['tokens'] ?? 0) as int, onTap: () => _go(context, const TokensScreen())),
-                    const Spacer(),
-                    if (!app.socketConnected)
-                      const Padding(
-                        padding: EdgeInsets.only(right: 6),
-                        child: Tooltip(message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: Colors.white70)),
-                      ),
-                    GestureDetector(
-                      onTap: () => _go(context, const ProfileScreen()),
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
-                        decoration: BoxDecoration(
-                          color: headerChipColor,
-                          border: Border.all(color: Colors.white24),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(children: [
-                          UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
-                          const SizedBox(width: 8),
-                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(u['username'] ?? '',
-                                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                            Text('Level ${u['level'] ?? 1}',
-                                style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
-                            const SizedBox(height: 3),
-                            LevelBar(
-                                progress: u['levelProgress'], totalPoints: total, width: 70, textColor: Colors.white70),
+                    // Jedna traka: profil levo, tokeni desno.
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _go(context, const ProfileScreen()),
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(4, 4, 6, 4),
+                          decoration: BoxDecoration(
+                            color: headerChipColor,
+                            border: Border.all(color: Colors.white24),
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Row(children: [
+                            UserAvatar(url: u['avatarUrl'], name: u['username'] ?? '', radius: 22, ring: true),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                Text(u['username'] ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                                Text('Level ${u['level'] ?? 1}',
+                                    style: const TextStyle(color: gold, fontWeight: FontWeight.w700, fontSize: 13)),
+                                const SizedBox(height: 3),
+                                LevelBar(
+                                    progress: u['levelProgress'],
+                                    totalPoints: total,
+                                    width: 60,
+                                    textColor: Colors.white70),
+                              ]),
+                            ),
+                            if (!app.socketConnected)
+                              const Padding(
+                                padding: EdgeInsets.only(right: 6),
+                                child: Tooltip(
+                                    message: 'Povezivanje…', child: Icon(Icons.cloud_off, color: Colors.white70)),
+                              ),
+                            TokenChip((u['tokens'] ?? 0) as int, onTap: () => _go(context, const TokensScreen())),
                           ]),
-                        ]),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -132,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisSpacing: 12,
                   childAspectRatio: 1.75,
                   children: [
-                    MenuTile(Icons.emoji_events, 'Rang-liste', () => _go(context, const LeaderboardScreen())),
+                    MenuTile(Icons.emoji_events, 'Rang liste', () => _go(context, const LeaderboardScreen())),
                     MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen())),
                     MenuTile(Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
                     MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),

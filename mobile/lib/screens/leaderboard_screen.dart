@@ -13,7 +13,7 @@ class LeaderboardScreen extends StatelessWidget {
         length: 3,
         initialIndex: 1,
         child: GameScaffold(
-          title: 'Rang-liste',
+          title: 'Rang liste',
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(54),
             child: Container(
