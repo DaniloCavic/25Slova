@@ -253,7 +253,7 @@ class _Stat extends StatelessWidget {
           child: Panel(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
             child: Column(children: [
-              Icon(icon, color: gold, size: 22),
+              icon == Icons.monetization_on ? const CoinIcon(size: 22) : Icon(icon, color: gold, size: 22),
               const SizedBox(height: 4),
               FittedBox(
                   child: Text('${value ?? 0}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900))),

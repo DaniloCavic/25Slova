@@ -115,6 +115,7 @@ class HomeScreen extends StatelessWidget {
                   subtitle: 'nasumični protivnik',
                   icon: Icons.play_arrow_rounded,
                   height: 72,
+                  trailing: const CostTag(matchCost),
                   onPressed: () => _playRandom(context),
                 ),
                 const SizedBox(height: 12),
@@ -123,16 +124,10 @@ class HomeScreen extends StatelessWidget {
                   subtitle: 'pošalji ili unesi kod',
                   icon: Icons.group,
                   height: 64,
+                  trailing: const CostTag(matchCost, color: Colors.white),
                   onPressed: () => _go(context, const PrivateGameScreen()),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    'Partija košta $matchCost tokena · broj početnih slova (1, 3 ili 5) je nasumičan',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: textMuted, fontSize: 12),
-                  ),
-                ),
+                const SizedBox(height: 16),
                 GridView.count(
                   crossAxisCount: 2,
                   shrinkWrap: true,
@@ -142,7 +137,8 @@ class HomeScreen extends StatelessWidget {
                   childAspectRatio: 1.75,
                   children: [
                     MenuTile(Icons.emoji_events, 'Rang liste', () => _go(context, const LeaderboardScreen())),
-                    MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen())),
+                    MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen()),
+                        iconWidget: const CoinIcon(size: 34)),
                     MenuTile(Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
                     MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
                     MenuTile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),

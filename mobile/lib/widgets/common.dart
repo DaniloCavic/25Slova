@@ -167,7 +167,9 @@ class GoldButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
   final double height;
-  const GoldButton({super.key, required this.label, this.subtitle, this.icon, this.onPressed, this.height = 60});
+  final Widget? trailing;
+  const GoldButton(
+      {super.key, required this.label, this.subtitle, this.icon, this.onPressed, this.height = 60, this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -210,6 +212,7 @@ class GoldButton extends StatelessWidget {
                               style: const TextStyle(color: goldText, fontSize: 13, fontWeight: FontWeight.w500)),
                       ],
                     ),
+                    if (trailing != null) ...[const SizedBox(width: 8), const Spacer(), trailing!]
                   ]),
             ),
           ),
@@ -226,7 +229,9 @@ class BlueButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onPressed;
   final double height;
-  const BlueButton({super.key, required this.label, this.subtitle, this.icon, this.onPressed, this.height = 56});
+  final Widget? trailing;
+  const BlueButton(
+      {super.key, required this.label, this.subtitle, this.icon, this.onPressed, this.height = 56, this.trailing});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -246,20 +251,36 @@ class BlueButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: subtitle == null ? MainAxisAlignment.center : MainAxisAlignment.start,
                 children: [
-                  if (icon != null) ...[Icon(icon, color: Colors.white, size: 28), const SizedBox(width: 14)],
+                  if (icon != null) ...[
+                    Icon(icon, color: Colors.white, size: 28),
+                    SizedBox(width: trailing != null ? 10 : 14)
+                  ],
                   Flexible(
+                    fit: trailing != null ? FlexFit.tight : FlexFit.loose,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: subtitle == null ? CrossAxisAlignment.center : CrossAxisAlignment.start,
                       children: [
-                        Text(label,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3)),
+                        // Natpis u jednom redu; na uskim ekranima se malo smanji umesto da pređe u novi red.
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(label,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3)),
+                        ),
                         if (subtitle != null)
-                          Text(subtitle!, style: const TextStyle(color: Color(0xFFC9D8F5), fontSize: 13)),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(subtitle!,
+                                maxLines: 1, style: const TextStyle(color: Color(0xFFC9D8F5), fontSize: 13)),
+                          ),
                       ],
                     ),
                   ),
+                  if (trailing != null) ...[const SizedBox(width: 8), trailing!]
                 ],
               ),
             ),
@@ -274,17 +295,25 @@ class MenuTile extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final Color iconColor;
-  const MenuTile(this.icon, this.label, this.onTap, {super.key, this.iconColor = gold});
+  final Widget? iconWidget;
+  const MenuTile(this.icon, this.label, this.onTap, {super.key, this.iconColor = gold, this.iconWidget});
 
   @override
   Widget build(BuildContext context) => Panel(
         onTap: onTap,
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(icon, color: iconColor, size: 34),
+          iconWidget ?? Icon(icon, color: iconColor, size: 34),
           const SizedBox(height: 8),
-          Text(label.toUpperCase(),
-              textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(label.toUpperCase(),
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+            ),
+          ),
         ]),
       );
 }
@@ -379,7 +408,7 @@ class CoinIcon extends StatelessWidget {
           border: Border.all(color: const Color(0xFFB87800), width: 1.5),
         ),
         alignment: Alignment.center,
-        child: Text('S', style: TextStyle(color: goldText, fontWeight: FontWeight.w900, fontSize: size * 0.5)),
+        child: Text('T', style: TextStyle(color: goldText, fontWeight: FontWeight.w900, fontSize: size * 0.5)),
       );
 }
 
@@ -414,6 +443,20 @@ class LevelBar extends StatelessWidget {
           style: TextStyle(fontSize: 12, color: textColor ?? textMuted, fontWeight: FontWeight.w600)),
     ]);
   }
+}
+
+/// Cena partije na dugmetu: „-10“ i znak tokena.
+class CostTag extends StatelessWidget {
+  final int amount;
+  final Color color;
+  const CostTag(this.amount, {super.key, this.color = goldText});
+
+  @override
+  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
+        Text('-$amount', style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 18)),
+        const SizedBox(width: 5),
+        const CoinIcon(size: 24),
+      ]);
 }
 
 /// Logo „25 SLOVA“ od zlatnih pločica.
