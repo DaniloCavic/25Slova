@@ -159,7 +159,7 @@ export function Words() {
           </select>
           <span className="muted">{data?.total ?? 0} reči</span>
         </div>
-        <table>
+        <table className="responsive">
           <thead>
             <tr>
               <th>Reč</th>
@@ -173,18 +173,18 @@ export function Words() {
           <tbody>
             {data?.items.map((w: any) => (
               <tr key={w.id}>
-                <td className="word">
+                <td data-label="Reč" className="word">
                   {editing?.id === w.id ? (
                     <input value={editing?.value ?? ""} onChange={(e) => setEditing({ id: w.id, value: e.target.value })} autoFocus />
                   ) : (
                     w.word
                   )}
                 </td>
-                <td>{w.latin}</td>
-                <td>{w.length}</td>
-                <td className="muted">{w.addedBy ?? 'početni rečnik'}</td>
-                <td className="muted">{fmtDate(w.createdAt)}</td>
-                <td>
+                <td data-label="Latinica">{w.latin}</td>
+                <td data-label="Slova">{w.length}</td>
+                <td data-label="Dodao" className="muted hide-sm">{w.addedBy ?? 'početni rečnik'}</td>
+                <td data-label="Datum" className="muted hide-sm">{fmtDate(w.createdAt)}</td>
+                <td data-label="">
                   <div className="row">
                     {editing?.id === w.id ? (
                       <>

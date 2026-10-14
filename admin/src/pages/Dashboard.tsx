@@ -49,7 +49,7 @@ export function Dashboard() {
       </div>
       <div className="card" style={{ marginTop: 16 }}>
         <h3 style={{ marginTop: 0 }}>Tokeni ovog meseca</h3>
-        <table>
+        <table className="responsive">
           <thead>
             <tr>
               <th>Vrsta</th>
@@ -60,9 +60,9 @@ export function Dashboard() {
           <tbody>
             {s.tokensThisMonth.map((t: any) => (
               <tr key={t.type}>
-                <td>{TX_LABELS[t.type] ?? t.type}</td>
-                <td>{t.count}</td>
-                <td>{t.amount}</td>
+                <td data-label="Vrsta">{TX_LABELS[t.type] ?? t.type}</td>
+                <td data-label="Broj transakcija">{t.count}</td>
+                <td data-label="Ukupno tokena">{t.amount}</td>
               </tr>
             ))}
           </tbody>

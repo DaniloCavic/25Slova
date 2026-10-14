@@ -44,7 +44,7 @@ export function Users() {
           </select>
           <button onClick={() => setCreating(true)}>+ Novi korisnik</button>
         </div>
-        <table>
+        <table className="responsive">
           <thead>
             <tr>
               <th>Korisničko ime</th>
@@ -60,16 +60,16 @@ export function Users() {
           <tbody>
             {data?.items.map((u: any) => (
               <tr key={u.id} className="clickable" onClick={() => setSelected(u.id)}>
-                <td>
+                <td data-label="Korisničko ime">
                   <b>{u.username}</b> {u.role === 'ADMIN' && <span className="badge blue">admin</span>}
                 </td>
-                <td>{u.fullName}</td>
-                <td>{u.email ?? '—'}</td>
-                <td>{u.level}</td>
-                <td>{u.totalPoints}</td>
-                <td>{u.tokens}</td>
-                <td><StatusBadge u={u} /></td>
-                <td className="muted">{fmtDate(u.createdAt)}</td>
+                <td data-label="Ime i prezime" className="hide-sm">{u.fullName}</td>
+                <td data-label="E-mail">{u.email ?? '—'}</td>
+                <td data-label="Level" className="hide-sm">{u.level}</td>
+                <td data-label="Poeni">{u.totalPoints}</td>
+                <td data-label="Tokeni">{u.tokens}</td>
+                <td data-label="Status"><StatusBadge u={u} /></td>
+                <td data-label="Registrovan" className="muted hide-sm">{fmtDate(u.createdAt)}</td>
               </tr>
             ))}
           </tbody>
@@ -268,17 +268,17 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
 
         <div className="card">
           <h3 style={{ marginTop: 0 }}>Poslednje partije</h3>
-          <table>
+          <table className="responsive">
             <thead><tr><th>Ishod</th><th>Tip</th><th>Poeni table</th><th>Reči</th><th>Saldo</th><th>Kraj</th></tr></thead>
             <tbody>
               {d.matches.map((m: any) => (
                 <tr key={m.matchId}>
-                  <td>{m.outcome === 'WIN' ? <span className="badge green">pobeda</span> : m.outcome === 'LOSS' ? <span className="badge red">poraz</span> : m.outcome === 'DRAW' ? <span className="badge">nerešeno</span> : m.status}</td>
-                  <td>{m.mode === 'PRIVATE' ? 'kod' : 'nasumično'}</td>
-                  <td>{m.score}</td>
-                  <td>{m.wordsCount}</td>
-                  <td>{m.pointsDelta > 0 ? `+${m.pointsDelta}` : m.pointsDelta}</td>
-                  <td className="muted">{fmtDate(m.endedAt)}</td>
+                  <td data-label="Ishod">{m.outcome === 'WIN' ? <span className="badge green">pobeda</span> : m.outcome === 'LOSS' ? <span className="badge red">poraz</span> : m.outcome === 'DRAW' ? <span className="badge">nerešeno</span> : m.status}</td>
+                  <td data-label="Tip">{m.mode === 'PRIVATE' ? 'kod' : 'nasumično'}</td>
+                  <td data-label="Poeni table">{m.score}</td>
+                  <td data-label="Reči">{m.wordsCount}</td>
+                  <td data-label="Saldo">{m.pointsDelta > 0 ? `+${m.pointsDelta}` : m.pointsDelta}</td>
+                  <td data-label="Kraj" className="muted">{fmtDate(m.endedAt)}</td>
                 </tr>
               ))}
             </tbody>
@@ -287,11 +287,11 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
 
         <div className="card">
           <h3 style={{ marginTop: 0 }}>Istorija tokena</h3>
-          <table>
+          <table className="responsive">
             <thead><tr><th>Vrsta</th><th>Iznos</th><th>Stanje posle</th><th>Napomena</th><th>Vreme</th></tr></thead>
             <tbody>
               {d.tokenHistory.map((t: any) => (
-                <tr key={t.id}><td>{t.type}</td><td>{t.amount > 0 ? `+${t.amount}` : t.amount}</td><td>{t.balanceAfter}</td><td>{t.note ?? ''}</td><td className="muted">{fmtDate(t.createdAt)}</td></tr>
+                <tr key={t.id}><td data-label="Vrsta">{t.type}</td><td data-label="Iznos">{t.amount > 0 ? `+${t.amount}` : t.amount}</td><td data-label="Stanje posle">{t.balanceAfter}</td><td data-label="Napomena">{t.note ?? ''}</td><td data-label="Vreme" className="muted">{fmtDate(t.createdAt)}</td></tr>
               ))}
             </tbody>
           </table>

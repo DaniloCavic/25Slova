@@ -56,9 +56,59 @@ tr.clickable:hover { background: #f0f3f8; cursor: pointer; }
 .modal-bg { position: fixed; inset: 0; background: rgba(15, 20, 30, 0.45); display: flex; justify-content: flex-end; z-index: 10; }
 .drawer { width: min(720px, 100%); background: var(--bg); height: 100%; overflow: auto; padding: 20px; }
 .word { font-weight: 600; letter-spacing: 0.04em; }
+/* ---------- Telefon ---------- */
 @media (max-width: 760px) {
+  html { -webkit-text-size-adjust: 100%; }
   .layout { grid-template-columns: 1fr; }
-  .sidebar { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
-  .sidebar h1 { display: none; }
-  main { padding: 16px; }
+  .sidebar {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; flex-wrap: nowrap; gap: 4px; overflow-x: auto;
+    padding: 8px 10px; align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    -webkit-overflow-scrolling: touch;
+  }
+  .sidebar h1 { display: block; font-size: 16px; margin: 0 8px 0 2px; white-space: nowrap; }
+  .sidebar a { white-space: nowrap; padding: 10px 12px; font-size: 15px; }
+  .sidebar .logout { margin-top: 0; margin-left: auto; }
+  main { padding: 14px 12px 40px; }
+  h2 { font-size: 22px; margin-bottom: 12px; }
+  .card { padding: 12px; border-radius: 14px; }
+
+  /* Veća polja i dugmad za prst; iOS ne zumira kad je font 16px */
+  input, select, textarea, button { font-size: 16px; min-height: 44px; }
+  button { padding: 10px 14px; }
+  .row { gap: 8px; }
+  .row > input.grow, .row > select, .row > .grow { flex: 1 1 100%; width: 100%; }
+  .row > button { flex: 1 1 auto; }
+  .form-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .stat b { font-size: 22px; }
+
+  /* Tabele postaju kartice: svaki red je kartica, svaka ćelija ima naziv kolone */
+  table.responsive, table.responsive tbody, table.responsive tr, table.responsive td { display: block; width: 100%; }
+  table.responsive thead { display: none; }
+  table.responsive td.hide-sm { display: none; }
+  table.responsive tr {
+    border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; background: #fff;
+  }
+  table.responsive td {
+    border: 0; padding: 5px 0; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    text-align: right; min-height: 28px;
+  }
+  table.responsive td::before {
+    content: attr(data-label); color: var(--muted); font-size: 13px; text-align: left; flex: 0 0 auto;
+  }
+  table.responsive td[data-label=""]::before { content: none; }
+  table.responsive td[data-label=""] { justify-content: stretch; }
+  table.responsive td[data-label=""] .row { width: 100%; }
+  table.responsive td .row { justify-content: flex-end; }
+  tr.clickable:hover { background: #fff; }
+  tr.clickable:active { background: #eef2f8; }
+
+  .pager { justify-content: space-between; }
+  .pager button { min-width: 64px; }
+  .modal-bg { align-items: stretch; }
+  .drawer { width: 100%; padding: 14px 12px 40px; }
+  .drawer h2 { font-size: 20px; }
+  .login { margin: 8vh 16px; }
 }
