@@ -187,8 +187,9 @@ export function computeResult(state: MatchState, isWord: (w: string) => boolean)
   const pointsDelta: [number, number] = [0, 0];
   if (winner !== null) {
     const w = scores[winner];
-    // Predaja ili gubitak sva tri života: pobedniku fiksno 25 poena.
-    pointsDelta[winner] = state.forfeitedBy !== undefined ? FORFEIT_WIN_CENTS : winRewardCents(w.points, w.wordsCount);
+    // Predaja ili gubitak sva tri života: pobedniku po formuli, ali najmanje 25 poena.
+    const reward = winRewardCents(w.points, w.wordsCount);
+    pointsDelta[winner] = state.forfeitedBy !== undefined ? Math.max(reward, FORFEIT_WIN_CENTS) : reward;
     pointsDelta[other(winner)] = -LOSS_PENALTY_CENTS;
   }
   return { scores, winner, pointsDelta };

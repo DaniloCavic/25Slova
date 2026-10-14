@@ -34,7 +34,7 @@ class RulesScreen extends StatelessWidget {
       ('Pobednik', 'Pobeđuje igrač sa više poena; ako su poeni isti — onaj sa više reči; ako je i to isto — nerešeno.'),
       (
         'Saldo',
-        'Pobednik dobija (poeni × broj reči) ÷ 7,2 poena na ukupni, nedeljni, mesečni i godišnji saldo, na dve decimale (npr. 36,11). Ako protivnik preda partiju ili izgubi sva tri života, pobednik dobija fiksno 25 poena. Poraz oduzima 10 poena. Nerešeno ne menja saldo.'
+        'Pobednik dobija (poeni × broj reči) ÷ 7,2 poena na ukupni, nedeljni, mesečni i godišnji saldo, na dve decimale (npr. 36,11). Ako protivnik preda partiju ili izgubi sva tri života, pobednik dobija poene po istoj formuli, ali najmanje 25. Poraz oduzima 10 poena. Nerešeno ne menja saldo.'
       ),
       (
         'Tokeni',

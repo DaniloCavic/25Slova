@@ -201,6 +201,17 @@ describe('tok partije', () => {
     expect(r.winner).toBe(0);
     expect(r.pointsDelta).toEqual([2500, -1000]);
   });
+
+  it('predaja: pobednik dobija više od 25 ako formula daje više', () => {
+    const base = createMatchState(1, 0);
+    // tabla sa 4 reči od 5 slova u redovima → 20 poena, 4 reči… plus kolone
+    const full = ['СТРОГ', 'СТРОГ', 'СТРОГ', 'СТРОГ', 'СТРОГ'];
+    const s: MatchState = { ...base, boards: [boardFromRows(full), boardFromRows(full)] };
+    const r = computeResult(applyResign(s, 1), isWord);
+    const sc = r.scores[0];
+    expect(sc.points * sc.wordsCount / 7.2).toBeGreaterThan(25);
+    expect(r.pointsDelta[0]).toBe(Math.round((sc.points * sc.wordsCount * 100) / 7.2));
+  });
 });
 
 describe('napredak levela', () => {
