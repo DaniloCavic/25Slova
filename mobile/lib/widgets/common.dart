@@ -367,7 +367,9 @@ class UserAvatar extends StatelessWidget {
 class TokenChip extends StatelessWidget {
   final int tokens;
   final VoidCallback? onTap;
-  const TokenChip(this.tokens, {super.key, this.onTap});
+  /// Svetla varijanta (svetlo plava pozadina, tamni tekst) — za svetle ekrane u svetlom režimu.
+  final bool light;
+  const TokenChip(this.tokens, {super.key, this.onTap, this.light = false});
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -375,14 +377,16 @@ class TokenChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
           decoration: BoxDecoration(
-            color: headerChipColor,
+            color: light ? const Color(0xFFDDEBFF) : headerChipColor,
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: panelBorder),
+            border: Border.all(color: light ? const Color(0xFF9DBFF2) : panelBorder),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             const CoinIcon(size: 26),
             const SizedBox(width: 8),
-            Text('$tokens', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+            Text('$tokens',
+                style: TextStyle(
+                    fontWeight: FontWeight.w800, fontSize: 16, color: light ? const Color(0xFF1E4FA8) : null)),
             const SizedBox(width: 8),
             if (onTap != null)
               Container(

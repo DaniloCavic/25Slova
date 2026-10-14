@@ -30,7 +30,7 @@ class _TokensScreenState extends State<TokensScreen> {
     return Scaffold(
       appBar: AppBar(title: const ScreenTitle('Tokeni')),
       body: ListView(padding: const EdgeInsets.all(16), children: [
-        Center(child: Transform.scale(scale: 1.4, child: TokenChip(tokens))),
+        Center(child: Transform.scale(scale: 1.4, child: TokenChip(tokens, light: !isDark))),
         const SizedBox(height: 16),
         const Card(
           child: ListTile(
