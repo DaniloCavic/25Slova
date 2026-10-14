@@ -31,16 +31,10 @@ class _BestBoardScreenState extends State<BestBoardScreen> {
           final by = data['byInitialLetters'] as Map;
           final rec = (_tab == 'overall' ? data['overall'] : by[_tab]) as Map?;
           return ListView(padding: const EdgeInsets.all(16), children: [
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'overall', label: Text('Ukupno')),
-                ButtonSegment(value: '1', label: Text('1 slovo')),
-                ButtonSegment(value: '3', label: Text('3 slova')),
-                ButtonSegment(value: '5', label: Text('5 slova')),
-              ],
-              showSelectedIcon: false,
-              selected: {_tab},
-              onSelectionChanged: (s) => setState(() => _tab = s.first),
+            PillTabs(
+              options: const {'overall': 'Ukupno', '1': '1 slovo', '3': '3 slova', '5': '5 slova'},
+              selected: _tab,
+              onChanged: (v) => setState(() => _tab = v),
             ),
             const SizedBox(height: 16),
             if (rec == null)

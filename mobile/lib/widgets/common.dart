@@ -705,3 +705,51 @@ String initialLettersLabel(int n) => switch (n) {
 Future<void> showError(BuildContext context, Object e) async {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
 }
+
+/// Izbor kao kartice na rang listama: izabrana opcija je plava, ostale prigušene.
+class PillTabs extends StatelessWidget {
+  final Map<String, String> options;
+  final String selected;
+  final ValueChanged<String> onChanged;
+  const PillTabs({super.key, required this.options, required this.selected, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: panel,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: panelBorder),
+        ),
+        child: Row(children: [
+          for (final e in options.entries)
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => onChanged(e.key),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    gradient: e.key == selected ? blueGradient : null,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(e.value,
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              color: e.key == selected ? Colors.white : textMuted)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ]),
+      );
+}
