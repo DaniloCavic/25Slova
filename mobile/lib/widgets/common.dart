@@ -472,18 +472,43 @@ class LevelBar extends StatelessWidget {
   }
 }
 
-/// Cena partije na dugmetu: „-10“ i znak tokena.
+/// Cena partije na dugmetu: „10“ i znak tokena u elipsi.
 class CostTag extends StatelessWidget {
   final int amount;
   final Color color;
   const CostTag(this.amount, {super.key, this.color = goldText});
 
   @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-        Text('-$amount', style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 18)),
-        const SizedBox(width: 5),
+  Widget build(BuildContext context) {
+    // Cena u „elipsi“: tamna providna podloga sa svetlom ivicom i sjajem.
+    final onGold = color == goldText;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 3, 4, 3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: onGold
+              ? [const Color(0x40FFFFFF), const Color(0x1A8A5A00)]
+              : [const Color(0x33FFFFFF), const Color(0x330A1530)],
+        ),
+        border: Border.all(
+            color: onGold ? const Color(0xCC8A5A00) : Colors.white.withOpacity(0.55), width: 1.6),
+        boxShadow: [
+          BoxShadow(
+              color: (onGold ? const Color(0xFF8A5A00) : Colors.black).withOpacity(0.25),
+              blurRadius: 6,
+              offset: const Offset(0, 2)),
+        ],
+      ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Text('$amount', style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 18)),
+        const SizedBox(width: 6),
         const CoinIcon(size: 24),
-      ]);
+      ]),
+    );
+  }
 }
 
 /// Logo „25 SLOVA“ od zlatnih pločica.
