@@ -105,6 +105,8 @@ class ScreenTitle extends StatelessWidget {
         text.toUpperCase(),
         maxLines: 1,
         style: TextStyle(
+          // Naslov ostaje u prethodnom (sistemskom) fontu, ne u Raleway.
+          fontFamily: 'Roboto',
           fontSize: fontSize,
           fontWeight: FontWeight.w900,
           letterSpacing: 1.6,

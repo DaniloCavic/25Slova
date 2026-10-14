@@ -67,6 +67,32 @@ Color get headerChipColor => isDark ? const Color(0xFF0A1530) : const Color(0xFF
 /// Zlatna za tekst: na svetloj podlozi tamnija da bi bila čitljiva.
 Color get goldAccent => isDark ? gold : const Color(0xFFA86A00);
 
+/// Font celog teksta u aplikaciji.
+const appFontFamily = 'Raleway';
+
+/// Raleway podrazumevano ima „stare“ brojeve različite visine; za poene i tokene koristimo ravne.
+TextTheme _liningFigures(TextTheme t) {
+  const f = [FontFeature.liningFigures()];
+  TextStyle? fix(TextStyle? s) => s?.copyWith(fontFeatures: f);
+  return t.copyWith(
+    displayLarge: fix(t.displayLarge),
+    displayMedium: fix(t.displayMedium),
+    displaySmall: fix(t.displaySmall),
+    headlineLarge: fix(t.headlineLarge),
+    headlineMedium: fix(t.headlineMedium),
+    headlineSmall: fix(t.headlineSmall),
+    titleLarge: fix(t.titleLarge),
+    titleMedium: fix(t.titleMedium),
+    titleSmall: fix(t.titleSmall),
+    bodyLarge: fix(t.bodyLarge),
+    bodyMedium: fix(t.bodyMedium),
+    bodySmall: fix(t.bodySmall),
+    labelLarge: fix(t.labelLarge),
+    labelMedium: fix(t.labelMedium),
+    labelSmall: fix(t.labelSmall),
+  );
+}
+
 const gold = Color(0xFFFFC93C);
 const goldDeep = Color(0xFFF0A21B);
 const goldText = Color(0xFF3B2600);
@@ -105,10 +131,12 @@ ThemeData buildTheme() {
     surface: panel,
     error: danger,
   );
-  final base = ThemeData(colorScheme: scheme, useMaterial3: true, brightness: pal.brightness);
+  // Ceo tekst u aplikaciji je Raleway Bold (naslovi ekrana zadržavaju svoj font).
+  final base = ThemeData(
+      colorScheme: scheme, useMaterial3: true, brightness: pal.brightness, fontFamily: appFontFamily);
   return base.copyWith(
     scaffoldBackgroundColor: bgBottom,
-    textTheme: base.textTheme.apply(bodyColor: textMain, displayColor: textMain),
+    textTheme: _liningFigures(base.textTheme.apply(bodyColor: textMain, displayColor: textMain)),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       foregroundColor: textMain,
