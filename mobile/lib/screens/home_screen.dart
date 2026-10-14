@@ -82,7 +82,8 @@ class HomeScreen extends StatelessWidget {
                                 LevelBar(
                                     progress: u['levelProgress'],
                                     totalPoints: total,
-                                    width: 60,
+                                    width: 56,
+                                    compact: true,
                                     textColor: Colors.white70),
                               ]),
                             ),

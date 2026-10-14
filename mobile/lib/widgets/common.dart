@@ -424,7 +424,15 @@ class LevelBar extends StatelessWidget {
   final num totalPoints;
   final double width;
   final Color? textColor;
-  const LevelBar({super.key, required this.progress, required this.totalPoints, this.width = 120, this.textColor});
+  /// Kratak zapis (bez decimala, hiljade kao „15,3K“) — za usku traku na početnom ekranu.
+  final bool compact;
+  const LevelBar(
+      {super.key,
+      required this.progress,
+      required this.totalPoints,
+      this.width = 120,
+      this.textColor,
+      this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -445,8 +453,21 @@ class LevelBar extends StatelessWidget {
         ),
       ),
       const SizedBox(width: 8),
-      Text(max == null ? 'MAX' : '${fmtPointsShort(totalPoints)}/$max',
-          style: TextStyle(fontSize: 12, color: textColor ?? textMuted, fontWeight: FontWeight.w600)),
+      // Tekst se smanji ako ne staje, da ne pređe preko susednih elemenata.
+      Flexible(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text(
+              max == null
+                  ? 'MAX'
+                  : compact
+                      ? '${fmtCompact(totalPoints)}/${fmtCompact(max)}'
+                      : '${fmtPointsShort(totalPoints)}/$max',
+              maxLines: 1,
+              style: TextStyle(fontSize: 12, color: textColor ?? textMuted, fontWeight: FontWeight.w600)),
+        ),
+      ),
     ]);
   }
 }
@@ -597,6 +618,15 @@ String fmtPoints(num? v) => (v ?? 0).toStringAsFixed(2).replaceAll('.', ',');
 String fmtPointsShort(num? v) {
   final x = v ?? 0;
   return x == x.roundToDouble() ? x.round().toString() : fmtPoints(x);
+}
+
+/// Kratko, za uske prikaze: 579,68 → "579", 15300 → "15,3K", 200000 → "200K".
+String fmtCompact(num? v) {
+  final x = (v ?? 0).toDouble();
+  if (x.abs() < 10000) return x.truncate().toString();
+  final k = x / 1000;
+  final s = k.abs() >= 100 ? k.truncate().toString() : ((k * 10).truncate() / 10).toString();
+  return '${s.endsWith('.0') ? s.substring(0, s.length - 2) : s.replaceAll('.', ',')}K';
 }
 
 /// "+36,11" / "-10,00" / "0,00"
