@@ -21,6 +21,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Tabla 5 × 5 po igraču; 1, 3 ili 5 početnih nasumičnih slova (ista polja i slova za oba igrača); tip partije je nasumičan.
 - Srpska azbuka od 30 slova — Lj, Nj i Dž su jedno slovo i jedno polje. Slova se prikazuju latinicom; tamni i svetli režim prikaza.
 - Naizmenični potezi: igrač bira slovo i polje, protivnik isto slovo postavlja na svoju tablu i bira sledeće.
+- Telefon zavibrira kada igraču na potezu ostane 5 sekundi.
 - Serverski tajmer (30/45/60 s), 3 života, istek vremena = −1 život, gubitak sva 3 = poraz; vreme teče i bez veze.
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.
 - Revanš: 60 sekundi posle partije oba igrača mogu da zatraže revanš; kad i drugi prihvati, odmah počinje nova partija (10 tokena po igraču).
@@ -34,6 +35,11 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Profil drugog igrača (dodir na igrača na rang listi): level, poeni po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
 - Istorija: poslednjih 10 partija; dodir otvara partiju sa obe table i pronađenim rečima.
 - Server je spreman za Google i Apple prijavu (provera tokena, dopuna profila, povezivanje bez preuzimanja tuđeg naloga).
+
+**Obaveštenja (push)**
+- „Na potezu si“ (samo kada igrač nije u aplikaciji), osvojena medalja, i svaki dan u 11:00 podsetnik ako dnevna nagrada još nije preuzeta.
+- iPhone: Web Push — igra mora biti dodata na početni ekran; uključuje se u Podešavanjima. VAPID ključevi se prave sami i čuvaju u bazi.
+- Android aplikacija: preko Firebase (FCM). Server je spreman (promenljiva `FIREBASE_SERVICE_ACCOUNT`); aplikaciji treba `google-services.json`.
 
 **Tokeni, poeni, rang liste**
 - Svaka promena tokena je posebna transakcija. Dnevna nagrada 30 tokena (najviše jednom dnevno, zaštićeno i od istovremenih zahteva).

@@ -42,6 +42,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       const user = await this.auth.userFromToken(String(token || ''));
       socket.data.userId = user.id;
       await socket.join(`user:${user.id}`);
+      this.game.setPresence(socket.id, user.id, true);
       const resumed = this.game.resume(user.id);
       socket.emit('session', { userId: user.id, activeMatch: resumed });
     } catch (e) {
@@ -52,6 +53,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async handleDisconnect(socket: AuthedSocket) {
     const userId = socket.data?.userId;
+    this.game.removePresence(socket.id);
     if (!userId) return;
     const remaining = await this.server.in(`user:${userId}`).fetchSockets();
     if (remaining.length === 0) await this.game.onUserOffline(userId);
@@ -113,6 +115,17 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('match:move')
   move(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { cell?: number; letter?: string | null }) {
     return this.handle(() => this.game.move(s.data.userId, Number(body?.cell), body?.letter ?? null));
+  }
+
+  /** Aplikacija javlja da li je na ekranu (za obaveštenje „na potezu si“). */
+  @SubscribeMessage('presence')
+  presence(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { foreground?: boolean }) {
+    return this.handle(() => {
+      const fg = body?.foreground !== false;
+      this.game.setPresence(s.id, s.data.userId, fg);
+      if (fg) this.game.onForeground(s.data.userId);
+      else this.game.onBackground(s.data.userId);
+    });
   }
 
   @SubscribeMessage('rematch:request')

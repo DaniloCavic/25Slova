@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../api.dart';
 import '../config.dart';
 import '../letters.dart';
+import '../push/push.dart';
 import '../theme.dart';
 import '../screens/game_screen.dart';
 import '../screens/result_screen.dart';
@@ -11,7 +13,7 @@ import '../screens/result_screen.dart';
 enum AuthStatus { loading, loggedOut, loggedIn }
 
 /// Glavno stanje aplikacije: prijava, profil, podešavanja i veza za igru.
-class AppState extends ChangeNotifier {
+class AppState extends ChangeNotifier with WidgetsBindingObserver {
   final api = Api();
   final navigatorKey = GlobalKey<NavigatorState>();
   final messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -49,6 +51,7 @@ class AppState extends ChangeNotifier {
   int? privateExpiresAt;
 
   AppState() {
+    WidgetsBinding.instance.addObserver(this);
     api.onUnauthorized = (msg) {
       if (status == AuthStatus.loggedIn) {
         logout();
@@ -143,6 +146,10 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    // Ovaj uređaj više ne prima obaveštenja za odjavljeni nalog.
+    final endpoint = _pushEndpoint;
+    _pushEndpoint = null;
+    if (endpoint != null) await api.post('/push/unsubscribe', {'endpoint': endpoint}).catchError((_) => null);
     _socket?.dispose();
     _socket = null;
     socketConnected = false;
@@ -174,6 +181,8 @@ class AppState extends ChangeNotifier {
 
     s.onConnect((_) {
       socketConnected = true;
+      _sendPresence();
+      _initPush();
       notifyListeners();
     });
     s.onDisconnect((_) {
@@ -263,6 +272,56 @@ class AppState extends ChangeNotifier {
         MaterialPageRoute(builder: (_) => const GameScreen()),
         (r) => r.isFirst,
       );
+    }
+  }
+
+  // ------------------------------------------------------------ obaveštenja
+
+  String? _pushEndpoint;
+
+  /// granted | denied | default | unsupported
+  String get pushPermissionState => pushSupported() ? pushPermission() : 'unsupported';
+
+  /// Aplikacija je u prvom planu ili ne — server šalje „na potezu si“ samo kad igrač nije u aplikaciji.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed || state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
+      _sendPresence(state);
+    }
+  }
+
+  void _sendPresence([AppLifecycleState? state]) {
+    final s = state ?? WidgetsBinding.instance.lifecycleState ?? AppLifecycleState.resumed;
+    _socket?.emit('presence', {'foreground': s == AppLifecycleState.resumed});
+  }
+
+  /// Ako je dozvola već data, obnovi pretplatu (tiho, bez pitanja).
+  Future<void> _initPush() async {
+    if (pushPermissionState == 'granted') await enablePush(ask: false);
+  }
+
+  /// Uključuje obaveštenja (traži dozvolu). Vraća poruku greške ili null.
+  Future<String?> enablePush({bool ask = true}) async {
+    if (!pushSupported()) {
+      return 'Na iPhone-u obaveštenja rade samo kada je igra dodata na početni ekran (Share → Add to Home Screen).';
+    }
+    try {
+      final cfg = Map<String, dynamic>.from(await api.get('/push/config'));
+      final key = cfg['webPublicKey'] as String?;
+      if (key == null) return 'Obaveštenja trenutno nisu dostupna.';
+      final json = await pushSubscribe(key, ask: ask);
+      notifyListeners();
+      if (json.isEmpty) {
+        return pushPermission() == 'denied'
+            ? 'Obaveštenja su blokirana. Uključi ih u podešavanjima telefona za 25 Slova.'
+            : 'Obaveštenja nisu uključena.';
+      }
+      final sub = Map<String, dynamic>.from(jsonDecode(json));
+      await api.post('/push/subscribe', {'kind': 'WEB', 'subscription': sub});
+      _pushEndpoint = sub['endpoint'] as String?;
+      return null;
+    } catch (e) {
+      return e.toString();
     }
   }
 

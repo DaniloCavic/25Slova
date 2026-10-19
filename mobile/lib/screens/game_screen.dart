@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 import 'package:provider/provider.dart';
 import '../letters.dart';
 import '../state/app_state.dart';
@@ -27,8 +28,23 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) {
-      if (mounted) setState(() {});
+      if (!mounted) return;
+      _warnLowTime();
+      setState(() {});
     });
+  }
+
+  /// Kada igraču na potezu ostane 5 sekundi, telefon zavibrira (jednom po potezu).
+  int? _vibratedForDeadline;
+  void _warnLowTime() {
+    final app = context.read<AppState>();
+    final m = app.match.value;
+    if (m == null || m['isMyTurn'] != true) return;
+    final deadline = m['deadline'] as int;
+    final left = deadline - (DateTime.now().millisecondsSinceEpoch + app.clockOffset);
+    if (left > 5000 || left <= 0 || _vibratedForDeadline == deadline) return;
+    _vibratedForDeadline = deadline;
+    Vibration.vibrate(pattern: [0, 300, 150, 300]).catchError((_) {});
   }
 
   @override

@@ -91,6 +91,7 @@ model User {
   medals            Medal[]
   passwordResets    PasswordReset[]
   wordsAdded        Word[]
+  pushSubscriptions PushSubscription[]
 }
 
 model PasswordReset {
@@ -218,4 +219,24 @@ model Setting {
   key       String   @id
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+enum PushKind {
+  WEB
+  FCM
+}
+
+/// Uređaji na koje stižu obaveštenja (Web Push za iPhone/pregledač, FCM za Android aplikaciju).
+model PushSubscription {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind       PushKind
+  /// Web: adresa pretplate; FCM: token uređaja
+  endpoint   String   @unique
+  keys       Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
 }

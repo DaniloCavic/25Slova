@@ -7,6 +7,8 @@ import { TokensService } from '../tokens/tokens.service';
 import { PointsService } from '../users/points.service';
 import { DictionaryService } from '../words/dictionary.service';
 import { SettingsService } from '../settings/settings.service';
+import { PushService } from '../push/push.service';
+import { toLatin } from './engine/alphabet';
 import { levelForCents, MATCH_ENTRY_COST, MATCH_TYPES, randomMatchType, toPoints } from './engine/rules';
 import {
   applyMove,
@@ -36,6 +38,8 @@ interface Runtime {
   timer?: NodeJS.Timeout;
   ending: boolean;
   saving: Promise<unknown>;
+  /** Poslednji potez za koji je poslato obaveštenje „na potezu si“. */
+  notifiedTurn?: string;
 }
 
 interface QueueEntry {
@@ -82,6 +86,8 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly privateByCode = new Map<string, PrivateGame>();
   private readonly privateByHost = new Map<string, PrivateGame>();
   private readonly rematches = new Map<string, RematchOffer>();
+  /** Da li je aplikacija na ekranu, po konekciji (socket id → korisnik, u prvom planu). */
+  private readonly presence = new Map<string, { userId: string; foreground: boolean }>();
   private ticker?: NodeJS.Timeout;
   private pairing = false;
 
@@ -91,6 +97,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     private readonly points: PointsService,
     private readonly dict: DictionaryService,
     private readonly settings: SettingsService,
+    private readonly push: PushService,
   ) {}
 
   async onApplicationBootstrap() {
@@ -314,6 +321,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       this.emitUser(p.userId, 'match:start', this.view(rt, seat as Seat));
       void this.sendTokenBalance(p.userId);
     });
+    this.notifyTurn(rt);
     this.log.log(`Partija ${matchId} (${mode}, tip ${type}) počela: ${players.map((p) => p.username).join(' vs ')}`);
   }
 
@@ -349,7 +357,59 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     } else {
       this.schedule(rt);
       rt.players.forEach((p, seat) => this.emitUser(p.userId, 'match:state', this.view(rt, seat as Seat)));
+      this.notifyTurn(rt);
     }
+  }
+
+  // ------------------------------------------------------- prisutnost i obaveštenja
+
+  setPresence(socketId: string, userId: string, foreground: boolean) {
+    this.presence.set(socketId, { userId, foreground });
+  }
+
+  removePresence(socketId: string) {
+    this.presence.delete(socketId);
+  }
+
+  /** Igrač gleda aplikaciju (bar jedna konekcija u prvom planu). */
+  private isActive(userId: string) {
+    for (const p of this.presence.values()) if (p.userId === userId && p.foreground) return true;
+    return false;
+  }
+
+  /** „Na potezu si“ — samo ako igrač trenutno nije u aplikaciji, jednom po potezu. */
+  private notifyTurn(rt: Runtime) {
+    const s = rt.state;
+    if (s.phase === 'ENDED') return;
+    const key = `${s.actor}:${s.moves.length}`;
+    if (rt.notifiedTurn === key) return;
+    const actor = rt.players[s.actor];
+    if (this.isActive(actor.userId)) return;
+    rt.notifiedTurn = key;
+    const opp = rt.players[other(s.actor)];
+    const secs = Math.max(0, Math.round((s.deadline - Date.now()) / 1000));
+    void this.push.send(actor.userId, {
+      title: 'Na potezu si! ⏱️',
+      body:
+        s.phase === 'FOLLOW'
+          ? `Postavi slovo ${toLatin(s.currentLetter ?? '').toUpperCase()} na svoju tablu — protivnik: ${opp.username} (${secs} s).`
+          : `Izaberi slovo i polje protiv igrača ${opp.username} (${secs} s).`,
+      tag: `turn-${rt.matchId}`,
+    });
+  }
+
+  /** Igrač se vratio u aplikaciju: ako je na potezu, a obaveštenje još nije poslato, više ni ne treba. */
+  onForeground(userId: string) {
+    const id = this.userMatch.get(userId);
+    const rt = id ? this.matches.get(id) : undefined;
+    if (rt) rt.notifiedTurn = `${rt.state.actor}:${rt.state.moves.length}`;
+  }
+
+  /** Igrač je izašao iz aplikacije usred partije, a na potezu je — odmah ga obavesti. */
+  onBackground(userId: string) {
+    const id = this.userMatch.get(userId);
+    const rt = id ? this.matches.get(id) : undefined;
+    if (rt && rt.players[rt.state.actor].userId === userId) this.notifyTurn(rt);
   }
 
   private persist(rt: Runtime) {

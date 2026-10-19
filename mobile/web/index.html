@@ -31,6 +31,57 @@
 
   <title>25 Slova</title>
   <link rel="manifest" href="manifest.json">
+  <script>
+    // Obaveštenja (Web Push) — poziva ih Flutter (lib/push/push_web.dart).
+    window.slovaPush = {
+      supported: function () {
+        return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+      },
+      permission: function () {
+        return ('Notification' in window) ? Notification.permission : 'unsupported';
+      },
+      _b64: function (s) {
+        var pad = '='.repeat((4 - s.length % 4) % 4);
+        var b = atob((s + pad).replace(/-/g, '+').replace(/_/g, '/'));
+        var a = new Uint8Array(b.length);
+        for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i);
+        return a;
+      },
+      // Pretplata traži aktivan service worker — sačekaj da se instalira.
+      _active: function (reg) {
+        if (reg.active) return Promise.resolve(reg);
+        return new Promise(function (resolve) {
+          var w = reg.installing || reg.waiting;
+          if (!w) return resolve(reg);
+          w.addEventListener('statechange', function () { if (w.state === 'activated') resolve(reg); });
+        });
+      },
+      // Traži dozvolu (ako treba) i vraća pretplatu kao JSON tekst, ili '' ako nije dozvoljeno.
+      subscribe: function (vapidKey, ask) {
+        var self = window.slovaPush;
+        var perm = (ask && Notification.permission === 'default')
+          ? Notification.requestPermission()
+          : Promise.resolve(Notification.permission);
+        return perm.then(function (p) {
+          if (p !== 'granted') return '';
+          return navigator.serviceWorker.register('push-sw.js', { scope: './push/' })
+            .then(function (reg) { return self._active(reg); })
+            .then(function (reg) {
+              return reg.pushManager.getSubscription().then(function (sub) {
+                return sub || reg.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: self._b64(vapidKey),
+                });
+              });
+            })
+            .then(function (sub) { return JSON.stringify(sub); });
+        }).catch(function (e) { console.warn('push', e); return ''; });
+      },
+      vibrate: function (pattern) {
+        try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (_) {}
+      }
+    };
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

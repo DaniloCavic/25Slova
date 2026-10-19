@@ -2,6 +2,7 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { MedalPeriod, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { PushService } from '../push/push.service';
 import { GAME_TZ, monthKey, previousMonthKey, previousWeekKey, previousYearKey, weekKey, yearKey } from '../common/time';
 import { levelForCents, toPoints } from '../game/engine/rules';
 
@@ -19,7 +20,10 @@ interface Row {
 @Injectable()
 export class LeaderboardService implements OnApplicationBootstrap {
   private readonly log = new Logger(LeaderboardService.name);
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly push: PushService,
+  ) {}
 
   /**
    * Rang-lista. Mesečna/godišnja se računa iz istorije poena za traženi period,
@@ -91,6 +95,15 @@ export class LeaderboardService implements OnApplicationBootstrap {
       skipDuplicates: true,
     });
     this.log.log(`Dodeljene medalje za ${period} ${key}: ${top.map((r) => r.username).join(', ')}`);
+    const medal = ['zlatnu', 'srebrnu', 'bronzanu'];
+    const list = { WEEK: 'nedeljnoj', MONTH: 'mesečnoj', YEAR: 'godišnjoj' }[period];
+    for (const r of top) {
+      void this.push.send(r.userId, {
+        title: `Osvojena medalja! ${['🥇', '🥈', '🥉'][r.rank - 1] ?? '🏅'}`,
+        body: `Čestitamo! ${r.rank}. mesto na ${list} rang listi (${medalPeriodText(period, key)}) — dobijaš ${medal[r.rank - 1]} medalju.`,
+        tag: `medal-${period}-${key}`,
+      });
+    }
     return top.length;
   }
 
@@ -144,4 +157,16 @@ export class LeaderboardService implements OnApplicationBootstrap {
       };
     return { overall: view(overall), byInitialLetters: { 1: view(t1), 3: view(t3), 5: view(t5) } };
   }
+}
+
+const MONTHS = ['januar', 'februar', 'mart', 'april', 'maj', 'jun', 'jul', 'avgust', 'septembar', 'oktobar', 'novembar', 'decembar'];
+
+/** "2026-W42" → "nedelja 42", "2026-10" → "oktobar 2026.", "2026" → "2026. godina" */
+function medalPeriodText(period: MedalPeriod, key: string) {
+  if (period === 'WEEK') return `nedelja ${Number(key.split('-W')[1])}`;
+  if (period === 'MONTH') {
+    const [y, m] = key.split('-');
+    return `${MONTHS[Number(m) - 1]} ${y}.`;
+  }
+  return `${key}. godina`;
 }

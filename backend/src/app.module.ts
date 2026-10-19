@@ -24,6 +24,8 @@ import { GameGateway } from './game/game.gateway';
 import { LeaderboardService } from './leaderboard/leaderboard.service';
 import { LeaderboardController } from './leaderboard/leaderboard.controller';
 import { HealthController } from './health.controller';
+import { PushService } from './push/push.service';
+import { PushController } from './push/push.controller';
 
 /** Ograničenje broja zahteva važi samo za HTTP (ne za Socket.IO). */
 @Injectable()
@@ -54,6 +56,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     AdminWordsController,
     AdminController,
     LeaderboardController,
+    PushController,
   ],
   providers: [
     AuthGuard,
@@ -72,6 +75,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     GameService,
     GameGateway,
     LeaderboardService,
+    PushService,
   ],
 })
 export class AppModule {}
