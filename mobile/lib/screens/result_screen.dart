@@ -144,7 +144,6 @@ class _ResultScreenState extends State<ResultScreen> {
                 ].join(' · '),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: textMuted, fontSize: 13)),
-          if (!review) _rematchBlock(app, opp['username'] as String),
           const SizedBox(height: 14),
           Row(children: [
             Expanded(
@@ -190,7 +189,9 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
           ]),
           if (!review) ...[
-            const SizedBox(height: 20),
+            const SizedBox(height: 6),
+            _rematchBlock(app, opp['username'] as String),
+            const SizedBox(height: 12),
             GoldButton(label: 'IGRAJ PONOVO', icon: Icons.play_arrow_rounded, onPressed: () => _playAgain(app)),
             const SizedBox(height: 12),
             BlueButton(
@@ -265,7 +266,7 @@ class _ResultScreenState extends State<ResultScreen> {
               onPressed: _busy ? null : () => _rematch(app),
             );
           }
-          return Padding(padding: const EdgeInsets.only(top: 14), child: child);
+          return child;
         },
       );
 

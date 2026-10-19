@@ -212,6 +212,8 @@ class AppState extends ChangeNotifier {
     });
     s.on('rematch:offer', (data) {
       rematch.value = {'matchId': data['matchId'], 'status': 'offered', 'from': data['from']};
+      // Dugme za prihvatanje je pri dnu ekrana rezultata — kratka poruka da se ne propusti.
+      toast('${data['from']} traži revanš!');
     });
     s.on('rematch:declined', (data) {
       rematch.value = {'matchId': data['matchId'], 'status': 'declined', 'reason': data['reason']};
