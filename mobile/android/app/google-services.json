@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "607153915718",
+    "project_id": "slova-b52b9",
+    "storage_bucket": "slova-b52b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607153915718:android:02e1d2f72ac20201434747",
+        "android_client_info": {
+          "package_name": "rs.slova25.slova25"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkdLquR8XwtPushBLJooJzi6N1eto8pGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

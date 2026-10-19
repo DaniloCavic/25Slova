@@ -6,6 +6,7 @@ import '../api.dart';
 import '../config.dart';
 import '../letters.dart';
 import '../push/push.dart';
+import '../push/push_fcm.dart';
 import '../theme.dart';
 import '../screens/game_screen.dart';
 import '../screens/result_screen.dart';
@@ -279,8 +280,11 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   String? _pushEndpoint;
 
-  /// granted | denied | default | unsupported
-  String get pushPermissionState => pushSupported() ? pushPermission() : 'unsupported';
+  /// Obaveštenja su podrazumevano uključena; igrač ih može isključiti u Podešavanjima.
+  bool pushOn = true;
+  bool _pushPrefsLoaded = false;
+  bool _firstTapArmed = false;
+  bool _fcmRefreshListening = false;
 
   /// Aplikacija je u prvom planu ili ne — server šalje „na potezu si“ samo kad igrač nije u aplikaciji.
   @override
@@ -295,27 +299,101 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     _socket?.emit('presence', {'foreground': s == AppLifecycleState.resumed});
   }
 
-  /// Ako je dozvola već data, obnovi pretplatu (tiho, bez pitanja).
+  /// Pri povezivanju: ako obaveštenja nisu isključena, prijavi uređaj (Android pita za dozvolu odmah,
+  /// iPhone posle prvog dodira na ekran).
   Future<void> _initPush() async {
-    if (pushPermissionState == 'granted') await enablePush(ask: false);
+    if (!_pushPrefsLoaded) {
+      final prefs = await SharedPreferences.getInstance();
+      pushOn = !(prefs.getBool('pushOff') ?? false);
+      _pushPrefsLoaded = true;
+      notifyListeners();
+    }
+    if (!pushOn) return;
+    if (fcmAvailable) {
+      await _enableFcm();
+    } else if (pushSupported()) {
+      final perm = pushPermission();
+      if (perm == 'granted') {
+        await _enableWeb(ask: false);
+      } else if (perm == 'default' && !_firstTapArmed) {
+        _firstTapArmed = true;
+        final key = await _vapidKey();
+        if (key == null) return;
+        final json = await pushSubscribeOnFirstTap(key);
+        _firstTapArmed = false;
+        if (json.isNotEmpty) await _saveWebSubscription(json);
+      }
+    }
   }
 
-  /// Uključuje obaveštenja (traži dozvolu). Vraća poruku greške ili null.
-  Future<String?> enablePush({bool ask = true}) async {
-    if (!pushSupported()) {
-      return 'Na iPhone-u obaveštenja rade samo kada je igra dodata na početni ekran (Share → Add to Home Screen).';
+  /// Prekidač u Podešavanjima.
+  Future<String?> setPushOn(bool on) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('pushOff', !on);
+    pushOn = on;
+    notifyListeners();
+    if (!on) {
+      final endpoint = _pushEndpoint;
+      _pushEndpoint = null;
+      if (endpoint != null) await api.post('/push/unsubscribe', {'endpoint': endpoint}).catchError((_) => null);
+      if (fcmAvailable) await fcmDeleteToken();
+      return null;
     }
+    final err = fcmAvailable ? await _enableFcm() : await _enableWeb(ask: true);
+    if (err != null) {
+      await prefs.setBool('pushOff', true);
+      pushOn = false;
+      notifyListeners();
+    }
+    return err;
+  }
+
+  Future<String?> _enableFcm() async {
+    final token = await fcmToken();
+    if (token == null) return 'Obaveštenja su blokirana. Uključi ih u podešavanjima telefona za 25 Slova.';
+    try {
+      await api.post('/push/subscribe', {'kind': 'FCM', 'token': token});
+      _pushEndpoint = token;
+    } catch (e) {
+      return e.toString();
+    }
+    if (!_fcmRefreshListening) {
+      _fcmRefreshListening = true;
+      await onFcmTokenRefresh((t) {
+        if (!pushOn || api.token == null) return;
+        _pushEndpoint = t;
+        api.post('/push/subscribe', {'kind': 'FCM', 'token': t}).catchError((_) => null);
+      });
+    }
+    return null;
+  }
+
+  Future<String?> _vapidKey() async {
     try {
       final cfg = Map<String, dynamic>.from(await api.get('/push/config'));
-      final key = cfg['webPublicKey'] as String?;
-      if (key == null) return 'Obaveštenja trenutno nisu dostupna.';
-      final json = await pushSubscribe(key, ask: ask);
-      notifyListeners();
-      if (json.isEmpty) {
-        return pushPermission() == 'denied'
-            ? 'Obaveštenja su blokirana. Uključi ih u podešavanjima telefona za 25 Slova.'
-            : 'Obaveštenja nisu uključena.';
-      }
+      return cfg['webPublicKey'] as String?;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<String?> _enableWeb({required bool ask}) async {
+    if (!pushSupported()) {
+      return 'Na iPhone-u obaveštenja rade kada je igra dodata na početni ekran (Share → Add to Home Screen).';
+    }
+    final key = await _vapidKey();
+    if (key == null) return 'Obaveštenja trenutno nisu dostupna.';
+    final json = await pushSubscribe(key, ask: ask);
+    if (json.isEmpty) {
+      return pushPermission() == 'denied'
+          ? 'Obaveštenja su blokirana. Uključi ih u podešavanjima telefona za 25 Slova.'
+          : 'Obaveštenja nisu uključena.';
+    }
+    return _saveWebSubscription(json);
+  }
+
+  Future<String?> _saveWebSubscription(String json) async {
+    try {
       final sub = Map<String, dynamic>.from(jsonDecode(json));
       await api.post('/push/subscribe', {'kind': 'WEB', 'subscription': sub});
       _pushEndpoint = sub['endpoint'] as String?;

@@ -26,7 +26,6 @@ class SettingsScreen extends StatelessWidget {
             onChanged: (m) => app.setThemeMode(m!),
           ),
         const Divider(),
-        const ListTile(title: Text('Obaveštenja', style: TextStyle(fontWeight: FontWeight.bold))),
         const _PushTile(),
         const Divider(),
         ListTile(
@@ -55,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-/// Uključivanje obaveštenja: kada si na potezu, kada osvojiš medalju i podsetnik za dnevnu nagradu (11:00).
+/// Obaveštenja — podrazumevano uključena, igrač ih može isključiti.
 class _PushTile extends StatefulWidget {
   const _PushTile();
   @override
@@ -68,40 +67,18 @@ class _PushTileState extends State<_PushTile> {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    final state = app.pushPermissionState;
-    final on = state == 'granted';
-    final subtitle = switch (state) {
-      'granted' => 'Uključena: kada si na potezu, kada osvojiš medalju i u 11:00 ako dnevna nagrada još nije preuzeta.',
-      'denied' => 'Blokirana u podešavanjima telefona. Uključi ih tamo za 25 Slova.',
-      'unsupported' => 'Na iPhone-u: dodaj igru na početni ekran (Share → Add to Home Screen) i otvori je odatle. '
-          'U Android aplikaciji obaveštenja stižu uskoro.',
-      _ => 'Dodirni da uključiš — telefon će pitati za dozvolu.',
-    };
-    return ListTile(
-      leading: Icon(on ? Icons.notifications_active : Icons.notifications_off_outlined),
-      title: Text(on ? 'Obaveštenja su uključena' : 'Uključi obaveštenja'),
-      subtitle: Text(subtitle),
-      trailing: _busy
-          ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
-          : on
-              ? TextButton(
-                  onPressed: () async {
-                    await app.api.post('/push/test');
-                  },
-                  child: const Text('Probaj'))
-              : null,
-      onTap: on || state == 'unsupported' || _busy
+    return SwitchListTile(
+      secondary: Icon(app.pushOn ? Icons.notifications_active : Icons.notifications_off_outlined),
+      title: const Text('Obaveštenja'),
+      value: app.pushOn,
+      onChanged: _busy
           ? null
-          : () async {
+          : (v) async {
               setState(() => _busy = true);
-              final err = await app.enablePush();
+              final err = await app.setPushOn(v);
               if (!context.mounted) return;
               setState(() => _busy = false);
-              if (err != null) {
-                showError(context, err);
-              } else {
-                app.toast('Obaveštenja su uključena 🔔');
-              }
+              if (err != null) showError(context, err);
             },
     );
   }

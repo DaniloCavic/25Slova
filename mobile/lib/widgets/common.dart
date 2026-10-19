@@ -367,6 +367,7 @@ class UserAvatar extends StatelessWidget {
 class TokenChip extends StatelessWidget {
   final int tokens;
   final VoidCallback? onTap;
+
   /// Svetla varijanta (svetlo plava pozadina, tamni tekst) — za svetle ekrane u svetlom režimu.
   final bool light;
   const TokenChip(this.tokens, {super.key, this.onTap, this.light = false});
@@ -424,6 +425,7 @@ class LevelBar extends StatelessWidget {
   final num totalPoints;
   final double width;
   final Color? textColor;
+
   /// Kratak zapis (bez decimala, hiljade kao „15,3K“) — za usku traku na početnom ekranu.
   final bool compact;
   const LevelBar(
@@ -493,8 +495,7 @@ class CostTag extends StatelessWidget {
               ? [const Color(0x40FFFFFF), const Color(0x1A8A5A00)]
               : [const Color(0x33FFFFFF), const Color(0x330A1530)],
         ),
-        border: Border.all(
-            color: onGold ? const Color(0xCC8A5A00) : Colors.white.withOpacity(0.55), width: 1.6),
+        border: Border.all(color: onGold ? const Color(0xCC8A5A00) : Colors.white.withOpacity(0.55), width: 1.6),
         boxShadow: [
           BoxShadow(
               color: (onGold ? const Color(0xFF8A5A00) : Colors.black).withOpacity(0.25),

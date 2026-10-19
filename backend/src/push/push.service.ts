@@ -118,7 +118,7 @@ export class PushService implements OnApplicationBootstrap {
           token: s.endpoint,
           notification: { title: msg.title, body: msg.body },
           data: { url: msg.url ?? '', tag: msg.tag ?? '' },
-          android: { priority: 'high', notification: { tag: msg.tag, channelId: 'igra' } },
+          android: { priority: 'high', notification: { tag: msg.tag } },
         });
       }
     } catch (e) {

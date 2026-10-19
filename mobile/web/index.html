@@ -77,6 +77,17 @@
             .then(function (sub) { return JSON.stringify(sub); });
         }).catch(function (e) { console.warn('push', e); return ''; });
       },
+      // Obaveštenja su podrazumevano uključena, ali iPhone dozvolu traži tek posle dodira na ekran.
+      subscribeOnFirstTap: function (vapidKey) {
+        var self = window.slovaPush;
+        return new Promise(function (resolve) {
+          var handler = function () {
+            document.removeEventListener('pointerup', handler, true);
+            self.subscribe(vapidKey, true).then(resolve);
+          };
+          document.addEventListener('pointerup', handler, true);
+        });
+      },
       vibrate: function (pattern) {
         try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (_) {}
       }

@@ -32,3 +32,14 @@ Future<String> pushSubscribe(String vapidKey, {bool ask = false}) async {
     return '';
   }
 }
+
+@JS('slovaPush.subscribeOnFirstTap')
+external JSPromise<JSString> _subscribeOnFirstTap(String vapidKey);
+
+Future<String> pushSubscribeOnFirstTap(String vapidKey) async {
+  try {
+    return (await _subscribeOnFirstTap(vapidKey).toDart).toDart;
+  } catch (_) {
+    return '';
+  }
+}
