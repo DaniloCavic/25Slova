@@ -50,6 +50,17 @@ interface PrivateGame {
   expiresAt: number;
 }
 
+/** Revanš: posle partije oba igrača imaju ovoliko sekundi da ga zatraže. */
+export const REMATCH_SECONDS = 60;
+
+interface RematchOffer {
+  matchId: string;
+  mode: 'RANDOM' | 'PRIVATE';
+  players: [PlayerInfo, PlayerInfo];
+  requested: Set<string>;
+  expiresAt: number;
+}
+
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
 export class GameError extends Error {}
@@ -70,6 +81,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly queue = new Map<string, QueueEntry>();
   private readonly privateByCode = new Map<string, PrivateGame>();
   private readonly privateByHost = new Map<string, PrivateGame>();
+  private readonly rematches = new Map<string, RematchOffer>();
   private ticker?: NodeJS.Timeout;
   private pairing = false;
 
@@ -140,6 +152,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
 
   joinQueue(user: User) {
     this.assertFree(user);
+    this.dropRematches(user.id);
     this.queue.set(user.id, { user: this.playerInfo(user), joinedAt: Date.now() });
     this.emitUser(user.id, 'queue:joined', { cost: MATCH_ENTRY_COST });
   }
@@ -194,6 +207,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
 
   async createPrivate(user: User) {
     this.assertFree(user);
+    this.dropRematches(user.id);
     const minutes = this.settings.matchmaking.privateCodeMinutes;
     let code = '';
     do {
@@ -291,6 +305,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       return m.id;
     });
 
+    players.forEach((p) => this.dropRematches(p.userId));
     const rt: Runtime = { matchId, mode, players, state, ending: false, saving: Promise.resolve() };
     this.matches.set(matchId, rt);
     players.forEach((p) => this.userMatch.set(p.userId, matchId));
@@ -461,6 +476,14 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       where: { id: { in: rt.players.map((p) => p.userId) } },
       select: { id: true, totalPoints: true },
     });
+    const offer: RematchOffer = {
+      matchId: rt.matchId,
+      mode: rt.mode,
+      players: rt.players,
+      requested: new Set(),
+      expiresAt: Date.now() + REMATCH_SECONDS * 1000,
+    };
+    this.rematches.set(rt.matchId, offer);
     rt.players.forEach((p, seat) => {
       const opp = other(seat as Seat);
       const total = totals.find((t) => t.id === p.userId)?.totalPoints ?? 0;
@@ -475,6 +498,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
         initialCells: s.initialCells.map((c) => c.cell),
         me: this.boardResult(s, result, seat as Seat, rt.players[seat]),
         opponent: this.boardResult(s, result, opp, rt.players[opp]),
+        rematchUntil: offer.expiresAt,
       });
     });
     this.matches.delete(rt.matchId);
@@ -495,10 +519,81 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     };
   }
 
+  // ------------------------------------------------------------------ revanš
+
+  /**
+   * Zahtev za revanš posle partije. Kada oba igrača zatraže, odmah počinje nova
+   * partija istog načina (tokeni se naplaćuju kao i za svaku partiju).
+   */
+  async requestRematch(user: User, matchId: string) {
+    const r = this.rematches.get(matchId);
+    if (!r || r.expiresAt < Date.now()) throw new GameError('Revanš više nije moguć.');
+    const me = r.players.find((p) => p.userId === user.id);
+    if (!me) throw new GameError('Niste igrali ovu partiju.');
+    const opp = r.players.find((p) => p.userId !== user.id)!;
+    this.assertFree(user);
+    r.requested.add(user.id);
+    if (!r.requested.has(opp.userId)) {
+      if (!(await this.isOnline(opp.userId))) {
+        this.rematches.delete(matchId);
+        throw new GameError('Protivnik je napustio igru.');
+      }
+      this.emitUser(opp.userId, 'rematch:offer', { matchId, from: me.username, expiresAt: r.expiresAt });
+      return { waiting: true, expiresAt: r.expiresAt };
+    }
+    // Oba igrača žele revanš.
+    this.rematches.delete(matchId);
+    const fresh = await this.prisma.user.findMany({ where: { id: { in: r.players.map((p) => p.userId) } } });
+    const users = r.players.map((p) => fresh.find((u) => u.id === p.userId));
+    const fail = (reason: string) => {
+      r.players.forEach((p) => this.emitUser(p.userId, 'rematch:declined', { matchId, reason }));
+      return new GameError(reason);
+    };
+    if (users.some((u) => !u || u.isBlocked || u.deletedAt)) throw fail('Revanš nije moguć.');
+    if (this.userMatch.has(opp.userId) || this.queue.has(opp.userId) || this.privateByHost.has(opp.userId)) {
+      throw fail('Protivnik je već u drugoj igri.');
+    }
+    try {
+      await this.startMatch(users.map((u) => this.playerInfo(u!)) as [PlayerInfo, PlayerInfo], r.mode);
+    } catch (e) {
+      if (e instanceof InsufficientTokens) {
+        const who = e.userId === user.id ? 'Nemate' : 'Protivnik nema';
+        throw fail(`${who} dovoljno tokena za revanš.`);
+      }
+      throw e;
+    }
+    return { started: true };
+  }
+
+  declineRematch(userId: string, matchId: string) {
+    const r = this.rematches.get(matchId);
+    if (!r || !r.players.some((p) => p.userId === userId)) return;
+    this.rematches.delete(matchId);
+    r.players
+      .filter((p) => p.userId !== userId)
+      .forEach((p) => this.emitUser(p.userId, 'rematch:declined', { matchId, reason: 'Protivnik je odbio revanš.' }));
+  }
+
+  /** Igrač je otišao u drugu igru ili napustio aplikaciju — ponude za revanš sa njim otpadaju. */
+  private dropRematches(userId: string, reason = 'Protivnik je otišao u drugu igru.') {
+    for (const r of [...this.rematches.values()]) {
+      if (!r.players.some((p) => p.userId === userId)) continue;
+      this.rematches.delete(r.matchId);
+      r.players
+        .filter((p) => p.userId !== userId)
+        .forEach((p) => this.emitUser(p.userId, 'rematch:declined', { matchId: r.matchId, reason }));
+    }
+  }
+
   // ----------------------------------------------------------------- ostalo
 
   private async tick() {
     const now = Date.now();
+    for (const r of [...this.rematches.values()]) {
+      if (r.expiresAt >= now) continue;
+      this.rematches.delete(r.matchId);
+      r.players.forEach((p) => this.emitUser(p.userId, 'rematch:expired', { matchId: r.matchId }));
+    }
     for (const pg of [...this.privateByHost.values()]) {
       if (pg.expiresAt < now) await this.cancelPrivate(pg.host.userId, 'Kod je istekao.').catch(() => undefined);
     }
@@ -508,6 +603,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   /** Igrač je napustio aplikaciju (sve konekcije zatvorene). Partija nastavlja da teče. */
   async onUserOffline(userId: string) {
     this.queue.delete(userId);
+    this.dropRematches(userId, 'Protivnik je napustio igru.');
     // Privatna partija ostaje otvorena dok kod ne istekne; pridruživanje proverava da li je domaćin povezan.
   }
 

@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import 'player_profile_screen.dart';
+import 'profile_screen.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -176,6 +178,15 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Panel(
+        // Dodir otvara profil igrača (ili moj profil).
+        onTap: () {
+          final mine = r['userId'] == context.read<AppState>().user?['id'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => mine ? const ProfileScreen() : PlayerProfileScreen(userId: r['userId'] as String)),
+          );
+        },
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         gradient: first
             ? (isDark

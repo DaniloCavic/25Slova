@@ -23,6 +23,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Naizmenični potezi: igrač bira slovo i polje, protivnik isto slovo postavlja na svoju tablu i bira sledeće.
 - Serverski tajmer (30/45/60 s), 3 života, istek vremena = −1 život, gubitak sva 3 = poraz; vreme teče i bez veze.
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.
+- Revanš: 60 sekundi posle partije oba igrača mogu da zatraže revanš; kad i drugi prihvati, odmah počinje nova partija (10 tokena po igraču).
 - Bodovanje: 12 nizova, oba smera čitanja, najduža reč (2–5 slova) po nizu, kraće reči unutar duže se ne sabiraju.
 - Pobednik po poenima → broju reči → nerešeno. Nagrada `(poeni × reči) ÷ 7,2`, poraz −10, nerešeno 0.
 
@@ -30,6 +31,8 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Registracija (korisničko ime, ime i prezime, pol, datum rođenja, e-mail, telefon, lozinka + potvrda) i prijava.
 - Zaboravljena lozinka (kod na e-mail), promena lozinke, profilna slika, izmena podataka, brisanje naloga.
 - E-mail i telefon se ne prikazuju drugim igračima.
+- Profil drugog igrača (dodir na igrača na rang listi): level, poeni po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
+- Istorija: poslednjih 10 partija; dodir otvara partiju sa obe table i pronađenim rečima.
 - Server je spreman za Google i Apple prijavu (provera tokena, dopuna profila, povezivanje bez preuzimanja tuđeg naloga).
 
 **Tokeni, poeni, rang liste**

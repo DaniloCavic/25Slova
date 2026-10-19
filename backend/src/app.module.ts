@@ -11,7 +11,7 @@ import { MailService } from './auth/mail.service';
 import { SocialVerifierService } from './auth/social-verifier.service';
 import { UsersService } from './users/users.service';
 import { PointsService } from './users/points.service';
-import { MatchesController } from './users/matches.controller';
+import { MatchesController, MatchHistoryService, PlayersController } from './users/matches.controller';
 import { TokensService } from './tokens/tokens.service';
 import { TokensController } from './tokens/tokens.controller';
 import { AdVerifierService } from './tokens/ad-verifier.service';
@@ -49,6 +49,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     AuthController,
     MeController,
     MatchesController,
+    PlayersController,
     TokensController,
     AdminWordsController,
     AdminController,
@@ -63,6 +64,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     SocialVerifierService,
     UsersService,
     PointsService,
+    MatchHistoryService,
     TokensService,
     AdVerifierService,
     DictionaryService,

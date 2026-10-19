@@ -115,6 +115,16 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     return this.handle(() => this.game.move(s.data.userId, Number(body?.cell), body?.letter ?? null));
   }
 
+  @SubscribeMessage('rematch:request')
+  rematchRequest(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { matchId?: string }) {
+    return this.handle(async () => this.game.requestRematch(await this.user(s), String(body?.matchId ?? '')));
+  }
+
+  @SubscribeMessage('rematch:decline')
+  rematchDecline(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { matchId?: string }) {
+    return this.handle(() => this.game.declineRematch(s.data.userId, String(body?.matchId ?? '')));
+  }
+
   @SubscribeMessage('match:resign')
   resign(@ConnectedSocket() s: AuthedSocket) {
     return this.handle(() => this.game.resign(s.data.userId));

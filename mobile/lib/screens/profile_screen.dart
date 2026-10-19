@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/profile_parts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -134,11 +135,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const SizedBox(height: 16),
         Row(children: [
-          _Stat(Icons.emoji_events, 'Ukupno', fmtPointsShort(u['totalPoints'])),
-          _Stat(Icons.date_range, 'Nedelja', fmtPointsShort(u['weeklyPoints'])),
-          _Stat(Icons.calendar_month, 'Mesec', fmtPointsShort(u['monthlyPoints'])),
-          _Stat(Icons.bar_chart, 'Godina', fmtPointsShort(u['yearlyPoints'])),
-          _Stat(Icons.monetization_on, 'Tokeni', u['tokens']),
+          StatTile(Icons.emoji_events, 'Ukupno', fmtPointsShort(u['totalPoints'])),
+          StatTile(Icons.date_range, 'Nedelja', fmtPointsShort(u['weeklyPoints'])),
+          StatTile(Icons.calendar_month, 'Mesec', fmtPointsShort(u['monthlyPoints'])),
+          StatTile(Icons.bar_chart, 'Godina', fmtPointsShort(u['yearlyPoints'])),
+          StatTile(Icons.monetization_on, 'Tokeni', u['tokens'], iconWidget: const CoinIcon(size: 22)),
         ]),
         const SizedBox(height: 18),
         FutureBuilder<List<dynamic>>(
@@ -147,75 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (!snap.hasData) return const LinearProgressIndicator();
             final medals = (snap.data![0] as List).cast<Map>();
             final matches = (snap.data![1] as List).cast<Map>();
-            int count(int place) => medals.where((m) => m['place'] == place).length;
             return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Medalje', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
-              const SizedBox(height: 8),
-              Row(children: [
-                for (final place in [1, 2, 3])
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Panel(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Column(children: [
-                          Icon(Icons.military_tech,
-                              size: 40, color: count(place) > 0 ? medalColor(place) : textMuted.withOpacity(0.35)),
-                          Text(['Zlatne', 'Srebrne', 'Bronzane'][place - 1],
-                              style: TextStyle(fontSize: 12, color: textMuted)),
-                          Text('${count(place)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
-                        ]),
-                      ),
-                    ),
-                  ),
-              ]),
-              const SizedBox(height: 8),
-              if (medals.isEmpty)
-                Text('Uđi među prva tri na nedeljnoj, mesečnoj ili godišnjoj listi i osvoji medalju!',
-                    style: TextStyle(color: textMuted, fontSize: 13))
-              else
-                Wrap(spacing: 6, runSpacing: 6, children: [
-                  for (final m in medals.take(12))
-                    Chip(
-                      avatar: Icon(Icons.military_tech, color: medalColor(m['place'])),
-                      label: Text('${m['place']}. mesto · ${medalPeriodLabel(m['period'], m['periodKey'])}'),
-                    ),
-                ]),
+              MedalsSection(medals,
+                  emptyText: 'Uđi među prva tri na nedeljnoj, mesečnoj ili godišnjoj listi i osvoji medalju!'),
               const SizedBox(height: 18),
-              const Text('Poslednje partije', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
-              const SizedBox(height: 8),
-              if (matches.isEmpty) Text('Još nema odigranih partija.', style: TextStyle(color: textMuted)),
-              for (final m in matches)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Panel(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    child: Row(children: [
-                      Icon(
-                        m['outcome'] == 'WIN'
-                            ? Icons.check_circle
-                            : m['outcome'] == 'LOSS'
-                                ? Icons.cancel
-                                : Icons.remove_circle,
-                        color: m['outcome'] == 'WIN' ? success : (m['outcome'] == 'LOSS' ? danger : textMuted),
-                        size: 30,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('protiv ${m['opponent'] ?? '—'}', style: const TextStyle(fontWeight: FontWeight.w700)),
-                          Text('${m['myScore']} : ${m['opponentScore']} poena',
-                              style: TextStyle(color: textMuted, fontSize: 13)),
-                        ]),
-                      ),
-                      Text(fmtSignedPoints(m['pointsDelta']),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 17,
-                              color: m['pointsDelta'] > 0 ? success : (m['pointsDelta'] < 0 ? danger : textMuted))),
-                    ]),
-                  ),
-                ),
+              RecentMatches(matches),
             ]);
           },
         ),
@@ -239,29 +176,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ]),
     );
   }
-}
-
-class _Stat extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final dynamic value;
-  const _Stat(this.icon, this.label, this.value);
-  @override
-  Widget build(BuildContext context) => Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3),
-          child: Panel(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-            child: Column(children: [
-              icon == Icons.monetization_on ? const CoinIcon(size: 22) : Icon(icon, color: gold, size: 22),
-              const SizedBox(height: 4),
-              FittedBox(
-                  child: Text('${value ?? 0}', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900))),
-              Text(label, style: TextStyle(fontSize: 11, color: textMuted)),
-            ]),
-          ),
-        ),
-      );
 }
 
 class _PasswordDialog extends StatefulWidget {

@@ -37,6 +37,9 @@ class AppState extends ChangeNotifier {
   /// Trenutna partija (stanje iz ugla ovog igrača) — null ako nije u partiji.
   final match = ValueNotifier<Map<String, dynamic>?>(null);
 
+  /// Revanš posle partije: {matchId, status: waiting|offered|declined|expired, from?, reason?}.
+  final rematch = ValueNotifier<Map<String, dynamic>?>(null);
+
   /// Razlika serverskog i lokalnog sata (ms), da tajmer ne zavisi od sata telefona.
   int clockOffset = 0;
 
@@ -203,7 +206,19 @@ class AppState extends ChangeNotifier {
       _setWaiting(null);
       toast(data['reason'] ?? 'Privatna partija je otkazana.');
     });
-    s.on('match:start', (data) => _openMatch(Map<String, dynamic>.from(data)));
+    s.on('match:start', (data) {
+      rematch.value = null;
+      _openMatch(Map<String, dynamic>.from(data));
+    });
+    s.on('rematch:offer', (data) {
+      rematch.value = {'matchId': data['matchId'], 'status': 'offered', 'from': data['from']};
+    });
+    s.on('rematch:declined', (data) {
+      rematch.value = {'matchId': data['matchId'], 'status': 'declined', 'reason': data['reason']};
+    });
+    s.on('rematch:expired', (data) {
+      rematch.value = {'matchId': data['matchId'], 'status': 'expired'};
+    });
     s.on('match:state', (data) => _updateMatch(Map<String, dynamic>.from(data)));
     s.on('match:life-lost', (data) {
       final m = match.value;
@@ -265,6 +280,21 @@ class AppState extends ChangeNotifier {
     final r = await emit('queue:join');
     if (r['ok'] == true) _setWaiting('queue');
     return r['ok'] == true ? null : r['error'];
+  }
+
+  /// Traži revanš (ili prihvata protivnikov zahtev). Vraća poruku greške ili null.
+  Future<String?> requestRematch(String matchId) async {
+    final r = await emit('rematch:request', {'matchId': matchId});
+    if (r['ok'] != true) return r['error'];
+    if (r['waiting'] == true) rematch.value = {'matchId': matchId, 'status': 'waiting'};
+    return null;
+  }
+
+  Future<void> declineRematch(String matchId) async {
+    final st = rematch.value;
+    if (st != null && st['matchId'] == matchId && st['status'] != 'waiting' && st['status'] != 'offered') return;
+    rematch.value = null;
+    await emit('rematch:decline', {'matchId': matchId});
   }
 
   Future<void> leaveQueue() async {
