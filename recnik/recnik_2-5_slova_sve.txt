@@ -9,8 +9,6 @@ agent
 ajde
 ajfon
 ajmo
-ajnc
-ajoj
 ajova
 ajpod
 akbar
@@ -32,7 +30,6 @@ ali
 alias
 alibi
 alice
-alin
 alina
 aline
 alka
@@ -49,17 +46,14 @@ aman
 amara
 ambar
 ambis
-amen
 amigo
 amin
 amina
 amino
 amiš
 amiši
-andi
 anđeo
 aneks
-anis
 anker
 anti
 anus
@@ -69,17 +63,13 @@ apel
 april
 ar
 arapi
-arči
 arena
 arene
-argo
 arhiv
 arija
 arije
-arno
 aroma
 arsen
-arti
 as
 astma
 astme
@@ -96,12 +86,10 @@ audio
 aura
 aure
 aut
-auta
 auti
 autić
 auto
 autor
-avaj
 avans
 avet
 aveti
@@ -112,10 +100,7 @@ azil
 azot
 baba
 babe
-babi
-babo
 babom
-babu
 babun
 baca
 bacač
@@ -131,8 +116,6 @@ baciš
 bačen
 bačva
 bačve
-bada
-bade
 badem
 badnje
 bager
@@ -151,7 +134,6 @@ bakin
 baklja
 baklje
 bakra
-baku
 bal
 bala
 bale
@@ -166,7 +148,6 @@ bandži
 bane
 baner
 bani
-bank
 banka
 banke
 banks
@@ -176,7 +157,6 @@ banja
 banje
 bar
 bara
-bard
 bare
 barel
 barem
@@ -185,7 +165,6 @@ barka
 barke
 barom
 baron
-baru
 barut
 bas
 basa
@@ -211,14 +190,12 @@ bazni
 bdenje
 beba
 bebe
-bebi
 bebin
 beda
 bedak
 bedan
 bede
 bedem
-bedi
 bedna
 bedne
 bedni
@@ -227,7 +204,6 @@ bednu
 bedra
 bedro
 beg
-behu
 bejah
 bejbi
 bek
@@ -244,13 +220,9 @@ belog
 beloj
 belom
 belov
-belu
-bena
 bend
 benda
 bendžo
-bene
-beng
 beo
 berba
 berbe
@@ -265,7 +237,6 @@ berze
 bes
 besa
 besan
-bese
 besi
 besna
 besne
@@ -284,7 +255,6 @@ bežim
 bežiš
 bi
 biber
-bici
 bič
 bića
 biće
@@ -302,7 +272,6 @@ bila
 bile
 bili
 bilo
-bilja
 biljar
 bilje
 biljka
@@ -326,7 +295,6 @@ bismo
 biste
 bit
 bitan
-bite
 biti
 bitka
 bitke
@@ -343,7 +311,6 @@ bivše
 bivši
 bivšu
 bizon
-biže
 blag
 blaga
 blage
@@ -365,7 +332,6 @@ blede
 bledi
 bledo
 blef
-blek
 blic
 blizu
 bliža
@@ -383,13 +349,11 @@ boba
 bobe
 boca
 boce
-boci
 bocka
 bočna
 bočne
 bočni
 bočno
-boće
 bod
 bode
 boden
@@ -403,7 +367,6 @@ boga
 bogalj
 bogat
 bogme
-bogo
 bogom
 bogu
 boing
@@ -427,7 +390,6 @@ boks
 boksa
 boksu
 bol
-bola
 bolan
 bole
 boleo
@@ -438,9 +400,7 @@ bolne
 bolni
 bolno
 bolnu
-bolo
 bolom
-bolu
 bolja
 bolje
 boljeg
@@ -450,7 +410,6 @@ boljih
 boljim
 boljoj
 boljom
-bolju
 bomba
 bombe
 bonus
@@ -462,7 +421,6 @@ borbe
 borci
 bordo
 bore
-borg
 bori
 borim
 borio
@@ -470,12 +428,10 @@ boriš
 boršč
 bos
 bosa
-bose
 bosi
 bosna
 bova
 bove
-boze
 božić
 božja
 božje
@@ -499,7 +455,6 @@ brani
 branu
 branje
 braon
-bras
 brat
 brate
 brati
@@ -519,7 +474,6 @@ breme
 brend
 breze
 brice
-bridž
 briga
 brige
 brije
@@ -561,7 +515,6 @@ brzo
 brzog
 brzoj
 brzom
-brzu
 brža
 brže
 brži
@@ -571,7 +524,6 @@ bubanj
 bube
 bubne
 bubnja
-buci
 bucka
 bucko
 bučan
@@ -594,10 +546,6 @@ budno
 budu
 budžet
 buđi
-bugi
-buha
-buhe
-buja
 bujna
 bujne
 bujnu
@@ -605,9 +553,6 @@ buka
 buke
 buket
 bukom
-buku
-bula
-bule
 bulja
 bulje
 bulji
@@ -625,13 +570,11 @@ bunim
 bunio
 buniš
 bunt
-bura
 burad
 buran
 buraz
 bure
 burek
-buri
 burka
 burke
 burma
@@ -639,12 +582,8 @@ burme
 burna
 burno
 burnu
-buru
 bus
-busa
 busom
-busu
-buša
 buše
 buši
 bušim
