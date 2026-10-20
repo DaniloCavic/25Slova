@@ -187,7 +187,6 @@ cela
 cele
 celi
 celo
-celu
 cena
 cene
 ceni
@@ -209,7 +208,6 @@ crna
 crne
 crni
 crno
-crnu
 crnja
 crnje
 crnji
@@ -323,7 +321,6 @@ data
 date
 dati
 dato
-datu
 dave
 davi
 debi
@@ -395,7 +392,6 @@ done
 donja
 donje
 donji
-donju
 doza
 doze
 drag
@@ -445,7 +441,6 @@ duva
 duža
 duže
 duži
-dužu
 dvor
 džaba
 džabe
@@ -495,7 +490,6 @@ fina
 fine
 fini
 fino
-finu
 fisk
 fleš
 flip
@@ -720,7 +714,6 @@ jaci
 jača
 jače
 jači
-jaču
 jada
 jade
 jadu
@@ -1058,7 +1051,6 @@ lena
 lene
 leni
 leno
-lenu
 lenja
 lenje
 lenji
@@ -1068,7 +1060,6 @@ lepa
 lepe
 lepi
 lepo
-lepu
 leta
 lete
 leti
@@ -1129,7 +1120,6 @@ lord
 loša
 loše
 loši
-lošu
 loto
 lova
 love
@@ -1169,7 +1159,6 @@ ljuta
 ljute
 ljuti
 ljuto
-ljutu
 maca
 mace
 mače
@@ -1182,7 +1171,6 @@ mala
 male
 mali
 malo
-malu
 mama
 mame
 mami
@@ -1193,7 +1181,6 @@ manu
 manja
 manje
 manji
-manju
 mapa
 mape
 mare
@@ -1227,7 +1214,6 @@ meka
 meke
 meki
 meko
-meku
 mela
 mele
 meli
@@ -1260,7 +1246,6 @@ mila
 mile
 mili
 milo
-milu
 milja
 milje
 mimo
@@ -1425,7 +1410,6 @@ nova
 nove
 novi
 novo
-novu
 nude
 nudi
 nula
@@ -1466,7 +1450,6 @@ očev
 očit
 očne
 očni
-očnu
 očuh
 odaj
 odam
@@ -1696,7 +1679,6 @@ prva
 prve
 prvi
 prvo
-prvu
 prže
 prži
 psić
@@ -1721,7 +1703,6 @@ punč
 pune
 puni
 puno
-punu
 pusa
 pust
 puše
@@ -1915,7 +1896,6 @@ seći
 seda
 sede
 sedi
-sedu
 seje
 seju
 seka
@@ -1973,7 +1953,6 @@ siva
 sive
 sivi
 sivo
-sivu
 sjaj
 skaj
 skeč
@@ -2029,7 +2008,6 @@ solo
 sona
 song
 soni
-sonu
 soul
 sova
 sove
@@ -2098,7 +2076,6 @@ suva
 suve
 suvi
 suvo
-suvu
 suza
 suze
 suzi
@@ -2211,7 +2188,6 @@ tank
 tanja
 tanje
 tanji
-tanju
 taoc
 tara
 tare
@@ -2250,7 +2226,6 @@ tiha
 tihe
 tihi
 tiho
-tihu
 tika
 tili
 tima
@@ -2321,7 +2296,6 @@ tuda
 tuđa
 tuđe
 tuđi
-tuđu
 tuga
 tuge
 tuka
@@ -2419,7 +2393,6 @@ uska
 uske
 uski
 usko
-usku
 usna
 usne
 usni
@@ -2451,7 +2424,6 @@ uzmu
 uzor
 užad
 užas
-užem
 vade
 vadi
 vafl
@@ -2533,7 +2505,6 @@ visi
 viša
 više
 viši
-višu
 vita
 vite
 viti
@@ -2611,10 +2582,6 @@ zima
 zime
 zimi
 zini
-zlih
-zlim
-zlog
-zloj
 zlom
 zmaj
 znaj
@@ -2689,4 +2656,3 @@ zvuk
 žute
 žuti
 žuto
-žutu

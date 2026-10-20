@@ -123,7 +123,6 @@ bedna
 bedne
 bedni
 bedno
-bednu
 bedra
 bedro
 bejah
@@ -133,9 +132,6 @@ belci
 beleg
 belih
 belim
-belog
-beloj
-belom
 belov
 benda
 bendžo
@@ -150,7 +146,6 @@ besna
 besne
 besni
 besno
-besnu
 beton
 bežao
 bežim
@@ -181,13 +176,11 @@ bitna
 bitne
 bitni
 bitno
-bitnu
 bivam
 bivao
 bivša
 bivše
 bivši
-bivšu
 bizon
 blaga
 blage
@@ -246,14 +239,8 @@ bolna
 bolne
 bolni
 bolno
-bolnu
 bolom
 boljeg
-boljem
-boljih
-boljim
-boljoj
-boljom
 bomba
 bombe
 bonus
@@ -271,7 +258,6 @@ božić
 božja
 božje
 božji
-božju
 braca
 brace
 braća
@@ -323,12 +309,6 @@ brusa
 bruse
 brusu
 bruto
-brzih
-brzim
-brzog
-brzoj
-brzom
-bržim
 bubanj
 bubne
 bubnja
@@ -352,7 +332,6 @@ budno
 budžet
 bujna
 bujne
-bujnu
 buket
 bukom
 buljim
@@ -375,7 +354,6 @@ burma
 burme
 burna
 burno
-burnu
 busom
 bušim
 butan
@@ -390,9 +368,6 @@ cedar
 celer
 celih
 celim
-celog
-celoj
-celom
 cenim
 cenio
 ceniš
@@ -415,7 +390,6 @@ ciljao
 ciljaš
 ciljna
 ciljne
-ciljnu
 cimer
 cimet
 cinik
@@ -442,9 +416,6 @@ crnci
 crnih
 crnim
 crnka
-crnog
-crnoj
-crnom
 crtač
 crtać
 crtam
@@ -470,7 +441,6 @@ cvili
 časne
 časni
 časno
-časnu
 časte
 časti
 čaura
@@ -521,7 +491,6 @@ cvili
 čiste
 čisti
 čisto
-čistu
 čitač
 čitaj
 čitam
@@ -546,7 +515,6 @@ cvili
 čudne
 čudni
 čudno
-čudnu
 čujem
 čuješ
 čujmo
@@ -612,8 +580,6 @@ darbi
 daska
 daske
 dašak
-datim
-datom
 datum
 dauni
 davao
@@ -636,7 +602,6 @@ dečak
 dečja
 dečje
 dečji
-dečju
 dečka
 dečke
 dečki
@@ -666,7 +631,6 @@ desna
 desne
 desni
 desno
-desnu
 detalj
 dever
 devet
@@ -712,7 +676,6 @@ divna
 divne
 divni
 divno
-divnu
 dizao
 dizel
 dižem
@@ -759,10 +722,6 @@ donet
 donio
 donor
 donjeg
-donjem
-donjih
-donjim
-donjoj
 dopao
 dopis
 dopre
@@ -842,14 +801,9 @@ dubai
 dublja
 dublje
 dublji
-dublju
 dubok
 dućan
-dugih
-dugim
 dugme
-dugog
-dugoj
 dugom
 duhan
 duhom
@@ -861,7 +815,6 @@ dupla
 duple
 dupli
 duplo
-duplu
 duplje
 duran
 durim
@@ -948,12 +901,7 @@ fetiš
 fetus
 fijat
 filet
-finih
-finim
 finiš
-finog
-finoj
-finom
 fioka
 fioke
 firer
@@ -997,7 +945,6 @@ gadna
 gadne
 gadni
 gadno
-gadnu
 gađaj
 gađam
 gađao
@@ -1065,7 +1012,6 @@ glupa
 glupe
 glupi
 glupo
-glupu
 gluva
 gluve
 gluvi
@@ -1081,8 +1027,6 @@ gnjide
 golem
 golih
 golim
-golog
-goloj
 golom
 golub
 gonič
@@ -1093,9 +1037,7 @@ gorak
 gordi
 gordo
 goreg
-gorem
 goreo
-gorih
 gorim
 gorio
 goriš
@@ -1103,11 +1045,9 @@ gorka
 gorke
 gorki
 gorko
-gorku
 gornja
 gornje
 gornji
-gornju
 gorom
 gospa
 gospe
@@ -1138,7 +1078,6 @@ grčka
 grčke
 grčki
 grčko
-grčku
 grdiš
 grdno
 grebe
@@ -1170,7 +1109,6 @@ gruba
 grube
 grubi
 grubo
-grubu
 grudi
 grupa
 grupe
@@ -1302,7 +1240,6 @@ idoli
 iduća
 iduće
 idući
-iduću
 igrač
 igraj
 igram
@@ -1337,7 +1274,6 @@ irska
 irske
 irski
 irsko
-irsku
 irvas
 iseci
 iseče
@@ -1401,15 +1337,11 @@ izvod
 izvor
 izvoz
 jačeg
-jačih
-jačim
-jačom
 jadan
 jadna
 jadne
 jadni
 jadno
-jadnu
 jagnje
 jahač
 jahao
@@ -1417,12 +1349,8 @@ jahta
 jahte
 jajca
 jajne
-jakih
-jakim
 jakna
 jakne
-jakog
-jakoj
 jakom
 jakov
 jamči
@@ -1439,7 +1367,6 @@ jasna
 jasne
 jasni
 jasno
-jasnu
 jašem
 jašeš
 jašta
@@ -1501,7 +1428,6 @@ južna
 južne
 južni
 južno
-južnu
 kabel
 kabul
 kačim
@@ -1565,7 +1491,6 @@ kasna
 kasne
 kasni
 kasno
-kasnu
 kasta
 kaste
 kašalj
@@ -1731,13 +1656,11 @@ kozji
 kožna
 kožne
 kožni
-kožnu
 kraba
 krabe
 kraća
 kraće
 kraći
-kraću
 krade
 kradi
 kradu
@@ -1822,7 +1745,6 @@ krvna
 krvne
 krvni
 krvno
-krvnu
 krzna
 krzno
 krznu
@@ -1839,7 +1761,6 @@ kućna
 kućne
 kućni
 kućno
-kućnu
 kufer
 kugla
 kugle
@@ -1911,9 +1832,6 @@ lajem
 laješ
 lakat
 lakej
-lakih
-lakim
-lakog
 lakom
 lakša
 lakše
@@ -1933,7 +1851,6 @@ laste
 lavež
 lavlje
 lavlji
-lavlju
 lavor
 lazne
 lažan
@@ -1943,7 +1860,6 @@ lažna
 lažne
 lažni
 lažno
-lažnu
 lažov
 lebde
 lebdi
@@ -1962,17 +1878,12 @@ lekar
 lekom
 leman
 lemur
-lenom
 lepak
 lepih
 lepim
-lepog
-lepoj
-lepom
 lepša
 lepše
 lepši
-lepšu
 letač
 letak
 leteo
@@ -1982,13 +1893,9 @@ letiš
 letnja
 letnje
 letnji
-letnju
 letos
 letva
 levak
-levim
-levog
-levoj
 levom
 ležaj
 ležao
@@ -2006,7 +1913,6 @@ lična
 lične
 lični
 lično
-ličnu
 lider
 lignja
 lignje
@@ -2052,11 +1958,6 @@ lopta
 lopte
 losos
 lošeg
-lošem
-loših
-lošim
-lošoj
-lošom
 lotus
 louel
 lovac
@@ -2073,8 +1974,6 @@ ludak
 ludih
 ludim
 ludiš
-ludog
-ludoj
 ludom
 luduj
 luđak
@@ -2117,7 +2016,6 @@ ljupka
 ljupke
 ljupki
 ljupko
-ljupku
 ljuska
 ljuske
 ljušti
@@ -2128,15 +2026,12 @@ ljutiš
 ljutit
 ljutnja
 ljutnje
-ljutog
-ljutom
 macan
 macka
 mačak
 mačja
 mačje
 mačji
-mačju
 mačka
 mačke
 mačku
@@ -2170,9 +2065,6 @@ maler
 malih
 malim
 malko
-malog
-maloj
-malom
 mamac
 maman
 mamba
@@ -2186,12 +2078,9 @@ mango
 manta
 manjak
 manjeg
-manjem
 manjih
 manjim
 manjka
-manjoj
-manjom
 marim
 mario
 mariš
@@ -2208,7 +2097,6 @@ masna
 masne
 masni
 masno
-masnu
 mason
 masti
 mašem
@@ -2231,10 +2119,6 @@ meden
 medij
 mehur
 mekan
-mekim
-mekog
-mekoj
-mekom
 mekša
 mekše
 mekši
@@ -2256,7 +2140,6 @@ mesec
 mesna
 mesne
 mesni
-mesnu
 mesta
 mesto
 mešaj
@@ -2281,7 +2164,6 @@ mikro
 miksa
 milim
 miliš
-milog
 milom
 minus
 minut
@@ -2292,7 +2174,6 @@ mirna
 mirne
 mirni
 mirno
-mirnu
 miruj
 misao
 misle
@@ -2307,7 +2188,6 @@ mladu
 mlađa
 mlađe
 mlađi
-mlađu
 mlate
 mlati
 mleka
@@ -2328,13 +2208,11 @@ moćna
 moćne
 moćni
 moćno
-moćnu
 model
 modem
 modna
 modne
 modni
-modnu
 modul
 modus
 mogao
@@ -2355,7 +2233,6 @@ mokra
 mokre
 mokri
 mokro
-mokru
 molba
 molbe
 moler
@@ -2419,7 +2296,6 @@ mrtva
 mrtve
 mrtvi
 mrtvo
-mrtvu
 mrzeo
 mrzim
 mrzio
@@ -2441,7 +2317,6 @@ mudra
 mudre
 mudri
 mudro
-mudru
 mulac
 multi
 muljaš
@@ -2450,7 +2325,6 @@ muška
 muške
 muški
 muško
-mušku
 mutan
 mutav
 mutiš
@@ -2590,7 +2464,6 @@ nežna
 nežne
 nežni
 nežno
-nežnu
 ničeg
 ničem
 ničim
@@ -2622,15 +2495,11 @@ nitro
 nizak
 nižeg
 nižem
-nižih
-nižim
-nižoj
 noćas
 noćna
 noćne
 noćni
 noćno
-noćnu
 nokat
 nokti
 nomad
@@ -2647,11 +2516,6 @@ notes
 novac
 novak
 novci
-novih
-novim
-novog
-novoj
-novom
 nožić
 nožne
 nožni
@@ -2738,12 +2602,10 @@ očeva
 očeve
 očevi
 očevo
-očevu
 očita
 očite
 očiti
 očito
-očnog
 očnjak
 očuva
 odaću
@@ -2861,7 +2723,6 @@ opaka
 opake
 opaki
 opako
-opaku
 opala
 opale
 opali
@@ -2889,7 +2750,6 @@ opseg
 opšta
 opšte
 opšti
-opštu
 oranž
 orasi
 orden
@@ -2913,9 +2773,6 @@ oseti
 osinje
 osipa
 osmeh
-osmog
-osmoj
-osmom
 osnov
 osoba
 osobe
@@ -2935,7 +2792,6 @@ oštra
 oštre
 oštri
 oštro
-oštru
 otaca
 otada
 otapa
@@ -3008,7 +2864,6 @@ palio
 pališ
 palma
 palme
-palog
 paljba
 paljbe
 pamet
@@ -3114,8 +2969,6 @@ petit
 petla
 petlja
 petlje
-petog
-petoj
 petom
 pevac
 pevač
@@ -3194,7 +3047,6 @@ plava
 plave
 plavi
 plavo
-plavu
 plaze
 plazi
 plaža
@@ -3262,7 +3114,6 @@ polka
 polne
 polni
 polno
-polnu
 polog
 polom
 pomak
@@ -3405,17 +3256,11 @@ pruža
 pruže
 pruži
 prvak
-prvih
-prvim
-prvog
-prvoj
-prvom
 pržim
 psalm
 pseća
 pseće
 pseći
-pseću
 pseta
 pseto
 psići
@@ -3446,7 +3291,6 @@ pukli
 puklo
 pukne
 puknu
-pukog
 pukom
 pumpa
 pumpe
@@ -3455,9 +3299,6 @@ punim
 punio
 puniš
 punkt
-punog
-punoj
-punom
 punjač
 punjen
 pupak
@@ -3479,7 +3320,6 @@ puter
 putna
 putne
 putni
-putnu
 putom
 putuj
 puzao
@@ -3496,7 +3336,6 @@ radna
 radne
 radni
 radno
-radnu
 radnja
 radnje
 radom
@@ -3514,8 +3353,6 @@ ranac
 ranih
 ranim
 ranio
-ranog
-ranoj
 ranom
 ranjen
 ranjiv
@@ -3527,7 +3364,6 @@ rasna
 rasne
 rasni
 rasno
-rasnu
 rasta
 raste
 rasti
@@ -3536,13 +3372,11 @@ ratna
 ratne
 ratni
 ratno
-ratnu
 ravan
 ravna
 ravne
 ravni
 ravno
-ravnu
 razbi
 razna
 razne
@@ -3605,7 +3439,6 @@ ribaš
 riblja
 riblje
 riblji
-riblju
 ritam
 riter
 rival
@@ -3613,7 +3446,6 @@ rizik
 roblje
 robna
 robne
-robnu
 robot
 rodea
 rodeo
@@ -3624,7 +3456,6 @@ rodna
 rodne
 rodni
 rodno
-rodnu
 rođak
 rođen
 rokaj
@@ -3656,7 +3487,6 @@ ručna
 ručne
 ručni
 ručno
-ručnu
 rudar
 rugaj
 rugam
@@ -3666,7 +3496,6 @@ ruglo
 ruina
 rujan
 rujna
-rujnu
 rukav
 rukuj
 rulet
@@ -3676,7 +3505,6 @@ ruska
 ruske
 ruski
 rusko
-rusku
 rušim
 rušio
 rušiš
@@ -3687,7 +3515,6 @@ ružna
 ružne
 ružni
 ružno
-ružnu
 rvanja
 rvanje
 sabat
@@ -3762,7 +3589,6 @@ sedma
 sedme
 sedmi
 sedmo
-sedmu
 sedne
 sedni
 sednu
@@ -3815,7 +3641,6 @@ silna
 silne
 silni
 silno
-silnu
 silos
 sinak
 singl
@@ -3842,12 +3667,7 @@ sitna
 sitne
 sitni
 sitno
-sitnu
-sivih
 sivim
-sivog
-sivoj
-sivom
 sjaje
 sjaji
 sjaši
@@ -3898,7 +3718,6 @@ slaba
 slabe
 slabi
 slabo
-slabu
 slade
 slađa
 slađe
@@ -3934,7 +3753,6 @@ slepa
 slepe
 slepi
 slepo
-slepu
 slete
 sleti
 sleva
@@ -3970,7 +3788,6 @@ smeću
 smeđa
 smeđe
 smeđi
-smeđu
 smeje
 smeju
 smela
@@ -4019,14 +3836,12 @@ snova
 snovi
 sobar
 sobna
-sobnu
 sobom
 sočan
 sočna
 sočne
 sočni
 sočno
-sočnu
 sokić
 sokol
 somot
@@ -4108,7 +3923,6 @@ stare
 stari
 staro
 start
-staru
 stati
 stave
 stavi
@@ -4180,7 +3994,6 @@ sudiš
 sudnji
 suđen
 sufle
-suhom
 suknja
 suknje
 sukob
@@ -4198,11 +4011,6 @@ sused
 sušta
 suton
 sutra
-suvih
-suvim
-suvog
-suvoj
-suvom
 suzan
 suzim
 suzio
@@ -4299,7 +4107,6 @@ svuda
 šeste
 šesti
 šesto
-šestu
 šešir
 šetač
 šetaj
@@ -4323,11 +4130,9 @@ svuda
 šipka
 šipke
 šipku
-širem
 širim
 širio
 širiš
-široj
 širok
 širom
 šišam
@@ -4413,7 +4218,6 @@ tačna
 tačne
 tačni
 tačno
-tačnu
 tajan
 tajio
 tajiš
@@ -4445,7 +4249,6 @@ tamna
 tamne
 tamni
 tamno
-tamnu
 tampa
 tanak
 tanga
@@ -4514,7 +4317,6 @@ teška
 teške
 teški
 teško
-tešku
 tetak
 tetka
 tetke
@@ -4531,10 +4333,6 @@ tibet
 tifus
 tiganj
 tigar
-tihim
-tihog
-tihoj
-tihom
 tiket
 tikva
 tikve
@@ -4572,7 +4370,6 @@ topla
 tople
 topli
 toplo
-toplu
 toranj
 torba
 torbe
@@ -4656,7 +4453,6 @@ trula
 trule
 truli
 trulo
-trulu
 trune
 truni
 trunu
@@ -4674,11 +4470,8 @@ tucaš
 tučem
 tučeš
 tuđeg
-tuđem
 tuđih
 tuđim
-tuđoj
-tuđom
 tuguj
 tukao
 tukla
@@ -4708,7 +4501,6 @@ tužna
 tužne
 tužni
 tužno
-tužnu
 tvari
 tvist
 tvoga
@@ -4722,7 +4514,6 @@ tvrda
 tvrde
 tvrdi
 tvrdo
-tvrdu
 tvrđe
 tvrđi
 ubace
@@ -4787,7 +4578,6 @@ udari
 udata
 udate
 udati
-udatu
 udave
 udavi
 udela
@@ -4950,11 +4740,6 @@ useli
 usere
 usevi
 usisa
-uskih
-uskim
-uskog
-uskoj
-uskom
 uskrs
 usled
 uslov
@@ -5093,20 +4878,14 @@ važna
 važne
 važni
 važno
-važnu
 večan
 večer
 večna
 večne
 večni
 večno
-večnu
 većeg
 većem
-većih
-većim
-većoj
-većom
 vedar
 vedra
 vedre
@@ -5127,7 +4906,6 @@ verna
 verne
 verni
 verno
-vernu
 veruj
 veseo
 vesla
@@ -5185,13 +4963,9 @@ visok
 viste
 višak
 višeg
-višem
-viših
-višim
 viška
 višnja
 višnje
-višoj
 vitak
 vitez
 vitka
@@ -5210,7 +4984,6 @@ voćke
 voćna
 voćne
 voćni
-voćnu
 vodič
 vodim
 vodio
@@ -5288,14 +5061,12 @@ vrtiš
 vruća
 vruće
 vrući
-vruću
 vrzma
 vučem
 vučeš
 vučja
 vučje
 vučji
-vučnu
 vukao
 vukla
 vukli
@@ -5313,7 +5084,6 @@ zadao
 zadnja
 zadnje
 zadnji
-zadnju
 zahod
 zajam
 zajeb
@@ -5378,7 +5148,6 @@ zebre
 zečić
 zečja
 zečje
-zečju
 zefir
 zelen
 zemlja
@@ -5439,7 +5208,6 @@ zrela
 zrele
 zreli
 zrelo
-zrelu
 zrnca
 zrnce
 zubar
@@ -5447,7 +5215,6 @@ zubić
 zubna
 zubne
 zubni
-zubnu
 zurim
 zurio
 zuriš
@@ -5461,7 +5228,6 @@ zvana
 zvane
 zvani
 zvano
-zvanu
 zvanja
 zvanje
 zvaše
@@ -5531,8 +5297,6 @@ zvuku
 živiš
 življe
 živni
-živog
-živoj
 živom
 život
 žlica
@@ -5556,9 +5320,6 @@ zvuku
 žurno
 žutih
 žutim
-žutog
-žutoj
-žutom
 žvaće
 žvaći
 žvaću
