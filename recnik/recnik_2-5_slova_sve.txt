@@ -6,8 +6,6 @@ afere
 afro
 agens
 agent
-ah
-aj
 ajde
 ajfon
 ajmo
@@ -66,11 +64,11 @@ anis
 anker
 anti
 anus
-ao
 aorta
 aorte
 apel
 april
+ar
 arapi
 arči
 arena
@@ -113,7 +111,6 @@ avion
 azija
 azil
 azot
-ba
 baba
 babe
 babi
@@ -1523,9 +1520,7 @@ edem
 efekt
 ego
 egom
-eh
 ehej
-ej
 ekaj
 ekcem
 ekipa
@@ -2017,7 +2012,6 @@ guze
 guzi
 gužva
 gužve
-ha
 hači
 hadži
 hagen
@@ -2079,7 +2073,6 @@ hlade
 hladi
 hleb
 hlor
-hm
 hobi
 hoće
 hoćeš
@@ -4602,12 +4595,10 @@ oglas
 ogled
 ogrev
 ogrni
-oh
 ohajo
 ohol
 ohola
 oholi
-oj
 ojača
 okači
 okani
@@ -7615,7 +7606,6 @@ uđi
 uđimo
 uđite
 uđu
-uf
 ugalj
 ugao
 ugase
@@ -7630,7 +7620,6 @@ ugriz
 ugura
 uguše
 uguši
-uh
 uho
 uhoda
 uhode
@@ -8216,6 +8205,7 @@ vlaka
 vlas
 vlasi
 vlast
+vo
 voća
 voće
 voćem
