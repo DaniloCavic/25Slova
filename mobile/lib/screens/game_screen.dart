@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
 import 'package:provider/provider.dart';
 import '../letters.dart';
@@ -34,7 +35,7 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
-  /// Kada igraču na potezu ostane 5 sekundi, telefon zavibrira (jednom po potezu).
+  /// Kada igraču na potezu ostane 10 sekundi, telefon zavibrira (jednom po potezu) — znak da ubrza.
   int? _vibratedForDeadline;
   void _warnLowTime() {
     final app = context.read<AppState>();
@@ -42,9 +43,20 @@ class _GameScreenState extends State<GameScreen> {
     if (m == null || m['isMyTurn'] != true) return;
     final deadline = m['deadline'] as int;
     final left = deadline - (DateTime.now().millisecondsSinceEpoch + app.clockOffset);
-    if (left > 5000 || left <= 0 || _vibratedForDeadline == deadline) return;
+    if (left > 10000 || left <= 0 || _vibratedForDeadline == deadline) return;
     _vibratedForDeadline = deadline;
-    Vibration.vibrate(pattern: [0, 300, 150, 300]).catchError((_) {});
+    _vibrate();
+  }
+
+  Future<void> _vibrate() async {
+    try {
+      if (await Vibration.hasVibrator()) {
+        await Vibration.vibrate(pattern: [0, 400, 150, 400], intensities: [0, 255, 0, 255]);
+        return;
+      }
+    } catch (_) {}
+    // Rezerva (npr. telefon bez podrške za šablon vibracije).
+    await HapticFeedback.vibrate();
   }
 
   @override

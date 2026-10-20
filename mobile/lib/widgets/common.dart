@@ -27,37 +27,51 @@ class PictureBackground extends StatelessWidget {
   /// Visina do koje se pruža logo na slici (ispod nje počinje sadržaj).
   static double logoBottom(BuildContext context) => imageWidth(context) * _aspect * 0.655;
 
+  /// Boja neba na vrhu slike — vidi se iznad slike kada se ekran povuče na dole.
+  static Color get skyColor => isDark ? const Color(0xFF01194F) : const Color(0xFF0B86EE);
+
+  /// Sama slika (pune širine, do 700 px) sa pretapanjem u pozadinu na dnu.
+  static Widget image(BuildContext context) {
+    final w = imageWidth(context);
+    return SizedBox(
+      height: w * _aspect,
+      child: Center(
+        child: SizedBox(
+          width: w,
+          child: Stack(fit: StackFit.expand, children: [
+            Image.asset(isDark ? 'assets/images/pozadina.jpg' : 'assets/images/pozadina_svetla.jpg',
+                fit: BoxFit.cover, alignment: Alignment.topCenter),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0, 0.62, 0.8, 1],
+                  colors: [Colors.transparent, Colors.transparent, const Color(0xCC07142E), bgBottom],
+                ),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  /// Sadržaj koji se pomera zajedno sa slikom (za ekrane sa listom koja se povlači):
+  /// slika je deo liste, a iznad nje je nebo u istoj boji, pa se pri povlačenju na dole
+  /// sve spušta zajedno.
+  static Widget scrolling(BuildContext context, Widget content) => Stack(clipBehavior: Clip.none, children: [
+        Positioned(top: -2000, left: 0, right: 0, height: 2001, child: ColoredBox(color: skyColor)),
+        Positioned(top: 0, left: 0, right: 0, child: image(context)),
+        content,
+      ]);
+
   @override
   Widget build(BuildContext context) {
-    final w = imageWidth(context);
     return Container(
       color: bgBottom,
       child: Stack(children: [
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: w * _aspect,
-          child: Center(
-            child: SizedBox(
-              width: w,
-              child: Stack(fit: StackFit.expand, children: [
-                Image.asset(isDark ? 'assets/images/pozadina.jpg' : 'assets/images/pozadina_svetla.jpg',
-                    fit: BoxFit.cover, alignment: Alignment.topCenter),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: const [0, 0.62, 0.8, 1],
-                      colors: [Colors.transparent, Colors.transparent, const Color(0xCC07142E), bgBottom],
-                    ),
-                  ),
-                ),
-              ]),
-            ),
-          ),
-        ),
+        Positioned(top: 0, left: 0, right: 0, child: image(context)),
         child,
       ]),
     );
