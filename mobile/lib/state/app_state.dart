@@ -40,6 +40,38 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   /// Trenutna partija (stanje iz ugla ovog igrača) — null ako nije u partiji.
   final match = ValueNotifier<Map<String, dynamic>?>(null);
 
+  /// Poruke preko celog ekrana (dnevna nagrada, medalja) — prikazuju se jedna za drugom.
+  final announcements = ValueNotifier<List<Map<String, dynamic>>>([]);
+  final Set<String> _announcedMedals = {};
+
+  void _announce(Map<String, dynamic> a) => announcements.value = [...announcements.value, a];
+
+  void dismissAnnouncement() {
+    final list = [...announcements.value];
+    if (list.isEmpty) return;
+    final a = list.removeAt(0);
+    announcements.value = list;
+    if (a['type'] == 'medal') {
+      api.post('/me/medals/seen', {
+        'ids': [a['id']]
+      }).catchError((_) => null);
+    }
+  }
+
+  /// Medalje o kojima igrač još nije obavešten.
+  Future<void> _checkMedals() async {
+    try {
+      final list = (await api.get('/me/medals/unseen') as List).cast<Map>();
+      for (final m in list) {
+        if (_announcedMedals.add(m['id'] as String)) _announce({'type': 'medal', ...Map<String, dynamic>.from(m)});
+      }
+    } catch (_) {}
+  }
+
+  void _announceDaily(Map? daily) {
+    if (daily != null && daily['granted'] == true) _announce({'type': 'daily', 'amount': daily['amount']});
+  }
+
   /// Revanš posle partije: {matchId, status: waiting|offered|declined|expired, from?, reason?}.
   final rematch = ValueNotifier<Map<String, dynamic>?>(null);
 
@@ -115,9 +147,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     user = u;
     status = AuthStatus.loggedIn;
     notifyListeners();
-    if (daily != null && daily['granted'] == true) {
-      Future.microtask(() => toast('Dnevna nagrada: +${daily['amount']} tokena!'));
-    }
+    _announceDaily(daily);
+    _checkMedals();
     _connectSocket();
   }
 
@@ -137,8 +168,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     final res = await api.get('/me');
     user = res['user'];
     notifyListeners();
-    final daily = res['dailyReward'];
-    if (daily != null && daily['granted'] == true) toast('Dnevna nagrada: +${daily['amount']} tokena!');
+    _announceDaily(res['dailyReward']);
+    _checkMedals();
   }
 
   void setUser(Map<String, dynamic> u) {
@@ -158,6 +189,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     user = null;
     match.value = null;
     waiting = null;
+    announcements.value = [];
+    _announcedMedals.clear();
     status = AuthStatus.loggedOut;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');

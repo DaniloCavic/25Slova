@@ -146,4 +146,19 @@ export class UsersService {
     });
     return rows.map((m) => ({ ...m, points: toPoints(m.points) }));
   }
+
+  /** Medalje o kojima igrač još nije obavešten u aplikaciji (prikazuju se preko ekrana). */
+  async unseenMedals(userId: string) {
+    const rows = await this.prisma.medal.findMany({
+      where: { userId, seenAt: null },
+      orderBy: [{ createdAt: 'asc' }, { place: 'asc' }],
+      select: { id: true, period: true, periodKey: true, place: true, points: true },
+    });
+    return rows.map((m) => ({ ...m, points: toPoints(m.points) }));
+  }
+
+  async markMedalsSeen(userId: string, ids: string[]) {
+    await this.prisma.medal.updateMany({ where: { userId, id: { in: ids }, seenAt: null }, data: { seenAt: new Date() } });
+    return { ok: true };
+  }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "Medal" ADD COLUMN "seenAt" TIMESTAMP(3);

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseEnumPipe, Patch, Post, Put } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { User } from '@prisma/client';
+import { ArrayMaxSize, IsArray, IsUUID } from 'class-validator';
 import { CurrentUser, Public } from '../common/auth.guard';
 import {
   AvatarDto,
@@ -58,6 +59,13 @@ export class AuthController {
   }
 }
 
+class MedalsSeenDto {
+  @IsArray()
+  @ArrayMaxSize(50)
+  @IsUUID('4', { each: true })
+  ids: string[];
+}
+
 @Controller('me')
 export class MeController {
   constructor(
@@ -97,6 +105,16 @@ export class MeController {
   @Get('medals')
   medals(@CurrentUser() user: User) {
     return this.users.medals(user.id);
+  }
+
+  @Get('medals/unseen')
+  unseenMedals(@CurrentUser() user: User) {
+    return this.users.unseenMedals(user.id);
+  }
+
+  @Post('medals/seen')
+  medalsSeen(@CurrentUser() user: User, @Body() dto: MedalsSeenDto) {
+    return this.users.markMedalsSeen(user.id, dto.ids);
   }
 
   @Post('link/:provider')

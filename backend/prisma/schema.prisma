@@ -209,6 +209,8 @@ model Medal {
   place     Int // 1, 2, 3
   points    Int
   createdAt DateTime    @default(now())
+  /// Kada je igrač video obaveštenje o medalji u aplikaciji (null = još nije)
+  seenAt    DateTime?
 
   @@unique([period, periodKey, place])
   @@index([userId])
