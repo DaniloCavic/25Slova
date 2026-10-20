@@ -2,7 +2,6 @@ ako
 akt
 ali
 alo
-amo
 aut
 bal
 bar
@@ -18,9 +17,7 @@ bič
 bih
 bik
 bio
-bis
 bit
-bob
 bod
 bog
 boj
@@ -43,7 +40,6 @@ crv
 čar
 čas
 ček
-čem
 čep
 čim
 čin
@@ -91,7 +87,6 @@ fer
 fin
 fuj
 gad
-gaf
 gaj
 gas
 gde
@@ -132,7 +127,6 @@ kao
 kap
 kći
 kec
-kič
 kip
 kit
 kod
@@ -177,7 +171,6 @@ mig
 mir
 miš
 mit
-mne
 moć
 mog
 moj
@@ -198,7 +191,6 @@ noj
 nos
 nov
 nož
-njem
 njen
 njih
 njim
@@ -207,8 +199,6 @@ njom
 njuh
 oba
 obe
-oca
-oda
 ode
 oko
 ona
@@ -273,7 +263,6 @@ sat
 sav
 sed
 sef
-sen
 seo
 set
 sin
@@ -366,7 +355,6 @@ zlo
 zna
 zov
 zub
-zum
 žao
 žar
 žeđ
@@ -375,5 +363,4 @@ zum
 živ
 žuč
 žulj
-žur
 žut

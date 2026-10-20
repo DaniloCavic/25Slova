@@ -56,7 +56,6 @@ amina
 amino
 amiš
 amiši
-amo
 andi
 anđeo
 aneks
@@ -322,7 +321,6 @@ biram
 birao
 biraš
 biro
-bis
 biser
 bismo
 biste
@@ -381,7 +379,6 @@ bluza
 bluze
 bljak
 bljuje
-bob
 boba
 bobe
 boca
@@ -833,7 +830,6 @@ cvili
 čela
 čelik
 čelo
-čem
 čemu
 čeoni
 čep
@@ -1687,7 +1683,6 @@ gađaj
 gađam
 gađao
 gađaš
-gaf
 gaj
 gajba
 gajbe
@@ -2657,7 +2652,6 @@ keve
 kevi
 kevin
 kicoš
-kič
 kičma
 kičme
 kida
@@ -3858,7 +3852,6 @@ mleko
 mleku
 mlin
 mljac
-mne
 mnoga
 mnoge
 mnogi
@@ -4387,7 +4380,6 @@ nužno
 nje
 njega
 njegov
-njem
 njemu
 njen
 njena
@@ -4488,7 +4480,6 @@ obula
 obuo
 obuti
 obzir
-oca
 ocat
 ocem
 ocena
@@ -4516,7 +4507,6 @@ očnjak
 očuh
 očuva
 od
-oda
 odaću
 odaj
 odaja
@@ -6080,7 +6070,6 @@ seliš
 selo
 seljak
 seme
-sen
 sena
 senat
 sene
@@ -8568,7 +8557,6 @@ zubni
 zubnu
 zuje
 zuji
-zum
 zure
 zuri
 zurim
@@ -8717,7 +8705,6 @@ zvuku
 žudnje
 žulj
 žulja
-žur
 žurba
 žurbe
 žure
