@@ -1296,7 +1296,6 @@ dvoru
 džaba
 džabe
 džak
-džaka
 džambo
 džanki
 džedaj
@@ -1309,7 +1308,6 @@ džez
 džihad
 džin
 džingl
-džins
 džip
 džoger
 džoint
@@ -1319,22 +1317,14 @@ džudo
 džukac
 đaci
 đak
-đake
 đakon
 đavo
-điha
 đoka
-đoke
 đubre
 đule
-đusa
 ebola
-edem
 efekt
 ego
-egom
-ehej
-ekaj
 ekcem
 ekipa
 ekipe
@@ -1345,7 +1335,6 @@ elisa
 elise
 elita
 elite
-emir
 eno
 enter
 enzim
@@ -1355,20 +1344,14 @@ epske
 epski
 epsko
 era
-erin
-eros
 esej
 etapa
 etar
-eter
 etika
 etike
 eto
-eura
-euro
 evnuh
 evo
-evra
 evro
 faca
 face
@@ -1380,7 +1363,6 @@ fali
 falio
 fališ
 falš
-fank
 fanki
 farba
 farbe
@@ -1409,7 +1391,6 @@ fidži
 fige
 fijat
 fiks
-file
 filet
 film
 fin
@@ -1423,7 +1404,6 @@ fioke
 firer
 firma
 firme
-fisk
 fitilj
 flaša
 flaše
@@ -1433,7 +1413,6 @@ flert
 fleš
 flint
 flip
-flor
 flora
 flore
 flota
@@ -1454,8 +1433,6 @@ fosil
 fotka
 fotke
 foto
-fraj
-frak
 frape
 fras
 fraza
@@ -1470,7 +1447,6 @@ frke
 front
 frula
 fućka
-fufa
 fuj
 funta
 funte
