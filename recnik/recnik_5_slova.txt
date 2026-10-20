@@ -12,7 +12,6 @@ alarm
 alati
 album
 aleja
-alert
 alias
 alibi
 alice
@@ -41,6 +40,7 @@ arena
 arene
 arhiv
 arija
+arije
 aroma
 arsen
 astma
@@ -269,6 +269,7 @@ boršč
 bosna
 božić
 božja
+božje
 božji
 božju
 braca
@@ -303,6 +304,7 @@ breze
 brice
 briga
 brige
+brije
 briju
 brine
 brini
@@ -502,6 +504,8 @@ cvili
 čežnja
 čežnje
 čičak
+čijeg
+čijem
 čijih
 čijim
 čijoj
@@ -1722,6 +1726,7 @@ kouts
 kovač
 kovao
 kozak
+kozje
 kozji
 kožna
 kožne
@@ -1774,6 +1779,7 @@ krhke
 krhki
 krhko
 krici
+krije
 kriju
 krika
 krike
@@ -1871,6 +1877,7 @@ kupus
 kurac
 kuran
 kurir
+kurje
 kurva
 kurve
 kusur
@@ -2004,6 +2011,7 @@ lider
 lignja
 lignje
 lijam
+lijem
 liker
 likom
 limbo
@@ -2126,6 +2134,7 @@ macan
 macka
 mačak
 mačja
+mačje
 mačji
 mačju
 mačka
@@ -2682,6 +2691,7 @@ obići
 obiđe
 obiđi
 obiđu
+obije
 obilo
 obilja
 obilje
@@ -3087,6 +3097,7 @@ perem
 pereš
 periš
 perja
+perje
 perla
 perle
 peron
@@ -3116,6 +3127,7 @@ pička
 pičke
 pijan
 pijem
+piješ
 pijmo
 pijte
 pijuk
@@ -4883,6 +4895,7 @@ unesi
 unesu
 uneti
 unija
+unije
 unose
 unosi
 unuci
@@ -4902,6 +4915,7 @@ upalu
 upeca
 uperi
 upija
+upije
 upire
 upiri
 upiru
@@ -5279,6 +5293,7 @@ vrzma
 vučem
 vučeš
 vučja
+vučje
 vučji
 vučnu
 vukao
@@ -5362,6 +5377,7 @@ zebra
 zebre
 zečić
 zečja
+zečje
 zečju
 zefir
 zelen

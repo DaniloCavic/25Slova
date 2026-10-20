@@ -114,6 +114,7 @@ biće
 biću
 bide
 bife
+bije
 biju
 bila
 bile
@@ -1313,6 +1314,7 @@ mice
 miče
 miči
 miču
+mije
 miju
 miks
 mila
@@ -1453,6 +1455,7 @@ nerv
 neto
 nica
 niče
+nije
 nikl
 niko
 nina

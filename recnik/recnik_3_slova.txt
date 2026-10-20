@@ -288,6 +288,7 @@ som
 sos
 srp
 srž
+ste
 sto
 sud
 suv

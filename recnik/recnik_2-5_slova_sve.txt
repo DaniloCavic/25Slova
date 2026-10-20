@@ -28,7 +28,6 @@ alat
 alati
 album
 aleja
-alert
 alfa
 alge
 ali
@@ -79,6 +78,7 @@ arene
 argo
 arhiv
 arija
+arije
 arno
 aroma
 arsen
@@ -297,6 +297,7 @@ biću
 bide
 bife
 bih
+bije
 bijem
 biješ
 biju
@@ -483,6 +484,7 @@ bove
 boze
 božić
 božja
+božje
 božji
 božju
 braca
@@ -526,6 +528,7 @@ brice
 bridž
 briga
 brige
+brije
 briju
 brik
 brine
@@ -866,6 +869,8 @@ cvili
 čičak
 čija
 čije
+čijeg
+čijem
 čiji
 čijih
 čijim
@@ -2884,6 +2889,7 @@ koza
 kozak
 koze
 kozi
+kozje
 kozji
 koža
 kože
@@ -2953,6 +2959,7 @@ krhki
 krhko
 krici
 krij
+krije
 kriju
 krik
 krika
@@ -3114,6 +3121,7 @@ kura
 kurac
 kuran
 kurir
+kurje
 kurs
 kurva
 kurve
@@ -3342,6 +3350,7 @@ lignje
 lija
 lijam
 lije
+lijem
 liju
 lik
 lika
@@ -3554,6 +3563,7 @@ mač
 mačak
 mače
 mačja
+mačje
 mačji
 mačju
 mačka
@@ -3787,6 +3797,7 @@ miči
 miču
 mig
 mijau
+mije
 miju
 mikro
 miks
@@ -4267,6 +4278,7 @@ ničem
 ničim
 nigde
 niger
+nije
 nikad
 nikim
 nikl
@@ -4436,6 +4448,7 @@ obići
 obiđe
 obiđi
 obiđu
+obije
 obilo
 obilja
 obilje
@@ -5023,6 +5036,7 @@ pereš
 peri
 periš
 perja
+perje
 perla
 perle
 pero
@@ -5072,6 +5086,7 @@ pij
 pijan
 pije
 pijem
+piješ
 pijmo
 pijte
 piju
@@ -6555,6 +6570,7 @@ stavi
 staza
 staze
 staž
+ste
 steći
 stega
 stek
@@ -7727,6 +7743,7 @@ unesi
 unesu
 uneti
 unija
+unije
 unio
 unos
 unose
@@ -7753,6 +7770,7 @@ upao
 upeca
 uperi
 upija
+upije
 upio
 upire
 upiri
@@ -8328,6 +8346,7 @@ vuče
 vučem
 vučeš
 vučja
+vučje
 vučji
 vučnu
 vući
@@ -8434,6 +8453,7 @@ zec
 zeče
 zečić
 zečja
+zečje
 zečju
 zefir
 zeka
