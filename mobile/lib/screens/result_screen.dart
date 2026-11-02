@@ -10,6 +10,7 @@ import '../widgets/profile_parts.dart';
 import 'home_screen.dart' show matchCost;
 import 'private_game_screen.dart';
 import 'waiting_screen.dart';
+import '../sound.dart';
 
 /// Rezultat partije: obe table (prebacivanje dodirom na karticu igrača) i reči.
 /// Odmah posle partije: „Revanš“, „Igraj ponovo“ i „Nazad na meni“.
@@ -32,6 +33,9 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
+    if (!widget.review) {
+      Sound.play(switch (widget.result['outcome']) { 'WIN' => Sfx.win, 'LOSS' => Sfx.lose, _ => Sfx.draw });
+    }
     // Odbrojavanje za revanš.
     if (!widget.review && widget.result['rematchUntil'] != null) {
       _tick = Timer.periodic(const Duration(seconds: 1), (_) {

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import 'common.dart';
+import '../sound.dart';
 
 /// Velika poruka preko ekrana (dnevna nagrada, osvojena medalja): zatamnjena pozadina,
 /// kartica koja „iskoči“ na sredinu, zraci svetlosti koji se polako okreću i dugme za zatvaranje.
@@ -34,7 +35,10 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
     final next = list.isEmpty ? null : list.first;
     if (identical(next, _current)) return;
     setState(() => _current = next);
-    if (next != null) _show.forward(from: 0);
+    if (next != null) {
+      _show.forward(from: 0);
+      Sound.play(next['type'] == 'medal' ? Sfx.medal : Sfx.coin);
+    }
   }
 
   Future<void> _close() async {

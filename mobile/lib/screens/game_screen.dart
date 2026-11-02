@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../widgets/board.dart';
 import '../widgets/common.dart';
 import '../widgets/letter_picker.dart';
+import '../sound.dart';
 
 /// Ekran partije. Stanje dolazi sa servera (AppState.match); server određuje
 /// čiji je potez, tajmer i živote — klijent samo prikazuje i šalje potez.
@@ -37,12 +38,19 @@ class _GameScreenState extends State<GameScreen> {
 
   /// Kada igraču na potezu ostane 10 sekundi, telefon zavibrira (jednom po potezu) — znak da ubrza.
   int? _vibratedForDeadline;
+  String? _tickKey;
   void _warnLowTime() {
     final app = context.read<AppState>();
     final m = app.match.value;
     if (m == null || m['isMyTurn'] != true) return;
     final deadline = m['deadline'] as int;
     final left = deadline - (DateTime.now().millisecondsSinceEpoch + app.clockOffset);
+    // Otkucaji u poslednjih 5 sekundi.
+    final sec = (left / 1000).ceil();
+    if (left > 0 && sec <= 5 && _tickKey != '$deadline:$sec') {
+      _tickKey = '$deadline:$sec';
+      Sound.play(Sfx.tick);
+    }
     if (left > 10000 || left <= 0 || _vibratedForDeadline == deadline) return;
     _vibratedForDeadline = deadline;
     _vibrate();
@@ -76,6 +84,7 @@ class _GameScreenState extends State<GameScreen> {
     if (err != null) {
       showError(context, err);
     } else {
+      Sound.play(Sfx.place);
       setState(() {
         _cell = null;
         _letter = null;
@@ -215,7 +224,12 @@ class _GameScreenState extends State<GameScreen> {
                           initialCells: Set<int>.from(m['initialCells'] as List),
                           selected: _cell,
                           previewLetter: choose ? _letter : current,
-                          onTap: myTurn ? (i) => setState(() => _cell = i) : null,
+                          onTap: myTurn
+                              ? (i) {
+                                  Sound.play(Sfx.tap);
+                                  setState(() => _cell = i);
+                                }
+                              : null,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -228,7 +242,13 @@ class _GameScreenState extends State<GameScreen> {
                       ]),
                       const SizedBox(height: 10),
                       if (myTurn && choose)
-                        LetterPicker(script: script, selected: _letter, onPick: (l) => setState(() => _letter = l)),
+                        LetterPicker(
+                            script: script,
+                            selected: _letter,
+                            onPick: (l) {
+                              Sound.play(Sfx.tap);
+                              setState(() => _letter = l);
+                            }),
                       if (myTurn && !choose)
                         Center(
                           child: Container(

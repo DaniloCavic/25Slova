@@ -10,6 +10,7 @@ import '../push/push_fcm.dart';
 import '../theme.dart';
 import '../screens/game_screen.dart';
 import '../screens/result_screen.dart';
+import '../sound.dart';
 
 enum AuthStatus { loading, loggedOut, loggedIn }
 
@@ -94,6 +95,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> init() async {
+    await Sound.init();
     final prefs = await SharedPreferences.getInstance();
     _applyTheme(prefs.getString('themeMode') ?? 'dark');
     final token = prefs.getString('token');
@@ -251,6 +253,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     });
     s.on('match:start', (data) {
       rematch.value = null;
+      Sound.play(Sfx.start);
       _openMatch(Map<String, dynamic>.from(data));
     });
     s.on('rematch:offer', (data) {
@@ -268,6 +271,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     s.on('match:life-lost', (data) {
       final m = match.value;
       if (m == null) return;
+      Sound.play(Sfx.lifeLost);
       // Ekran partije prikazuje veliku poruku na sredini ekrana.
       lifeLost.value = (mine: data['seat'] == m['mySeat'], livesLeft: data['livesLeft'] as int, at: DateTime.now());
     });
@@ -293,6 +297,14 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void _updateMatch(Map<String, dynamic> view) {
+    // Protivnik je odigrao (bio je njegov potez i broj poteza je porastao) — zvuk.
+    final prev = match.value;
+    if (prev != null &&
+        prev['matchId'] == view['matchId'] &&
+        prev['isMyTurn'] != true &&
+        (view['moveCount'] as int) > (prev['moveCount'] as int)) {
+      Sound.play(Sfx.turn);
+    }
     clockOffset = (view['serverNow'] as int) - DateTime.now().millisecondsSinceEpoch;
     match.value = view;
   }

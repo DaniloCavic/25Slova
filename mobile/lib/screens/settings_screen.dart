@@ -3,6 +3,7 @@ import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import 'rules_screen.dart';
+import '../sound.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -27,6 +28,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         const Divider(),
         const _PushTile(),
+        const _SoundTile(),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.menu_book),
@@ -82,4 +84,24 @@ class _PushTileState extends State<_PushTile> {
             },
     );
   }
+}
+
+/// Zvuci u igri — podrazumevano uključeni.
+class _SoundTile extends StatefulWidget {
+  const _SoundTile();
+  @override
+  State<_SoundTile> createState() => _SoundTileState();
+}
+
+class _SoundTileState extends State<_SoundTile> {
+  @override
+  Widget build(BuildContext context) => SwitchListTile(
+        secondary: Icon(Sound.enabled ? Icons.volume_up : Icons.volume_off),
+        title: const Text('Zvukovi'),
+        value: Sound.enabled,
+        onChanged: (v) async {
+          await Sound.setEnabled(v);
+          if (mounted) setState(() {});
+        },
+      );
 }

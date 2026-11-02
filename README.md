@@ -21,7 +21,8 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Tabla 5 × 5 po igraču; 1, 3 ili 5 početnih nasumičnih slova (ista polja i slova za oba igrača); tip partije je nasumičan.
 - Srpska azbuka od 30 slova — Lj, Nj i Dž su jedno slovo i jedno polje. Slova se prikazuju latinicom; tamni i svetli režim prikaza.
 - Naizmenični potezi: igrač bira slovo i polje, protivnik isto slovo postavlja na svoju tablu i bira sledeće.
-- Telefon zavibrira kada igraču na potezu ostane 5 sekundi.
+- Telefon zavibrira kada igraču na potezu ostane 10 sekundi; u poslednjih 5 sekundi se čuju otkucaji.
+- Zvučni efekti (mobile/assets/sounds, pravi ih `mobile/tool/make_sounds.py`): izbor slova/polja, postavljanje pločice, potez protivnika, izgubljen život, početak partije, pobeda/poraz/nerešeno, dnevna nagrada, medalja. Isključuju se u Podešavanjima → Zvukovi.
 - Serverski tajmer (30/45/60 s), 3 života, istek vremena = −1 život, gubitak sva 3 = poraz; vreme teče i bez veze.
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.
 - Revanš: 60 sekundi posle partije oba igrača mogu da zatraže revanš; kad i drugi prihvati, odmah počinje nova partija (10 tokena po igraču).
