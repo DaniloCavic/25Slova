@@ -112,3 +112,5 @@ tr.clickable:hover { background: #f0f3f8; cursor: pointer; }
   .drawer h2 { font-size: 20px; }
   .login { margin: 8vh 16px; }
 }
+
+.nav-badge { margin-left: 8px; font-weight: 700; }

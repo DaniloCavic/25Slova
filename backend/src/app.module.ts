@@ -16,7 +16,8 @@ import { TokensService } from './tokens/tokens.service';
 import { TokensController } from './tokens/tokens.controller';
 import { AdVerifierService } from './tokens/ad-verifier.service';
 import { DictionaryService } from './words/dictionary.service';
-import { AdminWordsController } from './words/words.controller';
+import { AdminSuggestionsController, AdminWordsController, DictionaryController } from './words/words.controller';
+import { SuggestionsService } from './words/suggestions.service';
 import { AdminController } from './admin/admin.controller';
 import { SettingsService } from './settings/settings.service';
 import { GameService } from './game/game.service';
@@ -54,6 +55,8 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     PlayersController,
     TokensController,
     AdminWordsController,
+    DictionaryController,
+    AdminSuggestionsController,
     AdminController,
     LeaderboardController,
     PushController,
@@ -71,6 +74,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     TokensService,
     AdVerifierService,
     DictionaryService,
+    SuggestionsService,
     SettingsService,
     GameService,
     GameGateway,

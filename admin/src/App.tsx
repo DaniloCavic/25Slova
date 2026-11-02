@@ -4,11 +4,13 @@ import { Dashboard } from './pages/Dashboard';
 import { Words } from './pages/Words';
 import { Users } from './pages/Users';
 import { Settings } from './pages/Settings';
+import { Suggestions } from './pages/Suggestions';
 
-type Page = 'dashboard' | 'words' | 'users' | 'settings';
+type Page = 'dashboard' | 'words' | 'suggestions' | 'users' | 'settings';
 const PAGES: { id: Page; label: string }[] = [
   { id: 'dashboard', label: 'Pregled' },
   { id: 'words', label: 'Rečnik' },
+  { id: 'suggestions', label: 'Predlozi reči' },
   { id: 'users', label: 'Korisnici' },
   { id: 'settings', label: 'Podešavanja' },
 ];
@@ -27,6 +29,21 @@ export function App() {
     location.hash = page;
   }, [page]);
 
+  // Broj novih predloga reči (osvežava se svakog minuta).
+  const [pending, setPending] = useState(0);
+  const loadPending = () => {
+    if (!getToken()) return;
+    api('GET', '/admin/suggestions/count')
+      .then((r) => setPending(r.pending))
+      .catch(() => undefined);
+  };
+  useEffect(() => {
+    if (!authed) return;
+    loadPending();
+    const t = setInterval(loadPending, 60_000);
+    return () => clearInterval(t);
+  }, [authed]);
+
   if (!authed) return <Login onDone={() => setAuthed(true)} />;
 
   return (
@@ -38,6 +55,7 @@ export function App() {
         {PAGES.map((p) => (
           <a key={p.id} className={page === p.id ? 'active' : ''} onClick={() => setPage(p.id)}>
             {p.label}
+            {p.id === 'suggestions' && pending > 0 && <span className="badge red nav-badge">{pending}</span>}
           </a>
         ))}
         <a
@@ -53,6 +71,7 @@ export function App() {
       <main>
         {page === 'dashboard' && <Dashboard />}
         {page === 'words' && <Words />}
+        {page === 'suggestions' && <Suggestions onChange={loadPending} />}
         {page === 'users' && <Users />}
         {page === 'settings' && <Settings />}
       </main>

@@ -19,6 +19,8 @@ export interface ParsedWord {
 export class DictionaryService implements OnModuleInit {
   private readonly log = new Logger(DictionaryService.name);
   private words = new Set<string>();
+  /** Reči latinicom, poređane po latiničnoj abecedi — za pregled rečnika u aplikaciji. */
+  private sorted: { latin: string; length: number }[] | null = null;
 
   async onModuleInit() {
     await this.reload();
@@ -27,6 +29,7 @@ export class DictionaryService implements OnModuleInit {
   async reload() {
     const rows = await this.prisma.word.findMany({ select: { word: true } });
     this.words = new Set(rows.map((r) => r.word));
+    this.sorted = null;
     this.log.log(`Rečnik učitan: ${this.words.size} reči.`);
   }
 
@@ -55,6 +58,7 @@ export class DictionaryService implements OnModuleInit {
       const row = await this.prisma.word.create({
         data: { word: p.word, length: letterCount(p.word), addedById: adminId },
       });
+      this.sorted = null;
       this.words.add(row.word);
       return this.view(row);
     } catch (e) {
@@ -77,6 +81,7 @@ export class DictionaryService implements OnModuleInit {
       data: valid.map((w) => ({ word: w, length: letterCount(w), addedById: adminId })),
       skipDuplicates: true,
     });
+    this.sorted = null;
     valid.forEach((w) => this.words.add(w));
     return {
       added: res.count,
@@ -95,6 +100,7 @@ export class DictionaryService implements OnModuleInit {
         where: { id },
         data: { word: p.word, length: letterCount(p.word) },
       });
+      this.sorted = null;
       this.words.delete(old.word);
       this.words.add(row.word);
       return this.view(row);
@@ -109,6 +115,7 @@ export class DictionaryService implements OnModuleInit {
   async remove(id: string) {
     const row = await this.prisma.word.delete({ where: { id } }).catch(() => null);
     if (!row) throw new NotFoundException('Reč ne postoji.');
+    this.sorted = null;
     this.words.delete(row.word);
     return { ok: true };
   }
@@ -135,6 +142,21 @@ export class DictionaryService implements OnModuleInit {
     return { total, page, pageSize, items: rows.map((r) => ({ ...this.view(r), addedBy: r.addedBy?.username ?? null })) };
   }
 
+  /** Pregled rečnika za igrače: latinica, abecedni red (a b c č ć d dž đ …), pretraga po delu reči. */
+  publicList(q: { search?: string; length?: number; page?: number; pageSize?: number }) {
+    if (!this.sorted) {
+      const key = (w: string) => latinKey(w);
+      this.sorted = [...this.words]
+        .map((w) => ({ latin: toLatin(w).toLowerCase(), length: letterCount(w) }))
+        .sort((a, b) => (key(a.latin) < key(b.latin) ? -1 : key(a.latin) > key(b.latin) ? 1 : 0));
+    }
+    const term = q.search ? (toLatin(toCyrillic(q.search) ?? q.search) || q.search).toLowerCase() : '';
+    const all = this.sorted.filter((w) => (!q.length || w.length === q.length) && (!term || w.latin.includes(term)));
+    const pageSize = Math.min(300, Math.max(1, q.pageSize || 120));
+    const page = Math.max(1, q.page || 1);
+    return { total: all.length, page, pageSize, words: all.slice((page - 1) * pageSize, page * pageSize).map((w) => w.latin) };
+  }
+
   /** Provera jedne reči (za admin panel i testiranje rečnika). */
   check(input: string) {
     const p = this.parse(input);
@@ -144,4 +166,11 @@ export class DictionaryService implements OnModuleInit {
   private view(r: { id: string; word: string; length: number; createdAt: Date }) {
     return { id: r.id, word: r.word, latin: toLatin(r.word), length: r.length, createdAt: r.createdAt };
   }
+}
+
+const LATIN_ORDER = 'a b c č ć d dž đ e f g h i j k l lj m n nj o p r s š t u v z ž'.split(' ');
+/** Ključ za poređenje po srpskoj latiničnoj abecedi (lj, nj, dž su po jedno slovo). */
+function latinKey(w: string) {
+  const parts = w.match(/lj|nj|dž|./g) ?? [];
+  return parts.map((c) => String.fromCharCode(65 + Math.max(0, LATIN_ORDER.indexOf(c)))).join('');
 }

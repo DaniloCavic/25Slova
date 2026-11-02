@@ -92,6 +92,7 @@ model User {
   passwordResets    PasswordReset[]
   wordsAdded        Word[]
   pushSubscriptions PushSubscription[]
+  wordSuggestions WordSuggestion[] @relation("WordSuggestions")
 }
 
 model PasswordReset {
@@ -241,4 +242,29 @@ model PushSubscription {
   updatedAt  DateTime @updatedAt
 
   @@index([userId])
+}
+
+enum SuggestionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+/// Reč koju je igrač predložio za rečnik; admin je prihvata ili odbija.
+model WordSuggestion {
+  id          String           @id @default(uuid())
+  /// Reč ćirilicom, velikim slovima (kao u rečniku)
+  word        String
+  length      Int
+  userId      String
+  user        User             @relation("WordSuggestions", fields: [userId], references: [id], onDelete: Cascade)
+  note        String?
+  status      SuggestionStatus @default(PENDING)
+  reason      String?
+  createdAt   DateTime         @default(now())
+  decidedAt   DateTime?
+
+  @@unique([userId, word])
+  @@index([status, createdAt])
+  @@index([word])
 }
