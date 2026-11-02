@@ -1,0 +1,25 @@
+✓ = reč već postoji u rečniku (npr. kao obična reč: kula, rača, lim, tara)
+
+DRŽAVE (38):
+alžir ✓, benin, bosna ✓, butan ✓, čad, češka ✓, čile ✓, fidži ✓, gabon, gana, grčka ✓, haiti ✓, irak ✓, iran ✓, irska ✓, japan ✓, jemen ✓, katar, kina ✓, kipar ✓, kongo ✓, kuba ✓, laos, liban ✓, mali ✓, malta ✓, nauru, nepal ✓, niger ✓, oman, palau, peru ✓, samoa, sudan ✓, timor, togo, tonga, tunis ✓
+
+GLAVNI GRADOVI (44):
+akra, aman ✓, apija, atina ✓, baku, bangi, banjul, beč ✓, bern ✓, bisao, daka, dakar, delhi ✓, dili, doha, hanoj, jaren, kabul ✓, kairo ✓, kajen, kijev ✓, kito, lima, lome ✓, male ✓, minsk, nasau, oslo ✓, otava, pariz ✓, prag ✓, praja, rabat, riga, rijad, rim ✓, roso, sana, seul, sukre, suva ✓, talin, timpu, tokio ✓
+
+VEĆI GRADOVI SVETA (59):
+adana, agra, asuan, bari ✓, basra, bazel, bon, bordo ✓, brno, bursa, cirih ✓, dalas, dubai ✓, džeda, giza, goa, grac, herat, izmir, jalta, jork, kali, kano, kazanj, keln, kjoto ✓, kobe, konja, kork, kusko, lagos, lahor, lavov, lids, linc, lion, lođ, makao ✓, malme, meka ✓, mosul, nant, napulj ✓, nica, odesa ✓, omsk, osaka ✓, perm, pert, porto, pusan, seatl, soči, širaz, tomsk, tuluz, turku, ufa, vegas
+
+GRADOVI SRBIJE (38):
+ada, arilje, bač, bečej ✓, blace, bor ✓, brus ✓, čačak ✓, čoka, futog, guča, irig, istok ✓, kać, klina, knić, kovin, kula ✓, ljig, niš ✓, odžaci, opovo, peć ✓, pirot ✓, rača, raška, ražanj ✓, ruma ✓, senta ✓, sopot, šabac ✓, šid, titel, tutin, užice ✓, vranje ✓, vršac ✓, zemun ✓
+
+REKE SVETA (41):
+amur, araks, bug, don, drava, drina ✓, duero, dunav ✓, dvina, ebro, gang, ind, jukon, kama, kupa ✓, kura ✓, laba, lena ✓, loara, mura, mureš, neva, nil ✓, odra, oka, olt, prut ✓, rajna, rona, sava ✓, sena, tajo, temza, tibar, tigar ✓, tisa ✓, una, ural, visla, volga ✓, volta
+
+REKE SRBIJE (16):
+begej, drim, gruža, ibar ✓, jadar, jerma, lab, lim ✓, mlava, pčinja, pek, rzav, tamiš ✓, tara ✓, timok, uvac
+
+PLANINE SVETA (15):
+ajger, alpi ✓, altaj, ande, atlas ✓, etna, fudži, harc, jura, olimp, pamir, pind, sinaj, tatre, vezuv
+
+PLANINE SRBIJE (14):
+avala ✓, cer, dukat ✓, goč, javor ✓, juhor, kučaj, maljen, miroč, ozren ✓, radan, rtanj ✓, stol, žljeb
