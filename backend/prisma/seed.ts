@@ -37,7 +37,7 @@ async function main() {
     skipDuplicates: true,
   });
   console.log(`Uvezeno ${res.count} novih reči (ukupno u fajlu: ${words.size}).`);
-  if (rejected.length) console.log(`Preskočeno (nisu 2–5 slova ili imaju nepoznat znak): ${rejected.join(', ')}`);
+  if (rejected.length) console.log(`Preskočeno (nisu 3–5 slova ili imaju nepoznat znak): ${rejected.join(', ')}`);
   await prisma.$disconnect();
 }
 

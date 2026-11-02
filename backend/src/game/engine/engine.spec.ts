@@ -94,10 +94,14 @@ describe('bodovanje', () => {
     expect(s.wordsCount).toBe(2);
   });
   it('prazna polja prekidaju reč', () => {
-    const b = boardFromRows(['СТ.ОР', '.....', '.....', '.....', '.....']);
+    const b = boardFromRows(['С.РОГ', '.....', '.....', '.....', '.....']);
     const r = scoreLine(b, LINES[0].cells, isWord);
-    expect(r.word).toBe('ОР'); // СТРОГ ne može da se pročita preko praznog polja
-    expect(r.points).toBe(2);
+    expect(r.word).toBe('РОГ'); // СТРОГ ne može da se pročita preko praznog polja
+    expect(r.points).toBe(3);
+  });
+  it('reči od 2 slova se ne računaju, čak ni kad su u rečniku', () => {
+    const b = boardFromRows(['АСШШШ', 'ТОШШШ', 'ШШШШШ', 'ШШШШШ', 'ШШШШШ']);
+    expect(scoreBoard(b, isWord)).toMatchObject({ points: 0, wordsCount: 0 });
   });
 });
 
@@ -183,9 +187,9 @@ describe('tok partije', () => {
       boards: [boardFromRows(b0), boardFromRows(b1)],
     });
     const empty = ['ШШШШШ', 'ШШШШШ', 'ШШШШШ', 'ШШШШШ', 'ШШШШШ'];
-    // 4 poena jednom rečju protiv 4 poena sa dve reči (2+2) -> pobeđuje drugi
+    // 9 poena sa dve reči (4+5) protiv 9 poena sa tri reči (3+3+3) -> pobeđuje drugi
     const r1 = computeResult(
-      mk(['КУЋАШ', ...empty.slice(1)], ['АСШШШ', 'ТОШШШ', ...empty.slice(2)]),
+      mk(['КУЋАШ', 'СТРОГ', ...empty.slice(2)], ['РОГШШ', 'ЉУТШШ', 'РОГШШ', ...empty.slice(3)]),
       isWord,
     );
     expect(r1.scores[0].points).toBe(r1.scores[1].points);

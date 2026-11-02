@@ -25,7 +25,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Serverski tajmer (30/45/60 s), 3 života, istek vremena = −1 život, gubitak sva 3 = poraz; vreme teče i bez veze.
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.
 - Revanš: 60 sekundi posle partije oba igrača mogu da zatraže revanš; kad i drugi prihvati, odmah počinje nova partija (10 tokena po igraču).
-- Bodovanje: 12 nizova, oba smera čitanja, najduža reč (2–5 slova) po nizu, kraće reči unutar duže se ne sabiraju.
+- Bodovanje: 12 nizova, oba smera čitanja, najduža reč (3–5 slova) po nizu; reči od 2 slova se ne računaju, kraće reči unutar duže se ne sabiraju.
 - Pobednik po poenima → broju reči → nerešeno. Nagrada `(poeni × reči) ÷ 7,2`, poraz −10, nerešeno 0.
 
 **Nalozi i profil**
@@ -116,7 +116,7 @@ Gde specifikacija ostavlja izbor, primenjeno je sledeće (sve se lako menja):
 12. **Registracija** — e-mail je obavezan (potreban za zaboravljenu lozinku), telefon nije; korisničko ime 5–20 znakova, bilo koji znakovi; lozinka najmanje 8 znakova sa slovom i brojem.
 13. **Brisanje naloga** — lični podaci se trajno brišu, a odigrane partije ostaju anonimne (da protivnicima ne nestanu iz istorije).
 14. **Rang liste** — samo mesečna i godišnja (ukupna je izbačena na zahtev), sa pretragom igrača po imenu; pretraga pokazuje pravo mesto igrača na listi.
-15. **Rečnik** — čuvaju se samo reči od 2 do 5 slova (duže ne mogu stati u niz). Unos latinicom se pretvara u ćirilicu; reči kod kojih „nj/lj/dž“ nisu jedno slovo (npr. „injekcija“) unose se ćirilicom.
+15. **Rečnik** — čuvaju se samo reči od 3 do 5 slova (duže ne mogu stati u niz). Unos latinicom se pretvara u ćirilicu; reči kod kojih „nj/lj/dž“ nisu jedno slovo (npr. „injekcija“) unose se ćirilicom.
 16. **Google/Apple nalog sa istim e-mailom** kao postojeći nalog se ne spaja automatski (zaštita od preuzimanja naloga); korisnik se prijavi lozinkom i poveže nalog iz profila.
 17. **Privatni kod** — 6 znakova, važi 10 minuta (podesivo); igrač koji je napravio kod mora biti u aplikaciji kada se drugi pridruži.
 

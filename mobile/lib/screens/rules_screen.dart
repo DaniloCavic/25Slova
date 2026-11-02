@@ -25,7 +25,7 @@ class RulesScreen extends StatelessWidget {
       ),
       (
         'Bodovanje',
-        'Proverava se 5 redova, 5 kolona i 2 dijagonale, u oba smera. Svaki niz donosi onoliko poena koliko slova ima najduža reč u njemu (2–5). Kraće reči unutar duže se ne sabiraju. Najviše 60 poena po tabli.'
+        'Proverava se 5 redova, 5 kolona i 2 dijagonale, u oba smera. Svaki niz donosi onoliko poena koliko slova ima najduža reč u njemu (3–5). Reči od 2 slova se ne računaju. Kraće reči unutar duže se ne sabiraju. Najviše 60 poena po tabli.'
       ),
       (
         'Reči',

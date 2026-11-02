@@ -18,7 +18,7 @@ export const LOSS_PENALTY_CENTS = LOSS_PENALTY * POINTS_SCALE;
 export const FORFEIT_WIN_CENTS = 25 * POINTS_SCALE;
 export const toPoints = (cents: number) => cents / POINTS_SCALE;
 export const toCents = (points: number) => Math.round(points * POINTS_SCALE);
-export const MIN_WORD_LENGTH = 2;
+export const MIN_WORD_LENGTH = 3; // reči od 2 slova se ne računaju
 export const MAX_WORD_LENGTH = 5;
 
 export type MatchType = 1 | 2 | 3;

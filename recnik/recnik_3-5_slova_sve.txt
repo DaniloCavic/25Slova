@@ -43,7 +43,6 @@ aorta
 aorte
 apel
 april
-ar
 arapi
 arena
 arene
@@ -52,7 +51,6 @@ arija
 arije
 aroma
 arsen
-as
 astma
 ašov
 ataše
@@ -213,7 +211,6 @@ beže
 beži
 bežim
 bežiš
-bi
 biber
 bič
 bića
@@ -748,7 +745,6 @@ cvili
 ćale
 ćao
 ćaska
-će
 ćebad
 ćebe
 ćelav
@@ -765,7 +761,6 @@ cvili
 ćorke
 ćošak
 ćoše
-ću
 ćudi
 ćufta
 ćufte
@@ -778,7 +773,6 @@ cvili
 ćuti
 ćutim
 ćutiš
-da
 dabar
 daće
 daćeš
@@ -955,7 +949,6 @@ dlan
 dleto
 dna
 dno
-do
 doba
 dobar
 dobij
@@ -1279,7 +1272,6 @@ frula
 fuj
 funta
 funte
-ga
 gaće
 gad
 gadan
@@ -1388,7 +1380,6 @@ gnjave
 gnjavi
 gnjida
 gnjide
-go
 godi
 goji
 gol
@@ -1668,7 +1659,6 @@ igram
 igrao
 igraš
 igre
-ih
 ikad
 ikada
 ikako
@@ -1680,7 +1670,6 @@ ikona
 ikone
 ili
 iliti
-im
 ima
 imaće
 imaću
@@ -1756,7 +1745,6 @@ iver
 ivica
 ivice
 ivici
-iz
 iza
 izaći
 izađe
@@ -1790,7 +1778,6 @@ izveo
 izvod
 izvor
 izvoz
-ja
 jača
 jače
 jači
@@ -1852,7 +1839,6 @@ javni
 javno
 javnu
 javor
-je
 jebač
 jebao
 jebe
@@ -1910,7 +1896,6 @@ ježim
 joga
 joj
 još
-ju
 juan
 juče
 jug
@@ -1930,7 +1915,6 @@ južna
 južne
 južni
 južno
-ka
 kabl
 kabul
 kače
@@ -2124,7 +2108,6 @@ kljuse
 knez
 knjiga
 knjige
-ko
 koala
 koban
 kobna
@@ -2567,7 +2550,6 @@ ležem
 leži
 ležim
 ležiš
-li
 liban
 lica
 lice
@@ -2738,7 +2720,6 @@ ljutiš
 ljutnja
 ljutnje
 ljuto
-ma
 maca
 macan
 mace
@@ -2849,7 +2830,6 @@ maziš
 mazne
 maže
 mažeš
-me
 meci
 meč
 med
@@ -2917,7 +2897,6 @@ metle
 metod
 metro
 meze
-mi
 micao
 miče
 mičem
@@ -3104,7 +3083,6 @@ mrzim
 mrziš
 mržnja
 mržnje
-mu
 muca
 mucam
 mucaš
@@ -3155,7 +3133,6 @@ muzej
 muzem
 muž
 mužić
-na
 nabi
 nabij
 nabio
@@ -3256,7 +3233,6 @@ navoj
 nazad
 naziv
 nažao
-ne
 nebo
 nečeg
 nečem
@@ -3314,7 +3290,6 @@ nežna
 nežne
 nežni
 nežno
-ni
 niče
 ničeg
 ničem
@@ -3355,7 +3330,6 @@ niža
 niže
 niži
 nižu
-no
 noć
 noćas
 noći
@@ -3410,7 +3384,6 @@ nužda
 nužde
 nužna
 nužno
-nje
 njega
 njegov
 njemu
@@ -3438,7 +3411,6 @@ njoj
 njoke
 njom
 njome
-nju
 njuh
 njuši
 njušim
@@ -3519,7 +3491,6 @@ očni
 očnjak
 očuh
 očuva
-od
 odaću
 odaj
 odaja
@@ -3635,7 +3606,6 @@ omete
 omlet
 omot
 omota
-on
 ona
 onaj
 onako
@@ -3809,7 +3779,6 @@ ožene
 oženi
 ožive
 oživi
-pa
 pacov
 pače
 pad
@@ -4118,7 +4087,6 @@ pljuje
 pljuju
 pljune
 pljuni
-po
 pobij
 pobio
 poče
@@ -4609,7 +4577,6 @@ rosi
 rov
 roza
 roze
-rt
 rubin
 rublja
 rublje
@@ -4668,7 +4635,6 @@ ružno
 rvač
 rvanje
 rvao
-sa
 sablja
 sablje
 sabor
@@ -4737,7 +4703,6 @@ sazna
 sazri
 scena
 scene
-se
 sebe
 sebi
 seci
@@ -4820,7 +4785,6 @@ sezam
 seže
 sfera
 sfere
-si
 sići
 sida
 sidra
@@ -5240,7 +5204,6 @@ stupe
 stupi
 stvar
 stvor
-su
 sud
 sudan
 sudar
@@ -5553,7 +5516,6 @@ svuda
 šverc
 švorc
 švrlja
-ta
 tabla
 table
 tabor
@@ -5629,7 +5591,6 @@ tata
 tate
 tatin
 tavan
-te
 tebe
 tebi
 teča
@@ -5704,7 +5665,6 @@ težio
 težiš
 težnja
 težnje
-ti
 tibet
 tiče
 tiču
@@ -5735,7 +5695,6 @@ tkiva
 tkivo
 tla
 tlo
-to
 tobom
 točak
 toči
@@ -5868,7 +5827,6 @@ trut
 trza
 trzaj
 tržni
-tu
 tuba
 tube
 tuca
@@ -5998,7 +5956,6 @@ učiti
 učtiv
 ući
 ućuti
-ud
 udaće
 udaću
 udah
@@ -6117,7 +6074,6 @@ uludo
 ulje
 uljez
 uljezi
-um
 umaći
 umak
 umalo
@@ -6307,7 +6263,6 @@ uvuci
 uvuče
 uvući
 uvuku
-uz
 uzak
 uzan
 uzda
@@ -6474,7 +6429,6 @@ vežem
 vežeš
 veži
 vežu
-vi
 vic
 vici
 viče
@@ -6550,7 +6504,6 @@ vlage
 vlas
 vlasi
 vlast
-vo
 voće
 voćem
 voćka
@@ -6670,7 +6623,6 @@ vukli
 vuklo
 vuku
 vuna
-za
 zabij
 zabio
 zabo

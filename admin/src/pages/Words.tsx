@@ -88,7 +88,7 @@ export function Words() {
       <h2>Rečnik</h2>
       <div className="card">
         <p className="muted" style={{ marginTop: 0 }}>
-          Reči se unose latinicom ili ćirilicom i čuvaju ćirilicom. Lj, Nj i Dž su po jedno slovo. Za igru važe reči od 2
+          Reči se unose latinicom ili ćirilicom i čuvaju ćirilicom. Lj, Nj i Dž su po jedno slovo. Za igru važe reči od 3
           do 5 slova, u nominativu jednine ili množine, bez ličnih imena, skraćenica i brendova. Ako latinično „nj“, „lj“
           ili „dž“ nisu jedno slovo (npr. „injekcija“), reč unesite ćirilicom.
         </p>
@@ -151,7 +151,7 @@ export function Words() {
           <input className="grow" placeholder="Pretraga" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
           <select value={length} onChange={(e) => { setLength(e.target.value); setPage(1); }}>
             <option value="">Sve dužine</option>
-            {[2, 3, 4, 5].map((n) => (
+            {[3, 4, 5].map((n) => (
               <option key={n} value={n}>
                 {n} slova
               </option>

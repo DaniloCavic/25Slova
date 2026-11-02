@@ -13,7 +13,7 @@ export interface ParsedWord {
 /**
  * Odobreni rečnik igre. Sve reči su u memoriji (Set) radi trenutne provere table;
  * baza je izvor istine, a izmene administratora se odmah primenjuju i u memoriji.
- * Za igru su važne samo reči od 2 do 5 slova.
+ * Za igru su važne samo reči od 3 do 5 slova.
  */
 @Injectable()
 export class DictionaryService implements OnModuleInit {
