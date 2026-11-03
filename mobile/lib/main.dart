@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:provider/provider.dart';
+import 'push/push.dart' show iosStandalone;
 import 'state/app_state.dart';
 import 'theme.dart';
 import 'widgets/announcement.dart';
@@ -9,6 +11,9 @@ import 'screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // iPhone sa igrom na početnom ekranu ne otvara tastaturu za skriveno polje za unos;
+  // sa uključenom pristupačnošću (semantics) polja su prava HTML polja i tastatura radi.
+  if (iosStandalone()) SemanticsBinding.instance.ensureSemantics();
   final state = AppState()..init();
   runApp(ChangeNotifierProvider.value(value: state, child: const SlovaApp()));
 }

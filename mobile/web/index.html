@@ -88,6 +88,14 @@
           document.addEventListener('pointerup', handler, true);
         });
       },
+      // iPhone/iPad, igra dodata na početni ekran (standalone).
+      iosStandalone: function () {
+        var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var standalone = navigator.standalone === true ||
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+        return ios && standalone;
+      },
       vibrate: function (pattern) {
         try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (_) {}
       }

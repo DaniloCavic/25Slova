@@ -8,3 +8,5 @@ Future<String> pushSubscribe(String vapidKey, {bool ask = false}) async => '';
 
 /// Posle prvog dodira na ekran traži dozvolu i pretplatu (iPhone traži da to bude posle dodira).
 Future<String> pushSubscribeOnFirstTap(String vapidKey) async => '';
+
+bool iosStandalone() => false;

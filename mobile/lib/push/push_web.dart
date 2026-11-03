@@ -1,5 +1,17 @@
 import 'dart:js_interop';
 
+@JS('slovaPush.iosStandalone')
+external bool _iosStandalone();
+
+/// iPhone, igra dodata na početni ekran.
+bool iosStandalone() {
+  try {
+    return _iosStandalone();
+  } catch (_) {
+    return false;
+  }
+}
+
 @JS('slovaPush.supported')
 external bool _supported();
 
