@@ -53,7 +53,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 
 **Zadaci** (pločica ZADACI, kartice Dnevni / Nedeljni / Mesečni, napredak u procentima, nagrada se preuzima dugmetom)
 - Glavni dnevni zadatak: svaki igrač dobija svoje nasumične reči (2 od 5 i 2 od 4 slova), nove svaki dan; treba ih složiti na jednoj tabli u jednoj partiji.
-- Dnevni: 5 partija, 3 pobede, 1 partija sa prijateljem, 3 pobede zaredom, 10 pobeda, 10 pobeda zaredom. Nedeljni: svaki dan 5 partija / 3 pobede, 5 partija sa prijateljem, 500 i 1.000 bodova, 25 pobeda bez izgubljenog života, 500 reči. Mesečni: 20 dana igre, 100 i 300 pobeda, 5.000 i 10.000 bodova, svi dnevni zadaci jednog dana, svi nedeljni jedne nedelje, 1.000 i 3.000 reči.
+- Dnevni: 5 partija, 3 pobede, 2 partije sa prijateljem, 3 pobede zaredom, 10 pobeda, 10 pobeda zaredom. Nedeljni: svaki dan 5 partija / 3 pobede, 20 partija sa prijateljem, 500 i 1.000 bodova, 25 pobeda bez izgubljenog života, 500 reči. Mesečni: 20 dana igre, 100 partija sa prijateljem, 100 i 300 pobeda, 5.000 i 10.000 bodova, svi dnevni zadaci jednog dana, svi nedeljni jedne nedelje, 1.000 i 3.000 reči.
 - Napredak se računa iz odigranih partija (vreme igre je Europe/Belgrade); nagrada se može preuzeti samo jednom.
 
 **Rečnik za igrače**
