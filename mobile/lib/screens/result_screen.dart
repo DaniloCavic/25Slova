@@ -130,7 +130,7 @@ class _ResultScreenState extends State<ResultScreen> {
           Text(reason, textAlign: TextAlign.center, style: TextStyle(color: textMuted)),
           const SizedBox(height: 6),
           Text(
-            delta == 0 ? 'Saldo poena nepromenjen' : '${fmtSignedPoints(delta)} poena',
+            delta == 0 ? 'Saldo bodova nepromenjen' : '${fmtSignedPoints(delta)} bodova',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20,

@@ -72,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (_) => AlertDialog(
         title: const Text('Brisanje naloga'),
         content: const Text(
-            'Nalog i lični podaci biće trajno obrisani. Tokeni, poeni i medalje se gube. Ova radnja se ne može poništiti.'),
+            'Nalog i lični podaci biće trajno obrisani. Tokeni, bodovi i medalje se gube. Ova radnja se ne može poništiti.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Odustani')),
           TextButton(

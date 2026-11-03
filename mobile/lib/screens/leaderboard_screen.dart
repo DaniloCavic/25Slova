@@ -130,7 +130,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
                           padding: const EdgeInsets.all(24),
                           child: Text(
                             searching
-                                ? 'Nema igrača sa tim imenom na ovoj listi.\nIgrač se pojavljuje na listi kada osvoji ili izgubi poene u ovom periodu.'
+                                ? 'Nema igrača sa tim imenom na ovoj listi.\nIgrač se pojavljuje na listi kada osvoji ili izgubi bodove u ovom periodu.'
                                 : 'Još nema rezultata u ovom periodu.',
                             textAlign: TextAlign.center,
                           ),

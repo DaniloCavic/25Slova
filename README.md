@@ -12,7 +12,7 @@ a na kraju se broje reči u redovima, kolonama i dijagonalama.
 | `admin/` | Admin panel u pregledaču (server ga servira na `/admin`) | React + Vite |
 | `mobile/` | Mobilna aplikacija — jedan kod za Android i iPhone | Flutter |
 
-Server je jedini sudija: on određuje čiji je potez, tajmer, živote, rezultat, tokene, poene, levele i medalje.
+Server je jedini sudija: on određuje čiji je potez, tajmer, živote, rezultat, tokene, poene, bodove, levele i medalje.
 Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti menjanjem sata ili aplikacije.
 
 ## Šta je urađeno (prva verzija)
@@ -27,13 +27,14 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Ponovno povezivanje vraća igrača u partiju u toku. Predaja partije.
 - Revanš: 60 sekundi posle partije oba igrača mogu da zatraže revanš; kad i drugi prihvati, odmah počinje nova partija (10 tokena po igraču).
 - Bodovanje: 12 nizova, oba smera čitanja, najduža reč (3–5 slova) po nizu; reči od 2 slova se ne računaju, kraće reči unutar duže se ne sabiraju.
-- Pobednik po poenima → broju reči → nerešeno. Nagrada `(poeni × reči) ÷ 7,2`, poraz −10, nerešeno 0.
+- **Poeni** se osvajaju na tabli (dužina najduže reči po nizu, najviše 60); pobednik je onaj sa više poena → više reči → nerešeno.
+- **Bodovi** se dobijaju posle partije: pobednik `(poeni × reči) ÷ 7,2`, poraz −10, nerešeno 0. Od bodova zavise level, rang liste i medalje.
 
 **Nalozi i profil**
 - Registracija (korisničko ime, ime i prezime, pol, datum rođenja, e-mail, telefon, lozinka + potvrda) i prijava.
 - Zaboravljena lozinka (kod na e-mail), promena lozinke, profilna slika, izmena podataka, brisanje naloga.
 - E-mail i telefon se ne prikazuju drugim igračima.
-- Profil drugog igrača (dodir na igrača na rang listi): level, poeni po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
+- Profil drugog igrača (dodir na igrača na rang listi): level, bodovi po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
 - Istorija: poslednjih 10 partija; dodir otvara partiju sa obe table i pronađenim rečima.
 - Server je spreman za Google i Apple prijavu (provera tokena, dopuna profila, povezivanje bez preuzimanja tuđeg naloga).
 
@@ -42,16 +43,16 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - iPhone: Web Push — igra mora biti dodata na početni ekran; uključuje se u Podešavanjima. VAPID ključevi se prave sami i čuvaju u bazi.
 - Android aplikacija: preko Firebase (FCM). Server je spreman (promenljiva `FIREBASE_SERVICE_ACCOUNT`); aplikaciji treba `google-services.json`.
 
-**Tokeni, poeni, rang liste**
+**Tokeni, bodovi, rang liste**
 - Svaka promena tokena je posebna transakcija. Dnevna nagrada 30 tokena (najviše jednom dnevno, zaštićeno i od istovremenih zahteva).
 - Partija košta 10 tokena po igraču. Nagrada za reklamu (5 tokena) preko AdMob serverske provere potpisa.
-- Ukupni, mesečni i godišnji saldo; leveli 1–10; mesečna i godišnja rang lista sa pretragom igrača; istorija prethodnih perioda.
+- Ukupni, nedeljni, mesečni i godišnji saldo bodova; leveli 1–10; mesečna i godišnja rang lista sa pretragom igrača; istorija prethodnih perioda.
 - Medalje za 1., 2. i 3. mesto na kraju meseca i godine (automatski, i nadoknadi ako je server bio ugašen).
 - „Najbolja tabla ikad“ — ukupno i posebno za 1, 3 i 5 početnih slova, sa označenim početnim slovima.
 
 **Zadaci** (pločica ZADACI, kartice Dnevni / Nedeljni / Mesečni, napredak u procentima, nagrada se preuzima dugmetom)
 - Glavni dnevni zadatak: svaki igrač dobija svoje nasumične reči (2 od 5 i 2 od 4 slova), nove svaki dan; treba ih složiti na jednoj tabli u jednoj partiji.
-- Dnevni: 5 partija, 3 pobede, 3 pobede zaredom, 10 pobeda, 10 pobeda zaredom. Nedeljni: svaki dan 5 partija / 3 pobede, 500 i 1.000 poena, 25 pobeda bez izgubljenog života, 500 reči. Mesečni: 20 dana igre, 100 i 300 pobeda, 5.000 i 10.000 poena, svi dnevni zadaci jednog dana, svi nedeljni jedne nedelje, 1.000 i 3.000 reči.
+- Dnevni: 5 partija, 3 pobede, 3 pobede zaredom, 10 pobeda, 10 pobeda zaredom. Nedeljni: svaki dan 5 partija / 3 pobede, 500 i 1.000 bodova, 25 pobeda bez izgubljenog života, 500 reči. Mesečni: 20 dana igre, 100 i 300 pobeda, 5.000 i 10.000 bodova, svi dnevni zadaci jednog dana, svi nedeljni jedne nedelje, 1.000 i 3.000 reči.
 - Napredak se računa iz odigranih partija (vreme igre je Europe/Belgrade); nagrada se može preuzeti samo jednom.
 
 **Rečnik za igrače**
@@ -65,7 +66,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 **Admin panel** (`http://<server>/admin`)
 - Rečnik: dodavanje, izmena i brisanje reči, masovni uvoz (lista ili .txt fajl), provera reči, pretraga, filter po dužini.
 - Korisnici: pretraga, pregled (partije, tokeni, medalje), izmena podataka i uloge, nova lozinka, blokiranje uz razlog
-  (korisnik se odmah izbacuje iz igre), odblokiranje, dodavanje/oduzimanje tokena i poena, kreiranje i brisanje naloga.
+  (korisnik se odmah izbacuje iz igre), odblokiranje, dodavanje/oduzimanje tokena i bodova, kreiranje i brisanje naloga.
 - Pregled: broj korisnika, aktivnih, partija, reči, partije u toku, red čekanja, tokeni po vrsti.
 - Podešavanja uparivanja (rasponi levela, brzina širenja, trajanje koda).
 
@@ -121,7 +122,7 @@ Gde specifikacija ostavlja izbor, primenjeno je sledeće (sve se lako menja):
 7. **Pobeda zbog gubitka života ili predaje** — pobednik dobija nagradu po formuli za svoju trenutnu tablu, gubitnik −10.
 8. **Negativan saldo** — dozvoljen (specifikacija ne zabranjuje); takav igrač je Level 1.
 9. **Najbolja tabla** — globalni rekord + posebni za 1, 3 i 5 početnih slova; računaju se samo partije završene popunjavanjem tabli; kod istog rezultata rekord zadržava onaj ko ga je prvi postigao; istorija ostaje u bazi.
-10. **Medalje** — samo igrači sa više od 0 poena u periodu; kod istog broja poena ispred je onaj ko ih je ranije dostigao.
+10. **Medalje** — samo igrači sa više od 0 bodova u periodu; kod istog broja bodova ispred je onaj ko ih je ranije dostigao.
 11. **Dan, mesec i godina** — računaju se po vremenu u Srbiji (`Europe/Belgrade`), ne po satu telefona.
 12. **Registracija** — e-mail je obavezan (potreban za zaboravljenu lozinku), telefon nije; korisničko ime 5–20 znakova, bilo koji znakovi; lozinka najmanje 8 znakova sa slovom i brojem.
 13. **Brisanje naloga** — lični podaci se trajno brišu, a odigrane partije ostaju anonimne (da protivnicima ne nestanu iz istorije).

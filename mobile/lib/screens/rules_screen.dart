@@ -34,7 +34,7 @@ class RulesScreen extends StatelessWidget {
       ('Pobednik', 'Pobeđuje igrač sa više poena; ako su poeni isti — onaj sa više reči; ako je i to isto — nerešeno.'),
       (
         'Saldo',
-        'Pobednik dobija (poeni × broj reči) ÷ 7,2 poena na ukupni, nedeljni, mesečni i godišnji saldo, na dve decimale (npr. 36,11). Ako protivnik preda partiju ili izgubi sva tri života, pobednik dobija poene po istoj formuli, ali najmanje 25. Poraz oduzima 10 poena. Nerešeno ne menja saldo.'
+        'Posle partije pobednik dobija BODOVE: (poeni × broj reči) ÷ 7,2, na dve decimale (npr. 36,11). Bodovi se dodaju na ukupni, nedeljni, mesečni i godišnji saldo; od njih zavise level i mesto na rang listi. Ako protivnik preda partiju ili izgubi sva tri života, pobednik dobija bodove po istoj formuli, ali najmanje 25. Poraz oduzima 10 bodova. Nerešeno ne menja saldo.'
       ),
       (
         'Tokeni',
@@ -42,7 +42,7 @@ class RulesScreen extends StatelessWidget {
       ),
       (
         'Medalje',
-        'Prva tri mesta na nedeljnoj, mesečnoj i godišnjoj rang listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu. Pri istom broju poena ispred je igrač koji je do njih stigao ranije.'
+        'Prva tri mesta na nedeljnoj, mesečnoj i godišnjoj rang listi dobijaju zlatnu, srebrnu i bronzanu medalju koja ostaje na profilu. Pri istom broju bodova ispred je igrač koji je do njih stigao ranije.'
       ),
     ];
     return Scaffold(
@@ -64,7 +64,7 @@ class RulesScreen extends StatelessWidget {
           const SizedBox(height: 20),
           const Text('Leveli', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          const Text('Level zavisi od ukupnog broja poena:', style: TextStyle(height: 1.4)),
+          const Text('Level zavisi od ukupnog broja bodova:', style: TextStyle(height: 1.4)),
           const SizedBox(height: 8),
           const LevelTable(),
         ],

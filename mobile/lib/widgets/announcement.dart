@@ -166,7 +166,7 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
         Text('$place. mesto na $list rang listi',
             textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: textMain, fontWeight: FontWeight.w700)),
         const SizedBox(height: 2),
-        Text('${_periodText(a['period'] as String, a['periodKey'] as String)} · ${fmtPoints(a['points'] as num)} poena',
+        Text('${_periodText(a['period'] as String, a['periodKey'] as String)} · ${fmtPoints(a['points'] as num)} bodova',
             textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: textMuted)),
         const SizedBox(height: 8),
         Text('Čestitamo! Medalja je dodata na tvoj profil.',

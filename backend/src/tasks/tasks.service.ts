@@ -34,7 +34,7 @@ interface TaskDef {
 
 interface Ctx {
   games: Played[];
-  /** Poeni na rang listi za period (cele vrednosti, posle decimala se ne gleda) */
+  /** Bodovi na rang listi za period (cele vrednosti, posle decimala se ne gleda) */
   points: number;
   /** Za mesečne: koliko je dana / nedelja ispunilo sve zadatke */
   allDailyDays?: number;
@@ -98,8 +98,8 @@ const WEEKLY: TaskDef[] = [
     reward: 50,
     progress: (c) => [...byDay(c.games).values()].filter((g) => wins(g) >= 3).length,
   },
-  { id: 'w_pts500', title: 'Osvoji 500 poena na nedeljnoj rang listi', target: 500, reward: 50, progress: (c) => c.points },
-  { id: 'w_pts1000', title: 'Osvoji 1.000 poena na nedeljnoj rang listi', target: 1000, reward: 150, progress: (c) => c.points },
+  { id: 'w_pts500', title: 'Osvoji 500 bodova na nedeljnoj rang listi', target: 500, reward: 50, progress: (c) => c.points },
+  { id: 'w_pts1000', title: 'Osvoji 1.000 bodova na nedeljnoj rang listi', target: 1000, reward: 150, progress: (c) => c.points },
   {
     id: 'w_clean25',
     title: 'Pobedi 25 puta bez izgubljenog života',
@@ -119,8 +119,8 @@ const MONTHLY: TaskDef[] = [
   { id: 'm_days20', title: 'Igraj 20 različitih dana', target: 20, reward: 20, progress: (c) => byDay(c.games).size },
   { id: 'm_win100', title: 'Pobedi u 100 partija', target: 100, reward: 50, progress: (c) => wins(c.games) },
   { id: 'm_win300', title: 'Pobedi u 300 partija', target: 300, reward: 200, progress: (c) => wins(c.games) },
-  { id: 'm_pts5000', title: 'Osvoji 5.000 poena na mesečnoj rang listi', target: 5000, reward: 100, progress: (c) => c.points },
-  { id: 'm_pts10000', title: 'Osvoji 10.000 poena na mesečnoj rang listi', target: 10000, reward: 500, progress: (c) => c.points },
+  { id: 'm_pts5000', title: 'Osvoji 5.000 bodova na mesečnoj rang listi', target: 5000, reward: 100, progress: (c) => c.points },
+  { id: 'm_pts10000', title: 'Osvoji 10.000 bodova na mesečnoj rang listi', target: 10000, reward: 500, progress: (c) => c.points },
   { id: 'm_alldaily', title: 'Jednog dana ispuni sve dnevne zadatke', target: 1, reward: 100, progress: (c) => c.allDailyDays ?? 0 },
   { id: 'm_allweekly', title: 'Jedne nedelje ispuni sve nedeljne zadatke', target: 1, reward: 1000, progress: (c) => c.allWeeklyWeeks ?? 0 },
   { id: 'm_words1000', title: 'Sastavi 1.000 reči', target: 1000, reward: 100, progress: (c) => c.games.reduce((s, g) => s + g.words, 0) },

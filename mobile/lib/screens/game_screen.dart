@@ -97,7 +97,7 @@ class _GameScreenState extends State<GameScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Predaja', textAlign: TextAlign.center),
-        content: const Text('Ako predate partiju, protivnik pobeđuje i gubite 10 poena. Da li ste sigurni?'),
+        content: const Text('Ako predate partiju, protivnik pobeđuje i gubite 10 bodova. Da li ste sigurni?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Nastavi igru')),
           TextButton(

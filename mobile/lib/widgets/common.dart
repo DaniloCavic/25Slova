@@ -678,7 +678,7 @@ String medalPeriodLabel(String period, String key) => switch (period) {
       _ => 'Nedelja $key',
     };
 
-/// Poeni sa dve decimale i zarezom: 36.1 → "36,10".
+/// Bodovi sa dve decimale i zarezom: 36.1 → "36,10".
 String fmtPoints(num? v) => (v ?? 0).toStringAsFixed(2).replaceAll('.', ',');
 
 /// Kao fmtPoints, ali bez ",00" kad je ceo broj (za uske prikaze).
@@ -715,7 +715,7 @@ const levelRanges = <(int, int, int?)>[
 
 String _thousands(int n) => n.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]}.');
 
-/// Tabela levela (od–do poena), sa istaknutim trenutnim levelom.
+/// Tabela levela (od–do bodova), sa istaknutim trenutnim levelom.
 class LevelTable extends StatelessWidget {
   final int? current;
   const LevelTable({super.key, this.current});
@@ -737,7 +737,7 @@ class LevelTable extends StatelessWidget {
               const Spacer(),
               Text(to == null ? 'više od ${_thousands(from - 1)}' : '${_thousands(from)} – ${_thousands(to)}',
                   style: const TextStyle(fontWeight: FontWeight.w600)),
-              Text('  poena', style: TextStyle(color: textMuted, fontSize: 12)),
+              Text('  bodova', style: TextStyle(color: textMuted, fontSize: 12)),
             ]),
           ),
       ]);
@@ -753,7 +753,7 @@ void showLevelsSheet(BuildContext context, {int? current}) {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Text('Leveli', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
           const SizedBox(height: 4),
-          Text('Level zavisi od ukupnog broja poena.', style: TextStyle(color: textMuted)),
+          Text('Level zavisi od ukupnog broja bodova.', style: TextStyle(color: textMuted)),
           const SizedBox(height: 12),
           LevelTable(current: current),
         ]),

@@ -65,10 +65,10 @@ class AdjustDto {
   note?: string;
 }
 
-/** Poeni mogu imati dve decimale (npr. 12,50). */
+/** Bodovi mogu imati dve decimale (npr. 12,50). */
 class AdjustPointsDto {
   @Type(() => Number)
-  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Poeni mogu imati najviše dve decimale.' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'Bodovi mogu imati najviše dve decimale.' })
   amount: number;
 
   @IsOptional()

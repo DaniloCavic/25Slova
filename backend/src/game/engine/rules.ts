@@ -9,12 +9,13 @@ export const AD_REWARD = 5;
 export const LOSS_PENALTY = 10;
 
 /**
- * Poeni se u bazi čuvaju u stotim delovima (kao novac u parama), da bi dve decimale
- * uvek bile tačne: 36,11 poena = 3611. Sve funkcije ispod sa "Cents" rade sa stotinkama.
+ * BODOVI (saldo posle partije, level, rang liste) se u bazi čuvaju u stotim delovima
+ * (kao novac u parama), da bi dve decimale uvek bile tačne: 36,11 bodova = 3611.
+ * POENI su ono što se osvoji na tabli u partiji (dužina reči po nizu, najviše 60). Sve funkcije ispod sa "Cents" rade sa stotinkama.
  */
 export const POINTS_SCALE = 100;
 export const LOSS_PENALTY_CENTS = LOSS_PENALTY * POINTS_SCALE;
-/** Pobeda zato što je protivnik predao ili izgubio sva tri života: najmanje 25 poena (ili više, ako formula daje više). */
+/** Pobeda zato što je protivnik predao ili izgubio sva tri života: najmanje 25 bodova (ili više, ako formula daje više). */
 export const FORFEIT_WIN_CENTS = 25 * POINTS_SCALE;
 export const toPoints = (cents: number) => cents / POINTS_SCALE;
 export const toCents = (points: number) => Math.round(points * POINTS_SCALE);
@@ -34,14 +35,14 @@ export function randomMatchType(rand: () => number = Math.random): MatchType {
 }
 
 /**
- * Nagrada pobedniku: (poeni × broj validnih reči) ÷ 7,2, na dve decimale (u stotinkama).
+ * Bodovi pobedniku: (poeni × broj validnih reči) ÷ 7,2, na dve decimale (u stotinkama).
  * Maksimum: 60 × 12 ÷ 7,2 = 100,00.
  */
 export function winRewardCents(points: number, words: number): number {
   return Math.round((points * words * POINTS_SCALE) / 7.2);
 }
 
-/** Leveli prema ukupnom saldu poena (odeljak 6.2). */
+/** Leveli prema ukupnom saldu bodova (odeljak 6.2). */
 const LEVEL_THRESHOLDS = [
   { level: 10, min: 500_001 },
   { level: 9, min: 200_001 },
@@ -61,7 +62,7 @@ export function levelForPoints(totalPoints: number): number {
   return 1;
 }
 
-/** Napredak ka sledećem levelu: od koliko poena počinje trenutni i sledeći level. */
+/** Napredak ka sledećem levelu: od koliko bodova počinje trenutni i sledeći level. */
 export function levelProgress(totalPoints: number) {
   const level = levelForPoints(totalPoints);
   const min = level === 1 ? 0 : LEVEL_THRESHOLDS.find((t) => t.level === level)!.min;

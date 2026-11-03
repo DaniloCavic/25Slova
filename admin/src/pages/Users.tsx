@@ -51,7 +51,7 @@ export function Users() {
               <th>Ime i prezime</th>
               <th>E-mail</th>
               <th>Level</th>
-              <th>Poeni</th>
+              <th>Bodovi</th>
               <th>Tokeni</th>
               <th>Status</th>
               <th>Registrovan</th>
@@ -66,7 +66,7 @@ export function Users() {
                 <td data-label="Ime i prezime" className="hide-sm">{u.fullName}</td>
                 <td data-label="E-mail">{u.email ?? '—'}</td>
                 <td data-label="Level" className="hide-sm">{u.level}</td>
-                <td data-label="Poeni">{u.totalPoints}</td>
+                <td data-label="Bodovi">{u.totalPoints}</td>
                 <td data-label="Tokeni">{u.tokens}</td>
                 <td data-label="Status"><StatusBadge u={u} /></td>
                 <td data-label="Registrovan" className="muted hide-sm">{fmtDate(u.createdAt)}</td>
@@ -251,16 +251,16 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
             </div>
 
             <div className="card">
-              <h3 style={{ marginTop: 0 }}>Tokeni i poeni</h3>
+              <h3 style={{ marginTop: 0 }}>Tokeni i bodovi</h3>
               <div className="row">
                 <input type="number" placeholder="± tokena" value={tokens} onChange={(e) => setTokens(e.target.value)} style={{ width: 120 }} />
                 <input className="grow" placeholder="Napomena" value={note} onChange={(e) => setNote(e.target.value)} />
                 <button disabled={!Number(tokens)} onClick={() => act(() => api('POST', `/admin/users/${id}/tokens`, { amount: Number(tokens), note }), 'Tokeni izmenjeni.')}>Primeni tokene</button>
               </div>
               <div className="row" style={{ marginTop: 8 }}>
-                <input type="number" step="0.01" placeholder="± poena" value={points} onChange={(e) => setPoints(e.target.value)} style={{ width: 120 }} />
-                <button disabled={!Number(points)} onClick={() => act(() => api('POST', `/admin/users/${id}/points`, { amount: Number(points) }), 'Poeni izmenjeni.')}>Primeni poene</button>
-                <span className="muted">Menja ukupni, mesečni i godišnji saldo.</span>
+                <input type="number" step="0.01" placeholder="± bodova" value={points} onChange={(e) => setPoints(e.target.value)} style={{ width: 120 }} />
+                <button disabled={!Number(points)} onClick={() => act(() => api('POST', `/admin/users/${id}/points`, { amount: Number(points) }), 'Bodovi izmenjeni.')}>Primeni bodove</button>
+                <span className="muted">Menja ukupni, nedeljni, mesečni i godišnji saldo bodova.</span>
               </div>
             </div>
           </>
@@ -269,7 +269,7 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
         <div className="card">
           <h3 style={{ marginTop: 0 }}>Poslednje partije</h3>
           <table className="responsive">
-            <thead><tr><th>Ishod</th><th>Tip</th><th>Poeni table</th><th>Reči</th><th>Saldo</th><th>Kraj</th></tr></thead>
+            <thead><tr><th>Ishod</th><th>Tip</th><th>Poeni table</th><th>Reči</th><th>Bodovi</th><th>Kraj</th></tr></thead>
             <tbody>
               {d.matches.map((m: any) => (
                 <tr key={m.matchId}>
@@ -277,7 +277,7 @@ function UserDrawer({ id, onClose }: { id: string; onClose: () => void }) {
                   <td data-label="Tip">{m.mode === 'PRIVATE' ? 'kod' : 'nasumično'}</td>
                   <td data-label="Poeni table">{m.score}</td>
                   <td data-label="Reči">{m.wordsCount}</td>
-                  <td data-label="Saldo">{m.pointsDelta > 0 ? `+${m.pointsDelta}` : m.pointsDelta}</td>
+                  <td data-label="Bodovi">{m.pointsDelta > 0 ? `+${m.pointsDelta}` : m.pointsDelta}</td>
                   <td data-label="Kraj" className="muted">{fmtDate(m.endedAt)}</td>
                 </tr>
               ))}

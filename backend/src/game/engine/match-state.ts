@@ -161,7 +161,7 @@ export function applyResign(state: MatchState, seat: Seat): MatchState {
 export interface MatchResult {
   scores: [BoardScore, BoardScore];
   winner: Seat | null; // null = nerešeno
-  /** Promena salda u stotinkama poena (3611 = +36,11). */
+  /** Promena salda bodova u stotinkama (3611 = +36,11). */
   pointsDelta: [number, number];
 }
 
@@ -187,7 +187,7 @@ export function computeResult(state: MatchState, isWord: (w: string) => boolean)
   const pointsDelta: [number, number] = [0, 0];
   if (winner !== null) {
     const w = scores[winner];
-    // Predaja ili gubitak sva tri života: pobedniku po formuli, ali najmanje 25 poena.
+    // Predaja ili gubitak sva tri života: pobedniku po formuli, ali najmanje 25 bodova.
     const reward = winRewardCents(w.points, w.wordsCount);
     pointsDelta[winner] = state.forfeitedBy !== undefined ? Math.max(reward, FORFEIT_WIN_CENTS) : reward;
     pointsDelta[other(winner)] = -LOSS_PENALTY_CENTS;

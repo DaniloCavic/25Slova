@@ -8,7 +8,7 @@ import { toPoints } from '../game/engine/rules';
 export class PointsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Promena ukupnog, nedeljnog, mesečnog i godišnjeg salda; delta je u stotinkama poena. */
+  /** Promena ukupnog, nedeljnog, mesečnog i godišnjeg salda; delta je u stotinkama bodova. */
   async apply(
     tx: Prisma.TransactionClient,
     userId: string,

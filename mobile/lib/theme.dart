@@ -71,7 +71,7 @@ Color get goldAccent => isDark ? gold : const Color(0xFFA86A00);
 const appFontFamily = 'Raleway';
 const _lnum = [FontFeature.liningFigures()];
 
-/// Raleway podrazumevano ima „stare“ brojeve različite visine; za poene i tokene koristimo ravne.
+/// Raleway podrazumevano ima „stare“ brojeve različite visine; za poene, bodove i tokene koristimo ravne.
 TextTheme _liningFigures(TextTheme t) {
   const f = _lnum;
   TextStyle? fix(TextStyle? s) => s?.copyWith(fontFeatures: f);

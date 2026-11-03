@@ -26,9 +26,9 @@ export class LeaderboardService implements OnApplicationBootstrap {
   ) {}
 
   /**
-   * Rang-lista. Mesečna/godišnja se računa iz istorije poena za traženi period,
+   * Rang-lista. Mesečna/godišnja se računa iz istorije bodova za traženi period,
    * pa su rezultati prethodnih perioda uvek dostupni (key = "2026-09" ili "2026").
-   * Pri istom broju poena ispred je onaj ko je do njih stigao ranije.
+   * Pri istom broju bodova ispred je onaj ko je do njih stigao ranije.
    */
   private async rows(
     period: Period,

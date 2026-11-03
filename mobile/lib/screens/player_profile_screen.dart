@@ -6,7 +6,7 @@ import '../widgets/common.dart';
 import '../widgets/profile_parts.dart';
 
 /// Profil drugog igrača (otvara se dodirom na igrača na rang listi):
-/// level, poeni po periodima, učinak, medalje i poslednjih 10 partija.
+/// level, bodovi po periodima, učinak, medalje i poslednjih 10 partija.
 class PlayerProfileScreen extends StatefulWidget {
   final String userId;
   const PlayerProfileScreen({super.key, required this.userId});
