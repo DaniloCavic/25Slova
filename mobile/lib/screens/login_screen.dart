@@ -19,6 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _error;
 
   Future<void> _submit() async {
+    // Zatvara tastaturu; na iPhone-u (web) inače sledeći dodir na polje ne otvara tastaturu ponovo.
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       _busy = true;
       _error = null;

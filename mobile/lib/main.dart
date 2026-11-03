@@ -31,7 +31,12 @@ class SlovaApp extends StatelessWidget {
       navigatorKey: app.navigatorKey,
       scaffoldMessengerKey: app.messengerKey,
       // Dnevna nagrada, medalje i izazovi prijatelja se prikazuju preko celog ekrana.
-      builder: (context, child) => AnnouncementOverlay(child: ChallengeOverlay(child: child!)),
+      // Dodir van polja za unos zatvara tastaturu (i sledeći dodir na polje je ponovo otvara).
+      builder: (context, child) => GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: AnnouncementOverlay(child: ChallengeOverlay(child: child!)),
+      ),
       home: Selector<AppState, AuthStatus>(
         selector: (_, s) => s.status,
         builder: (_, status, __) => switch (status) {

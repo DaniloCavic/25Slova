@@ -39,6 +39,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _submit() async {
+    // Zatvara tastaturu; na iPhone-u (web) inače sledeći dodir na polje ne otvara tastaturu ponovo.
+    FocusManager.instance.primaryFocus?.unfocus();
     if (!_form.currentState!.validate()) return;
     if (_gender == null || _birthDate == null) {
       setState(() => _error = 'Izaberite pol i datum rođenja.');

@@ -425,6 +425,10 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   /// Aplikacija je u prvom planu ili ne — server šalje „na potezu si“ samo kad igrač nije u aplikaciji.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Posle povratka u aplikaciju polje može ostati „aktivno“ bez tastature (iPhone, web) — otpusti ga.
+    if (state == AppLifecycleState.resumed || state == AppLifecycleState.hidden) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
     if (state == AppLifecycleState.resumed || state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
       _sendPresence(state);
     }
