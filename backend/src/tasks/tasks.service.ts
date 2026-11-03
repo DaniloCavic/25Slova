@@ -19,6 +19,8 @@ interface Played {
   month: string;
   win: boolean;
   noLifeLost: boolean;
+  /** Protivnik je (sada) na listi prijatelja */
+  withFriend: boolean;
   words: number;
   board: (string | null)[];
 }
@@ -70,6 +72,7 @@ export function challengeHits(board: (string | null)[], words: string[]) {
 const DAILY: TaskDef[] = [
   { id: 'd_play5', title: 'Odigraj 5 partija', target: 5, reward: 10, progress: (c) => c.games.length },
   { id: 'd_win3', title: 'Pobedi u 3 partije', target: 3, reward: 10, progress: (c) => wins(c.games) },
+  { id: 'd_friend1', title: 'Odigraj 1 partiju sa prijateljem', target: 1, reward: 10, progress: (c) => c.games.filter((g) => g.withFriend).length },
   { id: 'd_streak3', title: 'Pobedi 3 partije zaredom', target: 3, reward: 30, progress: (c) => bestStreak(c.games) },
   { id: 'd_win10', title: 'Pobedi u 10 partija', target: 10, reward: 100, progress: (c) => wins(c.games) },
   { id: 'd_streak10', title: 'Pobedi 10 partija zaredom', target: 10, reward: 200, progress: (c) => bestStreak(c.games) },
@@ -97,6 +100,13 @@ const WEEKLY: TaskDef[] = [
     target: 7,
     reward: 50,
     progress: (c) => [...byDay(c.games).values()].filter((g) => wins(g) >= 3).length,
+  },
+  {
+    id: 'w_friend5',
+    title: 'Odigraj 5 partija sa prijateljem',
+    target: 5,
+    reward: 10,
+    progress: (c) => c.games.filter((g) => g.withFriend).length,
   },
   { id: 'w_pts500', title: 'Osvoji 500 bodova na nedeljnoj rang listi', target: 500, reward: 50, progress: (c) => c.points },
   { id: 'w_pts1000', title: 'Osvoji 1.000 bodova na nedeljnoj rang listi', target: 1000, reward: 150, progress: (c) => c.points },
@@ -187,15 +197,19 @@ export class TasksService {
   // -------------------------------------------------------------- podaci
 
   private async games(userId: string, since: Date): Promise<Played[]> {
-    const rows = await this.prisma.matchPlayer.findMany({
-      where: { userId, match: { status: 'FINISHED', endedAt: { gte: since } } },
-      select: {
-        livesLeft: true,
-        wordsCount: true,
-        board: true,
-        match: { select: { endedAt: true, winnerId: true } },
-      },
-    });
+    const [rows, friends] = await Promise.all([
+      this.prisma.matchPlayer.findMany({
+        where: { userId, match: { status: 'FINISHED', endedAt: { gte: since } } },
+        select: {
+          livesLeft: true,
+          wordsCount: true,
+          board: true,
+          match: { select: { endedAt: true, winnerId: true, players: { select: { userId: true } } } },
+        },
+      }),
+      this.prisma.friendship.findMany({ where: { userId }, select: { friendId: true } }),
+    ]);
+    const friendIds = new Set(friends.map((f) => f.friendId));
     return rows.map((r) => {
       const endedAt = r.match.endedAt!;
       return {
@@ -205,6 +219,7 @@ export class TasksService {
         month: monthKey(endedAt),
         win: r.match.winnerId === userId,
         noLifeLost: r.livesLeft >= 3,
+        withFriend: r.match.players.some((p) => p.userId !== userId && friendIds.has(p.userId)),
         words: r.wordsCount,
         board: (r.board as (string | null)[] | null) ?? [],
       };
