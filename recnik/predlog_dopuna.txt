@@ -1,0 +1,47 @@
+Reči koje FALE u rečniku (predlog za dodavanje).
+Imenice i pridevi su u 1. padežu, glagoli u raznim oblicima.
+
+=== PO TEMAMA ===
+Životinje (10): bivo, boa, drozd, guja, junac, kobac, pilić, skuša, smuđ, sraka
+Rase pasa (8): akita, bigl, doga, haski, koli, mops, pudla, seter
+Voće, povrće i biljke (9): anis, glog, grab, heljda, iris, kelj, kim, proso, urma
+Hrana i piće (7): boza, đuveč, kefir, kifla, kulen, kvas, proja
+Kuća i predmeti (2): česma, lenjir
+Zanimanja i ljudi (1): ratar
+Sport i igre (3): čigra, out, zvrk
+Regije, ostrva, poluostrva (21): atos, bačka, banat, elba, gobi, ibica, istra, kapri, krf, krim, lika, mačva, mljet, pag, rab, rodos, samos, sibir, srem, tasos, zeta
+Glagoli (česti oblici) (3): hekla, mesim, sadim
+
+=== OSTALE ČESTE REČI KOJE SU ISPALE (po slovima) ===
+A (5): ameba, amebe, argon, arome, atol
+B (36): bacil, bagel, baget, bahat, bajat, bajt, barok, barža, barže, bekon, bista, bivol, bodlja, bokor, boljka, boljke, brala, brali, brao, brest, brkaj, brkam, brkaš, bruje, brusi, brzaj, buđav, bujno, bujon, bukti, bukve, burne, burni, busen, bušio, bušiš
+C (24): cede, cedim, cedio, cediš, cenjka, cepao, cepaš, ceri, ceriš, cigar, cimaj, cimam, cimaš, crep, crknu, crpim, crpiš, crpka, crtaj, crvić, cucla, cucle, cvile, cvrči
+Č (16): čabar, čađ, čaplje, čarka, čarke, čeljad, češao, češem, čigre, čioda, čiode, čoban, čučanj, čučao, čučim, čupav
+Ć (4): ćopav, ćumur, ćuška, ćuške
+D (30): dahće, dahću, daruj, davni, deran, dezen, didžej, digle, diglo, dirke, dirni, dirnu, dleta, dogma, dogme, dojka, drap, drčan, drmaj, drmam, drmao, drmaš, drmne, drmni, drnda, drobi, drske, drven, duplja, dveri
+DŽ (5): džada, džepar, džepna, džepne, džepno
+Đ (2): đački, đavao
+E (8): edikt, egzil, elan, emajl, epoha, eseji, esnaf, etape
+F (13): fagot, fakir, fića, fikus, finta, fjord, fluid, fluor, foaje, foton, frule, fuga, fuge
+G (29): gadžet, gibak, gibon, gipka, globa, gmaz, gnoji, gnječi, gorda, gorde, graja, grbav, grdne, grinja, grinje, griva, grive, grlić, grme, groš, grozd, gruda, grude, gruva, gubav, gulim, gulio, guliš, gurka
+H (16): haba, hajka, halka, halke, hamam, hitar, hitra, hitri, hmelj, hodža, hodže, hren, hrid, hroma, hromi, humka
+I (13): ibis, idila, idiom, ikra, inje, iskri, izdah, izlio, iznet, izrez, izuje, izuo, izuti
+J (15): jalov, jamac, jamb, jamče, jasle, jauci, jauče, jauk, jecaj, jecam, jecao, jedri, ježi, jugo, jurne
+K (90): kaca, kace, kalaj, kalif, karat, kasir, kavga, kavge, kedar, kegle, kendo, kezi, keziš, kidaj, kidam, kidao, kidaš, kifle, kihne, kijam, kijao, kijaš, kilav, kinje, kinji, kinjio, kinjiš, kipti, kišno, klali, klao, klate, klela, kleli, klen, kleti, kliče, klija, klike, klinč, kliže, kliži, kližu, klor, kljova, kljuka, kmet, kobni, kočio, kolar, koljem, kolješ, kolji, konak, konto, konus, kopni, kosci, kosiš, kotur, kovan, kozar, kozja, kožno, krase, krčim, kreči, kredo, kroje, kroji, kroti, krpi, krpim, krpio, krpiš, krsni, krsno, krupa, kubik, kubni, kucnu, kudi, kujem, kuješ, kuler, kupaj, kuvan, kvant, kvasi, kvrge
+L (28): laik, lajav, larma, lavić, lavlja, lečen, leđna, leđne, leđni, leđno, legat, legle, letve, limar, liska, lišaj, liti, loče, ločem, ločeš, lonci, lotos, lovor, ložač, ložio, lupka, lupni, lutaj
+LJ (3): ljaga, ljage, ljutić
+M (44): mačić, mamim, mamio, mamiš, manir, marža, marže, mazao, mažem, mažu, mečka, menta, menza, merak, merka, mesiš, mesti, metni, miluj, mišji, mlak, mlaka, mlake, mlako, množi, modar, modra, modre, modri, modro, mrka, mrko, mrmot, mrva, mrvi, mrzne, mucao, mućak, mućka, mumla, mutim, mutio, muže, mužev
+N (26): nabo, naduo, nadut, nalio, naliv, nanos, napis, nasuo, navij, navio, navod, nedra, neguj, nehat, nemoć, nerad, nerc, neuk, niču, nikne, nošnja, nudle, nugat, nužan, nužne, nužni
+NJ (4): njiva, njuše, njušio, njušiš
+O (42): obija, obiju, obla, oblio, oblog, oboa, oboj, obole, oboli, očara, očice, odliv, odmak, odvoz, odžak, oguli, okida, okine, okov, okup, omama, opeka, opeke, opio, opiti, opna, orač, oranje, orati, orem, oreš, orio, orkan, oro, osica, osnuj, otpis, otupi, oval, ovčje, ovčji, ozari
+P (74): pačji, pagan, palci, pampa, pandža, pandže, pasja, pecaj, pegle, pekač, pelin, pelud, perec, pijac, piket, pilav, piljar, pilji, piljio, piljiš, pinte, pipnu, pisač, pisak, pitka, pitke, pitko, pivar, plam, pleh, plela, pleni, pletu, pleve, plik, pliš, plot, pljunu, poeme, pogni, polip, polke, pomor, pompa, pompe, porub, pouči, povik, pozva, pralje, prebi, predi, predu, prišt, prljaj, prljam, prljao, proza, proze, pršte, pršti, pržen, pržio, pržiš, ptiče, pucne, pudle, pulpa, punac, pupi, putić, puzio, pužem, puži
+R (34): račić, račva, ralo, rašlje, rđava, rđave, rđavi, rebus, recka, recke, redni, reljef, rende, rente, reset, resor, reuma, rever, rezon, ribaj, ribao, rikne, rikša, rikše, rogač, rondo, rotor, rubac, ručaj, ruho, rumba, rumen, rvači, rvati
+S (78): sabio, sačma, sačme, saće, sadio, sadiš, sagao, sagne, sajle, sakat, saldo, salut, salve, sambe, satir, sažet, sedio, sejao, seješ, seke, senik, seoba, seobe, seoce, sepsa, sifon, sinus, sirni, sitar, skrob, skuše, slap, slez, sliv, smesa, smese, smeša, snela, sneo, snese, sobni, sokak, solar, spazi, spira, sprao, srčan, srdit, srdžba, srdžbe, sreže, srežu, srkni, srlja, sruči, stege, stenji, stepe, stoik, strmi, sulud, surla, surle, susam, sušim, sušio, sušiš, sušna, sušne, suzne, sužen, svade, svale, svela, sveli, svode, svuče, svuku
+Š (18): šaljiv, šanac, šaren, šarka, šećem, šećeš, šepam, šepao, šiblje, šifon, šinjel, šljuka, šljuke, šnala, šnale, šnaps, špajz, štof
+T (46): tabak, tajga, tajim, takli, taknu, tapka, tapše, tapši, tave, tečan, tečne, tesar, tinja, titra, tkanja, tlači, tmina, tmine, točim, točio, točiš, toner, topot, trasa, trase, triko, trnu, trom, troma, tromo, trpaj, trpam, trpao, trun, trzam, trzao, trzaš, trzne, trzni, tučak, tučen, tuđin, tuljan, tupiš, tvori, tvrđa
+U (64): ubere, uberi, uberu, udav, udeli, udesi, udomi, uglas, ugode, ugoji, ujeli, ukaži, ukažu, ukini, ukop, ukori, ukoso, ukuca, ulije, ulila, ulili, umnjak, umota, uočim, uočiš, upere, upiju, upila, urami, uranja, urez, urlaj, urlam, urod, uroni, usadi, usek, usnio, usnuo, ušće, ušila, ušio, ušiti, ušiva, utaja, uteče, uteći, uteg, utera, utoli, utone, utrči, uvele, uvenu, uveze, uvij, uvila, uvio, uviti, uvrni, uzdaj, uzdao, uzdaš, uzlet
+V (27): varen, vazal, veje, venci, vespa, vezem, vezla, vezuj, vinar, vinuo, vinjak, vitke, vitki, vitko, vlat, vlati, vlaži, volej, vonj, vozna, vreva, vrtna, vrtne, vrtni, vučen, vučna, vučni
+Z (23): zalij, zalud, zamro, zaova, zasun, zašij, zdela, zdele, zevaj, zevam, zgoda, zgode, zicer, zidni, zinem, zineš, zinuo, zjapi, zolja, zubac, zujao, zujim, zujiš
+Ž (13): žablja, žablji, žagor, žaket, žalac, žanje, žanju, žaoke, žitelj, žmuri, žubor, župa, župe
+
+Napomena: ove reči si ranije izbacio iz liste, ali su ovde predložene kao nešto drugo (rasa psa, region…): anis, doga, grab, guja, iris, koli, krim, lika, zeta
