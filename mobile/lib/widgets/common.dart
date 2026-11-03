@@ -312,26 +312,53 @@ class MenuTile extends StatelessWidget {
   final VoidCallback onTap;
   final Color iconColor;
   final Widget? iconWidget;
-  const MenuTile(this.icon, this.label, this.onTap, {super.key, this.iconColor = gold, this.iconWidget});
+
+  /// Crveni broj u uglu (npr. nagrade koje čekaju); 0 = bez broja.
+  final int badge;
+  const MenuTile(this.icon, this.label, this.onTap,
+      {super.key, this.iconColor = gold, this.iconWidget, this.badge = 0});
 
   @override
-  Widget build(BuildContext context) => Panel(
-        onTap: onTap,
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          iconWidget ?? Icon(icon, color: iconColor, size: 34),
-          const SizedBox(height: 8),
-          Flexible(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(label.toUpperCase(),
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+  Widget build(BuildContext context) => Stack(clipBehavior: Clip.none, children: [
+        Positioned.fill(
+          child: Panel(
+            onTap: onTap,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              iconWidget ?? Icon(icon, color: iconColor, size: 34),
+              const SizedBox(height: 8),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(label.toUpperCase(),
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                ),
+              ),
+            ]),
+          ),
+        ),
+        if (badge > 0)
+          Positioned(
+            top: 8,
+            right: 10,
+            child: IgnorePointer(
+              child: Container(
+                constraints: const BoxConstraints(minWidth: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                decoration: BoxDecoration(
+                  color: danger,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: Text('$badge',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+              ),
             ),
           ),
-        ]),
-      );
+      ]);
 }
 
 class Lives extends StatelessWidget {

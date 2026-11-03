@@ -26,6 +26,8 @@ import { LeaderboardService } from './leaderboard/leaderboard.service';
 import { LeaderboardController } from './leaderboard/leaderboard.controller';
 import { HealthController } from './health.controller';
 import { PushService } from './push/push.service';
+import { TasksService } from './tasks/tasks.service';
+import { TasksController } from './tasks/tasks.controller';
 import { PushController } from './push/push.controller';
 
 /** Ograničenje broja zahteva važi samo za HTTP (ne za Socket.IO). */
@@ -60,6 +62,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     AdminController,
     LeaderboardController,
     PushController,
+    TasksController,
   ],
   providers: [
     AuthGuard,
@@ -80,6 +83,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     GameGateway,
     LeaderboardService,
     PushService,
+    TasksService,
   ],
 })
 export class AppModule {}

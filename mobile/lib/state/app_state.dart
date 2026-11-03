@@ -47,6 +47,24 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   void _announce(Map<String, dynamic> a) => announcements.value = [...announcements.value, a];
 
+  /// Nagrada za ispunjen zadatak — isti prozor kao dnevna nagrada.
+  void announceTask(String title, int amount) => _announce({'type': 'task', 'title': title, 'amount': amount});
+
+  /// Broj zadataka čija nagrada čeka (crveni broj na pločici ZADACI).
+  int tasksClaimable = 0;
+  void setTasksClaimable(int n) {
+    tasksClaimable = n;
+    notifyListeners();
+  }
+
+  Future<void> refreshTasksBadge() async {
+    try {
+      final r = Map<String, dynamic>.from(await api.get('/tasks/claimable'));
+      tasksClaimable = r['claimable'] as int;
+      notifyListeners();
+    } catch (_) {}
+  }
+
   void dismissAnnouncement() {
     final list = [...announcements.value];
     if (list.isEmpty) return;
@@ -151,6 +169,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
     _announceDaily(daily);
     _checkMedals();
+    refreshTasksBadge();
     _connectSocket();
   }
 
@@ -276,6 +295,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
       lifeLost.value = (mine: data['seat'] == m['mySeat'], livesLeft: data['livesLeft'] as int, at: DateTime.now());
     });
     s.on('match:end', (data) {
+      Future.delayed(const Duration(seconds: 1), refreshTasksBadge);
       match.value = null;
       final result = Map<String, dynamic>.from(data);
       if (user != null) {

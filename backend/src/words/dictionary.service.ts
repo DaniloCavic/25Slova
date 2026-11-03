@@ -37,6 +37,11 @@ export class DictionaryService implements OnModuleInit {
 
   has = (word: string) => this.words.has(word);
 
+  /** Sve reči (ćirilica) — npr. za izbor reči dnevnog izazova. */
+  allWords() {
+    return [...this.words];
+  }
+
   get size() {
     return this.words.size;
   }

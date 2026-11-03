@@ -134,12 +134,16 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
               )),
         ]),
         children: [
-          Text('DNEVNA NAGRADA',
+          Text(a['type'] == 'task' ? 'ZADATAK ISPUNJEN!' : 'DNEVNA NAGRADA',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: textMain, letterSpacing: 0.5)),
           const SizedBox(height: 6),
-          Text('${a['amount']} tokena je dodato na tvoj račun.\nVrati se i sutra po još!',
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: textMuted, height: 1.35)),
+          Text(
+              a['type'] == 'task'
+                  ? '${a['title']}\n${a['amount']} tokena je dodato na tvoj račun.'
+                  : '${a['amount']} tokena je dodato na tvoj račun.\nVrati se i sutra po još!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15, color: textMuted, height: 1.35)),
         ],
         button: 'SUPER!',
       );

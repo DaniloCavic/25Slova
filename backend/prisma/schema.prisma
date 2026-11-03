@@ -27,6 +27,7 @@ enum TokenTxType {
   PURCHASE
   ADMIN_ADJUST
   SIGNUP_BONUS
+  TASK_REWARD
 }
 
 enum PointsReason {
@@ -93,6 +94,7 @@ model User {
   wordsAdded        Word[]
   pushSubscriptions PushSubscription[]
   wordSuggestions WordSuggestion[] @relation("WordSuggestions")
+  dailyChallenges DailyChallenge[]
 }
 
 model PasswordReset {
@@ -267,4 +269,16 @@ model WordSuggestion {
   @@unique([userId, word])
   @@index([status, createdAt])
   @@index([word])
+}
+
+/// Glavni dnevni zadatak: svaki igrač svaki dan dobija svoje nasumične reči (2 od 5 i 2 od 4 slova).
+model DailyChallenge {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayKey    String // "2026-11-03"
+  /// Reči ćirilicom
+  words     Json
+  createdAt DateTime @default(now())
+
+  @@id([userId, dayKey])
 }

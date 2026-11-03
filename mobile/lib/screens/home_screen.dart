@@ -13,6 +13,7 @@ import 'profile_screen.dart';
 import 'tokens_screen.dart';
 import 'rules_screen.dart';
 import 'dictionary_screen.dart';
+import 'tasks_screen.dart';
 import 'settings_screen.dart';
 
 const matchCost = 10;
@@ -146,6 +147,8 @@ class HomeScreen extends StatelessWidget {
                       childAspectRatio: 1.75,
                       children: [
                         MenuTile(Icons.emoji_events, 'Rang liste', () => _go(context, const LeaderboardScreen())),
+                        MenuTile(Icons.task_alt, 'Zadaci', () => _go(context, const TasksScreen()),
+                            badge: app.tasksClaimable),
                         MenuTile(Icons.spellcheck_rounded, 'Rečnik', () => _go(context, const DictionaryScreen())),
                         MenuTile(
                             Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
@@ -153,18 +156,8 @@ class HomeScreen extends StatelessWidget {
                             iconWidget: const CoinIcon(size: 34)),
                         MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
                         MenuTile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),
+                        MenuTile(Icons.group_add, 'Pozovi prijatelje', () => _invite(context)),
                       ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Široka pločica ispod mreže (7. stavka menija).
-                    Panel(
-                      onTap: () => _invite(context),
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Icon(Icons.group_add, color: gold, size: 30),
-                        SizedBox(width: 12),
-                        Text('POZOVI PRIJATELJE', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                      ]),
                     ),
                   ]),
                 ),

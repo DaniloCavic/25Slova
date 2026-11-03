@@ -49,6 +49,11 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Medalje za 1., 2. i 3. mesto na kraju meseca i godine (automatski, i nadoknadi ako je server bio ugašen).
 - „Najbolja tabla ikad“ — ukupno i posebno za 1, 3 i 5 početnih slova, sa označenim početnim slovima.
 
+**Zadaci** (pločica ZADACI, kartice Dnevni / Nedeljni / Mesečni, napredak u procentima, nagrada se preuzima dugmetom)
+- Glavni dnevni zadatak: svaki igrač dobija svoje nasumične reči (2 od 5 i 2 od 4 slova), nove svaki dan; treba ih složiti na jednoj tabli u jednoj partiji.
+- Dnevni: 5 partija, 3 pobede, 3 pobede zaredom, 10 pobeda, 10 pobeda zaredom. Nedeljni: svaki dan 5 partija / 3 pobede, 500 i 1.000 poena, 25 pobeda bez izgubljenog života, 500 reči. Mesečni: 20 dana igre, 100 i 300 pobeda, 5.000 i 10.000 poena, svi dnevni zadaci jednog dana, svi nedeljni jedne nedelje, 1.000 i 3.000 reči.
+- Napredak se računa iz odigranih partija (vreme igre je Europe/Belgrade); nagrada se može preuzeti samo jednom.
+
 **Rečnik za igrače**
 - Pločica REČNIK u meniju: sve reči igre (latinicom, abecedno), pretraga, filter 3/4/5 slova.
 - Predlog nove reči (sa napomenom); igrač vidi svoje predloge i status. Admin u panelu „Predlozi reči“ prihvata (reč odmah ulazi u igru) ili odbija uz razlog; igrači dobijaju obaveštenje, a admin dobija obaveštenje za svaki novi predlog.
