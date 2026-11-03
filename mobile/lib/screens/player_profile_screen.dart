@@ -115,6 +115,7 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                   icon: Icons.sports_kabaddi_rounded,
                   height: 56,
                   trailing: const CostTag(matchCost),
+                  centerTrailing: true,
                   onPressed: () async {
                     final err = await context.read<AppState>().challengeFriend(widget.userId);
                     if (err != null && context.mounted) showError(context, err);

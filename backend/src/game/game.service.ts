@@ -166,7 +166,8 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
 
   private assertFree(user: User) {
     if (this.userMatch.has(user.id)) throw new GameError('Već ste u partiji.');
-    if (this.queue.has(user.id)) throw new GameError('Već tražite protivnika.');
+    // Ko je ostao u redu čekanja (npr. posle izazova), izlazi iz njega — nova igra ima prednost.
+    this.leaveQueue(user.id);
     if (this.privateByHost.has(user.id)) throw new GameError('Već čekate igrača za privatnu partiju.');
     if (user.tokens < MATCH_ENTRY_COST) throw new GameError(`Za partiju je potrebno ${MATCH_ENTRY_COST} tokena.`);
   }
@@ -174,6 +175,11 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   // ---------------------------------------------------------------- red čekanja
 
   joinQueue(user: User) {
+    // Već u redu — nije greška (npr. dvostruki dodir na IGRAJ).
+    if (this.queue.has(user.id) && !this.userMatch.has(user.id)) {
+      this.emitUser(user.id, 'queue:joined', { cost: MATCH_ENTRY_COST });
+      return;
+    }
     this.assertFree(user);
     this.dropRematches(user.id);
     this.dropChallenges(user.id);

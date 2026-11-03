@@ -352,15 +352,14 @@ class _Progress extends StatelessWidget {
         ),
       ),
       const SizedBox(width: 6),
+      // Cilj: zastavica i broj (bez okvira); kad je ispunjeno — zelena kvačica.
       done
-          ? end(const Icon(Icons.check_rounded, size: 17, color: Colors.white), border: success, fill: success)
-          : end(
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                Icon(Icons.flag_rounded, size: 14, color: goldAccent),
-                const SizedBox(width: 2),
-                Text(fmtNum(target), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: goldAccent)),
-              ]),
-              border: gold.withOpacity(0.8)),
+          ? Icon(Icons.check_circle_rounded, size: 24, color: success)
+          : Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.flag_rounded, size: 16, color: goldAccent),
+              const SizedBox(width: 2),
+              Text(fmtNum(target), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: goldAccent)),
+            ]),
     ]);
   }
 }
@@ -374,12 +373,25 @@ class _Reward extends StatelessWidget {
   const _Reward(this.amount, {this.onGold = false});
 
   @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-        Text('+${fmtNum(amount)}',
-            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: onGold ? goldText : goldAccent)),
-        const SizedBox(width: 4),
-        const CoinIcon(size: 22),
-      ]);
+  Widget build(BuildContext context) {
+    final row = Row(mainAxisSize: MainAxisSize.min, children: [
+      Text('+${fmtNum(amount)}',
+          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: onGold ? goldText : goldAccent)),
+      const SizedBox(width: 4),
+      const CoinIcon(size: 22),
+    ]);
+    if (onGold) return row;
+    // Nagrada u zaobljenom okviru (kao cena partije).
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 3, 4, 3),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xFFFFF4D6),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: gold.withOpacity(0.85), width: 1.6),
+      ),
+      child: row,
+    );
+  }
 }
 
 class _ClaimedLabel extends StatelessWidget {
