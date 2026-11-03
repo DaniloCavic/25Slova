@@ -66,6 +66,8 @@ interface Challenge {
   expiresAt: number;
 }
 const CHALLENGE_SECONDS = 60;
+/** Kada prijatelj nije u igri (stiže mu obaveštenje na telefon). */
+const CHALLENGE_AWAY_SECONDS = 120;
 
 interface RematchOffer {
   matchId: string;
@@ -686,18 +688,21 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     const reverse = [...this.challenges.values()].find((c) => c.from.userId === friend.id && c.to.userId === user.id);
     if (reverse) return this.acceptChallenge(user, reverse.id);
     this.dropChallenges(user.id);
+    // Prijatelj koji nije u igri dobija obaveštenje na telefon i duže vreme da otvori igru.
+    const away = !this.isActive(friend.id);
+    const seconds = away ? CHALLENGE_AWAY_SECONDS : CHALLENGE_SECONDS;
     const c: Challenge = {
       id: `${user.id}:${Date.now()}`,
       from: this.playerInfo(user),
       to: this.playerInfo(friend),
-      expiresAt: Date.now() + CHALLENGE_SECONDS * 1000,
+      expiresAt: Date.now() + seconds * 1000,
     };
     this.challenges.set(c.id, c);
     this.emitUser(friend.id, 'challenge:incoming', this.challengeView(c));
-    if (!this.isActive(friend.id)) {
+    if (away) {
       void this.push.send(friend.id, {
-        title: 'Izazov! ⚔️',
-        body: `${user.username} te izaziva na partiju. Imaš ${CHALLENGE_SECONDS} sekundi da prihvatiš.`,
+        title: `${user.username} te izaziva! ⚔️`,
+        body: `${user.username} te izaziva na partiju 25 Slova. Otvori igru i prihvati izazov (važi ${seconds / 60} min).`,
         tag: `challenge-${user.id}`,
       });
     }
