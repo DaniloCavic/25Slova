@@ -35,6 +35,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - Zaboravljena lozinka (kod na e-mail), promena lozinke, profilna slika, izmena podataka, brisanje naloga.
 - E-mail i telefon se ne prikazuju drugim igračima.
 - Profil drugog igrača (dodir na igrača na rang listi): level, bodovi po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
+- **Prijatelji**: lični link iz „Pozovi prijatelje“ (`/igra/?prijatelj=<id>`) — ko ga otvori i prijavi se, postaje prijatelj; privatna partija preko koda takođe automatski pravi prijateljstvo. Lista na ekranu „Igraj sa prijateljem“: u partiji / na mreži / van mreže, međusobni skor, dodir → profil (sa međusobnim skorom i „Ukloni iz prijatelja“).
 - Istorija: poslednjih 10 partija; dodir otvara partiju sa obe table i pronađenim rečima.
 - Server je spreman za Google i Apple prijavu (provera tokena, dopuna profila, povezivanje bez preuzimanja tuđeg naloga).
 

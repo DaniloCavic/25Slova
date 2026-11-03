@@ -112,9 +112,15 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     };
   }
 
+  /// Lista prijatelja se promenila (novi prijatelj / uklonjen) — ekrani je ponovo učitavaju.
+  final friendsVersion = ValueNotifier<int>(0);
+
   Future<void> init() async {
     await Sound.init();
     final prefs = await SharedPreferences.getInstance();
+    // Lični link za poziv: …/igra/?prijatelj=<id>. Pamti se dok se igrač ne prijavi ili registruje.
+    final inviter = Uri.base.queryParameters['prijatelj'];
+    if (inviter != null && inviter.isNotEmpty) await prefs.setString('pendingFriend', inviter);
     _applyTheme(prefs.getString('themeMode') ?? 'dark');
     final token = prefs.getString('token');
     if (token == null) {
@@ -171,6 +177,21 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     _checkMedals();
     refreshTasksBadge();
     _connectSocket();
+    _acceptPendingFriend();
+  }
+
+  /// Ako je igra otvorena preko linka prijatelja — postajete prijatelji.
+  Future<void> _acceptPendingFriend() async {
+    final prefs = await SharedPreferences.getInstance();
+    final inviter = prefs.getString('pendingFriend');
+    if (inviter == null) return;
+    await prefs.remove('pendingFriend');
+    if (inviter == user?['id']) return;
+    try {
+      final r = Map<String, dynamic>.from(await api.post('/friends/link', {'inviterId': inviter}));
+      friendsVersion.value++;
+      if (r['isNew'] == true) toast('${r['friend']['username']} ti je sada prijatelj!');
+    } catch (_) {}
   }
 
   Future<void> login(String login, String password) async {
@@ -259,6 +280,10 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
         user = {...user!, 'tokens': data['tokens']};
         notifyListeners();
       }
+    });
+    s.on('friends:changed', (data) {
+      friendsVersion.value++;
+      if (data['isNew'] == true && '${data['friend']}'.isNotEmpty) toast('${data['friend']} ti je sada prijatelj!');
     });
     s.on('queue:left', (_) => _setWaiting(null));
     s.on('private:created', (data) {

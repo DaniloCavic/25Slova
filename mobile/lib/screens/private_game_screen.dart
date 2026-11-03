@@ -7,8 +7,10 @@ import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/friends_list.dart';
 
-/// Privatna partija: pošalji svoj kod prijatelju ili unesi njegov.
+/// Privatna partija: pošalji svoj kod prijatelju ili unesi njegov. Ispod je lista prijatelja
+/// (ko odigra partiju preko koda, automatski postaje prijatelj).
 /// Kada partija počne, AppState sam otvara ekran partije.
 class PrivateGameScreen extends StatefulWidget {
   const PrivateGameScreen({super.key});
@@ -187,6 +189,8 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
           const SizedBox(height: 18),
           Text('Partija košta 10 tokena, naplaćuje se kad počne.',
               textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 12)),
+          const SizedBox(height: 26),
+          const FriendsSection(),
         ]),
       ),
     );

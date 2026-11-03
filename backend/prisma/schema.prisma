@@ -93,8 +93,10 @@ model User {
   passwordResets    PasswordReset[]
   wordsAdded        Word[]
   pushSubscriptions PushSubscription[]
-  wordSuggestions WordSuggestion[] @relation("WordSuggestions")
-  dailyChallenges DailyChallenge[]
+  wordSuggestions   WordSuggestion[]   @relation("WordSuggestions")
+  dailyChallenges   DailyChallenge[]
+  friends           Friendship[]       @relation("FriendOf")
+  friendOf          Friendship[]       @relation("FriendIs")
 }
 
 model PasswordReset {
@@ -159,23 +161,23 @@ model Word {
 }
 
 model Match {
-  id         String          @id @default(uuid())
-  mode       MatchMode
+  id            String          @id @default(uuid())
+  mode          MatchMode
   /// 1, 2 ili 3 — određuje broj početnih slova (1/3/5) i vreme poteza (30/45/60 s)
-  type       Int
-  status     MatchStatus
-  code       String?         @unique
+  type          Int
+  status        MatchStatus
+  code          String?         @unique
   codeExpiresAt DateTime?
   /// Pozicije i slova postavljena na početku (ista za oba igrača)
-  initialCells Json?
+  initialCells  Json?
   /// Stanje partije u toku (za oporavak i reviziju)
-  state      Json?
-  endReason  MatchEndReason?
-  winnerId   String?
-  isDraw     Boolean         @default(false)
-  createdAt  DateTime        @default(now())
-  startedAt  DateTime?
-  endedAt    DateTime?
+  state         Json?
+  endReason     MatchEndReason?
+  winnerId      String?
+  isDraw        Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  startedAt     DateTime?
+  endedAt       DateTime?
 
   players MatchPlayer[]
 
@@ -183,20 +185,20 @@ model Match {
 }
 
 model MatchPlayer {
-  id          String   @id @default(uuid())
-  matchId     String
-  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  seat        Int // 0 ili 1
-  board       Json?
-  score       Int      @default(0)
-  wordsCount  Int      @default(0)
-  words       Json?
-  livesLeft   Int      @default(3)
-  pointsDelta Int      @default(0) // u stotinkama poena
-  initialLetters Int   @default(0)
-  createdAt   DateTime @default(now())
+  id             String   @id @default(uuid())
+  matchId        String
+  match          Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seat           Int // 0 ili 1
+  board          Json?
+  score          Int      @default(0)
+  wordsCount     Int      @default(0)
+  words          Json?
+  livesLeft      Int      @default(3)
+  pointsDelta    Int      @default(0) // u stotinkama poena
+  initialLetters Int      @default(0)
+  createdAt      DateTime @default(now())
 
   @@unique([matchId, seat])
   @@unique([matchId, userId])
@@ -233,15 +235,15 @@ enum PushKind {
 
 /// Uređaji na koje stižu obaveštenja (Web Push za iPhone/pregledač, FCM za Android aplikaciju).
 model PushSubscription {
-  id         String   @id @default(uuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  kind       PushKind
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      PushKind
   /// Web: adresa pretplate; FCM: token uređaja
-  endpoint   String   @unique
-  keys       Json?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  endpoint  String   @unique
+  keys      Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
 }
@@ -254,17 +256,17 @@ enum SuggestionStatus {
 
 /// Reč koju je igrač predložio za rečnik; admin je prihvata ili odbija.
 model WordSuggestion {
-  id          String           @id @default(uuid())
+  id        String           @id @default(uuid())
   /// Reč ćirilicom, velikim slovima (kao u rečniku)
-  word        String
-  length      Int
-  userId      String
-  user        User             @relation("WordSuggestions", fields: [userId], references: [id], onDelete: Cascade)
-  note        String?
-  status      SuggestionStatus @default(PENDING)
-  reason      String?
-  createdAt   DateTime         @default(now())
-  decidedAt   DateTime?
+  word      String
+  length    Int
+  userId    String
+  user      User             @relation("WordSuggestions", fields: [userId], references: [id], onDelete: Cascade)
+  note      String?
+  status    SuggestionStatus @default(PENDING)
+  reason    String?
+  createdAt DateTime         @default(now())
+  decidedAt DateTime?
 
   @@unique([userId, word])
   @@index([status, createdAt])
@@ -281,4 +283,19 @@ model DailyChallenge {
   createdAt DateTime @default(now())
 
   @@id([userId, dayKey])
+}
+
+/// Prijateljstvo (čuva se u oba smera: A→B i B→A). Nastaje preko ličnog linka
+/// za poziv ili kada dvojica odigraju privatnu partiju preko koda.
+model Friendship {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("FriendOf", fields: [userId], references: [id], onDelete: Cascade)
+  friendId  String
+  friend    User     @relation("FriendIs", fields: [friendId], references: [id], onDelete: Cascade)
+  source    String // LINK | CODE
+  createdAt DateTime @default(now())
+
+  @@unique([userId, friendId])
+  @@index([friendId])
 }

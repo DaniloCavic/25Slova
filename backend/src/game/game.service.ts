@@ -8,6 +8,7 @@ import { PointsService } from '../users/points.service';
 import { DictionaryService } from '../words/dictionary.service';
 import { SettingsService } from '../settings/settings.service';
 import { PushService } from '../push/push.service';
+import { FriendsService } from '../friends/friends.service';
 import { toLatin } from './engine/alphabet';
 import { levelForCents, MATCH_ENTRY_COST, MATCH_TYPES, randomMatchType, toPoints } from './engine/rules';
 import {
@@ -98,6 +99,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     private readonly dict: DictionaryService,
     private readonly settings: SettingsService,
     private readonly push: PushService,
+    private readonly friends: FriendsService,
   ) {}
 
   async onApplicationBootstrap() {
@@ -113,6 +115,8 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
 
   attachServer(server: Server) {
     this.server = server;
+    this.friends.onChange = (userId, friendName, isNew) =>
+      this.emitUser(userId, 'friends:changed', { friend: friendName, isNew });
   }
 
   private emitUser(userId: string, event: string, payload: unknown) {
@@ -257,6 +261,8 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     this.privateByHost.delete(pg.host.userId);
     try {
       await this.startMatch([pg.host, this.playerInfo(user)], 'PRIVATE', pg.matchId);
+      // Partija preko koda — igrači automatski postaju prijatelji.
+      void this.friends.add(pg.host.userId, user.id, 'CODE').catch((e) => this.log.warn(`Prijateljstvo: ${e}`));
     } catch (e) {
       if (e instanceof InsufficientTokens && e.userId === pg.host.userId) {
         await this.prisma.match.update({ where: { id: pg.matchId }, data: { status: 'CANCELLED' } });
@@ -369,6 +375,12 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
 
   removePresence(socketId: string) {
     this.presence.delete(socketId);
+  }
+
+  /** Stanje igrača za listu prijatelja: u partiji, u aplikaciji ili van mreže. */
+  playerStatus(userId: string): 'PLAYING' | 'ONLINE' | 'OFFLINE' {
+    if (this.userMatch.has(userId)) return 'PLAYING';
+    return this.isActive(userId) ? 'ONLINE' : 'OFFLINE';
   }
 
   /** Igrač gleda aplikaciju (bar jedna konekcija u prvom planu). */

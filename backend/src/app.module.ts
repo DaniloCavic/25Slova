@@ -29,6 +29,8 @@ import { PushService } from './push/push.service';
 import { TasksService } from './tasks/tasks.service';
 import { TasksController } from './tasks/tasks.controller';
 import { PushController } from './push/push.controller';
+import { FriendsService } from './friends/friends.service';
+import { FriendsController } from './friends/friends.controller';
 
 /** Ograničenje broja zahteva važi samo za HTTP (ne za Socket.IO). */
 @Injectable()
@@ -63,6 +65,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     LeaderboardController,
     PushController,
     TasksController,
+    FriendsController,
   ],
   providers: [
     AuthGuard,
@@ -78,6 +81,7 @@ class HttpThrottlerGuard extends ThrottlerGuard {
     AdVerifierService,
     DictionaryService,
     SuggestionsService,
+    FriendsService,
     SettingsService,
     GameService,
     GameGateway,

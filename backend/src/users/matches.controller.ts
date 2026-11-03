@@ -4,6 +4,7 @@ import { CurrentUser } from '../common/auth.guard';
 import { PrismaService } from '../prisma/prisma.service';
 import { levelForCents, levelProgress, toPoints } from '../game/engine/rules';
 import { PointsService } from './points.service';
+import { FriendsService } from '../friends/friends.service';
 
 /** Broj poslednjih partija koje se prikazuju na profilu. */
 export const RECENT_MATCHES = 10;
@@ -124,13 +125,14 @@ export class PlayersController {
     private readonly prisma: PrismaService,
     private readonly points: PointsService,
     private readonly history: MatchHistoryService,
+    private readonly friends: FriendsService,
   ) {}
 
   @Get(':id')
-  async profile(@Param('id', new ParseUUIDPipe()) id: string) {
+  async profile(@CurrentUser() viewer: User, @Param('id', new ParseUUIDPipe()) id: string) {
     const u = await this.prisma.user.findFirst({ where: { id, deletedAt: null } });
     if (!u) throw new NotFoundException('Igrač ne postoji.');
-    const [period, medals, stats, recent] = await Promise.all([
+    const [period, medals, stats, recent, isFriend, h2h] = await Promise.all([
       this.points.periodPoints(u.id),
       this.prisma.medal.findMany({
         where: { userId: u.id },
@@ -139,6 +141,8 @@ export class PlayersController {
       }),
       this.stats(u.id),
       this.history.recent(u.id),
+      this.friends.areFriends(viewer.id, u.id),
+      this.friends.headToHead(viewer.id, [u.id]),
     ]);
     return {
       id: u.id,
@@ -152,6 +156,9 @@ export class PlayersController {
       stats,
       medals: medals.map((m) => ({ ...m, points: toPoints(m.points) })),
       recent,
+      isFriend,
+      /** Međusobni skor iz ugla onoga ko gleda profil (null za sopstveni profil). */
+      h2h: viewer.id === u.id ? null : h2h.get(u.id),
     };
   }
 

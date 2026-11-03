@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
-import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -15,6 +13,7 @@ import 'rules_screen.dart';
 import 'dictionary_screen.dart';
 import 'tasks_screen.dart';
 import 'settings_screen.dart';
+import '../widgets/friends_list.dart';
 
 const matchCost = 10;
 
@@ -28,17 +27,6 @@ class HomeScreen extends StatelessWidget {
     if (!context.mounted) return;
     if (err != null) return showError(context, err);
     _go(context, const WaitingScreen());
-  }
-
-  /// Otvara sistemski meni za deljenje (Viber, WhatsApp, SMS, Instagram, Telegram…).
-  void _invite(BuildContext context) {
-    const link = '$productionUrl/igra';
-    final box = context.findRenderObject() as RenderBox?;
-    Share.share(
-      'Hajde da igramo 25 Slova — igru rečima na srpskom! Otvori $link i napravi nalog.',
-      subject: '25 Slova',
-      sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
-    );
   }
 
   @override
@@ -131,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     BlueButton(
                       label: 'IGRAJ SA PRIJATELJEM',
-                      subtitle: 'pošalji ili unesi kod',
+                      subtitle: 'prijatelji · pošalji ili unesi kod',
                       icon: Icons.group,
                       height: 64,
                       trailing: const CostTag(matchCost, color: Colors.white),
@@ -156,7 +144,7 @@ class HomeScreen extends StatelessWidget {
                             iconWidget: const CoinIcon(size: 34)),
                         MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
                         MenuTile(Icons.menu_book, 'Pravila igre', () => _go(context, const RulesScreen())),
-                        MenuTile(Icons.group_add, 'Pozovi prijatelje', () => _invite(context)),
+                        MenuTile(Icons.group_add, 'Pozovi prijatelje', () => shareInviteLink(context)),
                       ],
                     ),
                   ]),
