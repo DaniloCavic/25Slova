@@ -88,8 +88,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           'newPassword': _password.text,
                         });
                         if (!context.mounted) return;
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(content: Text('Lozinka je promenjena. Prijavite se.')));
+                        showInfo(context, 'Lozinka je promenjena. Prijavite se.');
                         Navigator.pop(context);
                       }),
               child: const Text('Promeni lozinku'),

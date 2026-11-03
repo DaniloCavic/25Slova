@@ -9,12 +9,14 @@ import '../letters.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import 'board.dart';
+import 'challenge_overlay.dart' show PopupCard;
 import 'common.dart';
 
 /// „Podeli rezultat“: pregled slike (9:16, za Instagram priču, Viber, WhatsApp…)
 /// i deljenje preko sistemskog menija.
 Future<void> showShareResult(BuildContext context, Map<String, dynamic> result) => showDialog(
       context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
       builder: (_) => _ShareDialog(result),
     );
 
@@ -57,25 +59,32 @@ class _ShareDialogState extends State<_ShareDialog> {
     final script = context.read<AppState>().script;
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Flexible(
-          child: FittedBox(
-            child: RepaintBoundary(key: _key, child: ResultCard(widget.result, script: script)),
+      elevation: 0,
+      insetPadding: const EdgeInsets.symmetric(vertical: 24),
+      child: PopupCard(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+        children: [
+          Text('PODELI REZULTAT',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: textMain, letterSpacing: 0.5)),
+          const SizedBox(height: 12),
+          Flexible(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: FittedBox(
+                child: RepaintBoundary(key: _key, child: ResultCard(widget.result, script: script)),
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 14),
-        GoldButton(
-          label: _busy ? 'PRIPREMA…' : 'PODELI',
-          icon: Icons.ios_share_rounded,
-          height: 56,
-          onPressed: _busy ? null : _share,
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Zatvori', style: TextStyle(color: Colors.white)),
-        ),
-      ]),
+          const SizedBox(height: 14),
+          GoldButton(
+            label: _busy ? 'PRIPREMA…' : 'PODELI',
+            icon: Icons.ios_share_rounded,
+            height: 54,
+            onPressed: _busy ? null : _share,
+          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Zatvori')),
+        ],
+      ),
     );
   }
 }

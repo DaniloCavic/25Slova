@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../config.dart';
+import '../state/app_state.dart';
 import '../theme.dart';
 
 /// Tamnoplava pozadina sa blagim prelivom — koristi se na svim glavnim ekranima.
@@ -786,9 +788,13 @@ String initialLettersLabel(int n) => switch (n) {
       _ => '$n početnih slova',
     };
 
+/// Greška kao poruka na sredini ekrana.
 Future<void> showError(BuildContext context, Object e) async {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+  context.read<AppState>().toast(e.toString(), error: true);
 }
+
+/// Obaveštenje (ne greška) na sredini ekrana.
+void showInfo(BuildContext context, String msg) => context.read<AppState>().toast(msg);
 
 /// Izbor kao kartice na rang listama: izabrana opcija je plava, ostale prigušene.
 class PillTabs extends StatelessWidget {

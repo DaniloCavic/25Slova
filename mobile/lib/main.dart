@@ -6,6 +6,7 @@ import 'state/app_state.dart';
 import 'theme.dart';
 import 'widgets/announcement.dart';
 import 'widgets/challenge_overlay.dart';
+import 'widgets/message_overlay.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 
@@ -40,7 +41,7 @@ class SlovaApp extends StatelessWidget {
       builder: (context, child) => GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: AnnouncementOverlay(child: ChallengeOverlay(child: child!)),
+        child: MessageOverlay(child: AnnouncementOverlay(child: ChallengeOverlay(child: child!))),
       ),
       home: Selector<AppState, AuthStatus>(
         selector: (_, s) => s.status,

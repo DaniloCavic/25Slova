@@ -166,8 +166,12 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     await prefs.setString('themeMode', mode);
   }
 
-  void toast(String msg) {
-    messengerKey.currentState?.showSnackBar(SnackBar(content: Text(msg)));
+  /// Kratka poruka na sredini ekrana (umesto trake na dnu).
+  final message = ValueNotifier<({String text, bool error, int id})?>(null);
+  int _messageId = 0;
+
+  void toast(String msg, {bool error = false}) {
+    message.value = (text: msg, error: error, id: ++_messageId);
   }
 
   Future<void> _saveToken(String token) async {
@@ -301,10 +305,10 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
         }
       }
     });
-    s.on('auth:error', (data) => toast(data['error'] ?? 'Greška prijave.'));
+    s.on('auth:error', (data) => toast(data['error'] ?? 'Greška prijave.', error: true));
     s.on('account:blocked', (data) {
       logout();
-      toast('Nalog je blokiran: ${data['reason'] ?? ''}');
+      toast('Nalog je blokiran: ${data['reason'] ?? ''}', error: true);
     });
     s.on('tokens:balance', (data) {
       if (user != null) {
@@ -337,7 +341,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     });
     s.on('private:cancelled', (data) {
       _setWaiting(null);
-      toast(data['reason'] ?? 'Privatna partija je otkazana.');
+      toast(data['reason'] ?? 'Privatna partija je otkazana.', error: true);
     });
     s.on('match:start', (data) {
       rematch.value = null;
@@ -347,9 +351,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
       _openMatch(Map<String, dynamic>.from(data));
     });
     s.on('rematch:offer', (data) {
+      // Ekran rezultata prikazuje poziv za revanš na sredini ekrana.
       rematch.value = {'matchId': data['matchId'], 'status': 'offered', 'from': data['from']};
-      // Dugme za prihvatanje je pri dnu ekrana rezultata — kratka poruka da se ne propusti.
-      toast('${data['from']} traži revanš!');
     });
     s.on('rematch:declined', (data) {
       rematch.value = {'matchId': data['matchId'], 'status': 'declined', 'reason': data['reason']};

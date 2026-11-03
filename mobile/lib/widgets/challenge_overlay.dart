@@ -56,7 +56,7 @@ class _ChallengeOverlayState extends State<ChallengeOverlay> {
     final err = await _app.acceptChallenge(id);
     if (!mounted) return;
     setState(() => _busy = false);
-    if (err != null) _app.toast(err);
+    if (err != null) _app.toast(err, error: true);
   }
 
   @override
@@ -81,23 +81,7 @@ class _ChallengeOverlayState extends State<ChallengeOverlay> {
     ]);
   }
 
-  Widget _card({required List<Widget> children}) => Container(
-        margin: const EdgeInsets.symmetric(horizontal: 28),
-        constraints: const BoxConstraints(maxWidth: 380),
-        padding: const EdgeInsets.fromLTRB(22, 22, 22, 14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors:
-                isDark ? [const Color(0xFF1A3A7A), const Color(0xFF0B1A3C)] : [Colors.white, const Color(0xFFE9EFFA)],
-          ),
-          borderRadius: BorderRadius.circular(26),
-          border: Border.all(color: gold, width: 2.5),
-          boxShadow: [BoxShadow(color: gold.withOpacity(0.45), blurRadius: 30, spreadRadius: 1)],
-        ),
-        child: Column(mainAxisSize: MainAxisSize.min, children: children),
-      );
+  Widget _card({required List<Widget> children}) => PopupCard(children: children);
 
   Widget _vs(Map from, Map to) => Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         UserAvatar(url: from['avatarUrl'], name: from['username'] ?? '', radius: 30, ring: true),
@@ -166,4 +150,30 @@ class _ChallengeOverlayState extends State<ChallengeOverlay> {
       TextButton(onPressed: () => _app.declineChallenge(c['id'] as String), child: const Text('Otkaži')),
     ]);
   }
+}
+
+/// Kartica na sredini ekrana sa zlatnim okvirom (izazov, revanš, deljenje rezultata).
+class PopupCard extends StatelessWidget {
+  final List<Widget> children;
+  final EdgeInsets padding;
+  const PopupCard({super.key, required this.children, this.padding = const EdgeInsets.fromLTRB(22, 22, 22, 14)});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 28),
+        constraints: const BoxConstraints(maxWidth: 380),
+        padding: padding,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors:
+                isDark ? [const Color(0xFF1A3A7A), const Color(0xFF0B1A3C)] : [Colors.white, const Color(0xFFE9EFFA)],
+          ),
+          borderRadius: BorderRadius.circular(26),
+          border: Border.all(color: gold, width: 2.5),
+          boxShadow: [BoxShadow(color: gold.withOpacity(0.45), blurRadius: 30, spreadRadius: 1)],
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: children),
+      );
 }

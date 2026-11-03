@@ -74,7 +74,7 @@ class _WaitingScreenState extends State<WaitingScreen> {
                   GestureDetector(
                     onTap: () {
                       Clipboard.setData(ClipboardData(text: app.privateCode!));
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Kod je kopiran.')));
+                      showInfo(context, 'Kod je kopiran.');
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),

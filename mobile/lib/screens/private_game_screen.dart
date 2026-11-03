@@ -64,7 +64,7 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> {
 
   void _copy(String text, String msg) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    showInfo(context, msg);
   }
 
   Widget _tab(String label, IconData icon, bool active, VoidCallback onTap) => Expanded(

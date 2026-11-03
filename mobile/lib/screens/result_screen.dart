@@ -12,6 +12,7 @@ import 'private_game_screen.dart';
 import 'waiting_screen.dart';
 import '../sound.dart';
 import '../widgets/share_result.dart';
+import '../widgets/challenge_overlay.dart' show PopupCard;
 
 /// Rezultat partije: obe table (prebacivanje dodirom na karticu igrača) i reči.
 /// Odmah posle partije: „Revanš“, „Igraj ponovo“ i „Nazad na meni“.
@@ -34,6 +35,7 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
+    _app.rematch.addListener(_onRematch);
     if (!widget.review) {
       Sound.play(switch (widget.result['outcome']) { 'WIN' => Sfx.win, 'LOSS' => Sfx.lose, _ => Sfx.draw });
     }
@@ -47,9 +49,19 @@ class _ResultScreenState extends State<ResultScreen> {
     }
   }
 
+  late final AppState _app = context.read<AppState>();
+
+  void _onRematch() {
+    final st = _app.rematch.value;
+    if (st != null && st['matchId'] == _matchId && st['status'] == 'declined' && st['reason'] != null) {
+      _app.toast(st['reason'] as String, error: true);
+    }
+  }
+
   @override
   void dispose() {
     _tick?.cancel();
+    _app.rematch.removeListener(_onRematch);
     super.dispose();
   }
 
@@ -117,170 +129,196 @@ class _ResultScreenState extends State<ResultScreen> {
     return GameScaffold(
       title: review ? 'Partija' : 'Kraj partije',
       showBack: review,
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-        children: [
-          if (review && !mine)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text('${me['username']} protiv ${opp['username']}',
-                  textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w800, color: textMain)),
+      actions: [
+        if (mine)
+          IconButton(
+            tooltip: 'Podeli rezultat',
+            icon: const Icon(Icons.ios_share_rounded),
+            onPressed: () => showShareResult(context, r),
+          ),
+      ],
+      body: Stack(children: [
+        Column(children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              children: [
+                if (review && !mine)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Text('${me['username']} protiv ${opp['username']}',
+                        textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w800, color: textMain)),
+                  ),
+                Text(title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 30, height: 1.1, fontWeight: FontWeight.w900, color: color)),
+                Text(reason, textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 13)),
+                const SizedBox(height: 4),
+                Text(
+                  delta == 0 ? 'Saldo bodova nepromenjen' : '${fmtSignedPoints(delta)} bodova',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: delta > 0 ? goldAccent : (delta < 0 ? danger : textMuted)),
+                ),
+                Text(
+                    review
+                        ? [
+                            if (letters != null && letters > 0)
+                              '$letters ${letters == 1 ? 'početno slovo' : 'početna slova'}',
+                            if (ended != null) fmtDateShort(ended),
+                          ].join(' · ')
+                        : 'Ukupno ${fmtPoints(r['totalPoints'])} · Level ${r['level']}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: textMuted, fontSize: 12)),
+                const SizedBox(height: 10),
+                Row(children: [
+                  Expanded(
+                    child: _ScoreCard(
+                      label: mine ? 'Moja tabla' : '${me['username']}',
+                      data: me,
+                      active: !_showOpponent,
+                      onTap: () => setState(() => _showOpponent = false),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _ScoreCard(
+                      label: '${opp['username']}',
+                      data: opp,
+                      active: _showOpponent,
+                      onTap: () => setState(() => _showOpponent = true),
+                    ),
+                  ),
+                ]),
+                const SizedBox(height: 4),
+                Text('Dodirni karticu da vidiš tu tablu',
+                    textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 11)),
+                const SizedBox(height: 8),
+                Center(
+                  child: BoardGrid(
+                    board: shown['board'] as List,
+                    script: app.script,
+                    initialCells: Set<int>.from(r['initialCells'] as List),
+                    highlighted: highlighted,
+                    maxSize: 330,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text('Pronađene reči', style: TextStyle(fontWeight: FontWeight.w800, color: textMain)),
+                const SizedBox(height: 6),
+                if (lines.every((l) => l['word'] == null))
+                  Text('Nema validnih reči.', style: TextStyle(color: textMuted)),
+                Wrap(spacing: 6, runSpacing: 6, children: [
+                  for (final l in lines.where((l) => l['word'] != null))
+                    Chip(
+                      label: Text('${showWord(l['word'], app.script)} · ${l['points']}'),
+                      avatar: Text(_lineName(l), style: TextStyle(fontSize: 11, color: textMuted)),
+                    ),
+                ]),
+              ],
             ),
-          Text(title,
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, color: color)),
-          Text(reason, textAlign: TextAlign.center, style: TextStyle(color: textMuted)),
-          const SizedBox(height: 6),
-          Text(
-            delta == 0 ? 'Saldo bodova nepromenjen' : '${fmtSignedPoints(delta)} bodova',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: delta > 0 ? goldAccent : (delta < 0 ? danger : textMuted)),
           ),
           if (!review)
-            Text('Ukupno ${fmtPoints(r['totalPoints'])} · Level ${r['level']}',
-                textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 13))
-          else
-            Text(
-                [
-                  if (letters != null && letters > 0) '$letters ${letters == 1 ? 'početno slovo' : 'početna slova'}',
-                  if (ended != null) fmtDateShort(ended),
-                ].join(' · '),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: textMuted, fontSize: 13)),
-          const SizedBox(height: 14),
-          Row(children: [
-            Expanded(
-              child: _ScoreCard(
-                label: mine ? 'Moja tabla' : '${me['username']}',
-                data: me,
-                active: !_showOpponent,
-                onTap: () => setState(() => _showOpponent = false),
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 6, 16, 4),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Row(children: [
+                    Expanded(child: _rematchButton(app)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GoldButton(
+                        label: 'IGRAJ',
+                        subtitle: 'novi protivnik',
+                        icon: Icons.play_arrow_rounded,
+                        height: 56,
+                        onPressed: () => _playAgain(app),
+                      ),
+                    ),
+                  ]),
+                  TextButton.icon(
+                    icon: const Icon(Icons.home_rounded),
+                    label: const Text('Nazad na meni'),
+                    onPressed: () {
+                      app.declineRematch(_matchId);
+                      Navigator.of(context).popUntil((r) => r.isFirst);
+                    },
+                  ),
+                ]),
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _ScoreCard(
-                label: '${opp['username']}',
-                data: opp,
-                active: _showOpponent,
-                onTap: () => setState(() => _showOpponent = true),
-              ),
-            ),
-          ]),
-          const SizedBox(height: 6),
-          Text('Dodirni karticu da vidiš tu tablu',
-              textAlign: TextAlign.center, style: TextStyle(color: textMuted, fontSize: 12)),
-          const SizedBox(height: 10),
-          Center(
-            child: BoardGrid(
-              board: shown['board'] as List,
-              script: app.script,
-              initialCells: Set<int>.from(r['initialCells'] as List),
-              highlighted: highlighted,
-              maxSize: 360,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text('Pronađene reči', style: TextStyle(fontWeight: FontWeight.w800, color: textMain)),
-          const SizedBox(height: 6),
-          if (lines.every((l) => l['word'] == null)) Text('Nema validnih reči.', style: TextStyle(color: textMuted)),
-          Wrap(spacing: 6, runSpacing: 6, children: [
-            for (final l in lines.where((l) => l['word'] != null))
-              Chip(
-                label: Text('${showWord(l['word'], app.script)} · ${l['points']}'),
-                avatar: Text(_lineName(l), style: TextStyle(fontSize: 11, color: textMuted)),
-              ),
-          ]),
-          if (mine) ...[
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              icon: const Icon(Icons.ios_share_rounded),
-              label: const Text('Podeli rezultat'),
-              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(46)),
-              onPressed: () => showShareResult(context, r),
-            ),
-          ],
-          if (!review) ...[
-            const SizedBox(height: 6),
-            _rematchBlock(app, opp['username'] as String),
-            const SizedBox(height: 12),
-            GoldButton(label: 'IGRAJ PONOVO', icon: Icons.play_arrow_rounded, onPressed: () => _playAgain(app)),
-            const SizedBox(height: 12),
-            BlueButton(
-              label: 'NAZAD NA MENI',
-              onPressed: () {
-                app.declineRematch(_matchId);
-                Navigator.of(context).popUntil((r) => r.isFirst);
-              },
-            ),
-          ],
-        ],
-      ),
+        ]),
+        if (!review) _rematchOffer(app),
+      ]),
     );
   }
 
-  /// Revanš: dugme, čekanje na protivnika ili protivnikov zahtev (prihvati / odbij).
-  Widget _rematchBlock(AppState app, String oppName) => ValueListenableBuilder<Map<String, dynamic>?>(
+  Map<String, dynamic>? _rematchState(AppState app) {
+    final st = app.rematch.value;
+    return st != null && st['matchId'] == _matchId ? st : null;
+  }
+
+  /// Dugme za revanš u donjem redu (stanje: ponudi / čeka se / isteklo).
+  Widget _rematchButton(AppState app) => ValueListenableBuilder<Map<String, dynamic>?>(
         valueListenable: app.rematch,
-        builder: (context, st, _) {
-          final s = st != null && st['matchId'] == _matchId ? st : null;
-          final status = s?['status'] as String?;
+        builder: (context, _, __) {
+          final status = _rematchState(app)?['status'] as String?;
           final left = _secondsLeft;
-          Widget child;
-          if (status == 'declined' || status == 'expired' || (left <= 0 && status != 'waiting')) {
-            child = Text(
-              status == 'declined' ? (s!['reason'] ?? 'Revanš nije moguć.') : 'Vreme za revanš je isteklo.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: textMuted, fontSize: 13),
-            );
-          } else if (status == 'offered') {
-            child = Panel(
-              borderColor: gold,
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-              child: Column(children: [
-                Text('${s!['from']} traži revanš!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: textMain)),
-                const SizedBox(height: 10),
-                GoldButton(
-                  label: 'PRIHVATI REVANŠ',
-                  subtitle: 'još $left s',
-                  icon: Icons.replay_rounded,
-                  height: 62,
-                  trailing: const CostTag(matchCost),
-                  onPressed: _busy ? null : () => _rematch(app),
-                ),
-                TextButton(onPressed: () => app.declineRematch(_matchId), child: const Text('Odbij')),
-              ]),
-            );
-          } else if (status == 'waiting') {
-            child = Panel(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-              child: Column(children: [
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5)),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Text('Čeka se da $oppName prihvati revanš… ($left s)',
-                        style: TextStyle(fontWeight: FontWeight.w700, color: textMain)),
-                  ),
-                ]),
-                TextButton(onPressed: () => app.declineRematch(_matchId), child: const Text('Otkaži')),
-              ]),
-            );
-          } else {
-            child = BlueButton(
-              label: 'REVANŠ',
-              subtitle: 'isti protivnik · još $left s',
-              icon: Icons.replay_rounded,
-              height: 62,
-              trailing: const CostTag(matchCost, color: Colors.white),
-              onPressed: _busy ? null : () => _rematch(app),
+          if (status == 'waiting') {
+            return BlueButton(
+              label: 'ČEKA SE…',
+              subtitle: 'otkaži · $left s',
+              icon: Icons.hourglass_top_rounded,
+              onPressed: () => app.declineRematch(_matchId),
             );
           }
-          return child;
+          final over = status == 'declined' || status == 'expired' || left <= 0;
+          return BlueButton(
+            label: 'REVANŠ',
+            subtitle: over ? (status == 'declined' ? 'odbijen' : 'isteklo') : '10 T · još $left s',
+            icon: Icons.replay_rounded,
+            onPressed: over || _busy ? null : () => _rematch(app),
+          );
+        },
+      );
+
+  /// Protivnik traži revanš — poziv na sredini ekrana (kao izazov).
+  Widget _rematchOffer(AppState app) => ValueListenableBuilder<Map<String, dynamic>?>(
+        valueListenable: app.rematch,
+        builder: (context, _, __) {
+          final s = _rematchState(app);
+          final left = _secondsLeft;
+          if (s?['status'] != 'offered' || left <= 0) return const SizedBox.shrink();
+          return Positioned.fill(
+            child: Material(
+              color: Colors.black.withOpacity(0.6),
+              child: Center(
+                child: PopupCard(children: [
+                  Icon(Icons.replay_circle_filled_rounded, size: 64, color: goldAccent),
+                  const SizedBox(height: 8),
+                  Text('REVANŠ!',
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: textMain, letterSpacing: 1)),
+                  const SizedBox(height: 4),
+                  Text('${s!['from']} traži revanš',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: textMain, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 16),
+                  GoldButton(
+                    label: 'PRIHVATI',
+                    subtitle: 'još $left s',
+                    icon: Icons.replay_rounded,
+                    height: 62,
+                    trailing: const CostTag(matchCost),
+                    onPressed: _busy ? null : () => _rematch(app),
+                  ),
+                  TextButton(onPressed: () => app.declineRematch(_matchId), child: const Text('Odbij')),
+                ]),
+              ),
+            ),
+          );
         },
       );
 
@@ -303,13 +341,16 @@ class _ScoreCard extends StatelessWidget {
         onTap: onTap,
         color: active ? panelLight : null,
         borderColor: active ? gold : panelBorder,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
         child: Column(children: [
-          Text(label, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w800, color: textMain)),
-          Text('${data['points']} poena', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: textMain)),
-          Text('${data['wordsCount']} reči', style: TextStyle(color: textMuted)),
-          const SizedBox(height: 2),
-          Lives(data['lives'] as int, size: 14),
+          Text(label,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontWeight: FontWeight.w800, color: textMain, fontSize: 13)),
+          Text('${data['points']} poena', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900, color: textMain)),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('${data['wordsCount']} reči  ', style: TextStyle(color: textMuted, fontSize: 12)),
+            Lives(data['lives'] as int, size: 12),
+          ]),
         ]),
       );
 }
