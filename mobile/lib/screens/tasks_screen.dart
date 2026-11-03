@@ -187,6 +187,7 @@ class _MainCard extends StatelessWidget {
             label: 'PREUZMI NAGRADU',
             height: 52,
             trailing: _Reward(main['reward'] as int, onGold: true),
+            centerTrailing: true,
             onPressed: claiming.contains(main['id']) ? null : () => onClaim('day', main),
           ),
         ] else if (claimed) ...[
@@ -273,6 +274,7 @@ class _TaskCard extends StatelessWidget {
             label: 'PREUZMI',
             height: 46,
             trailing: _Reward(t['reward'] as int, onGold: true),
+            centerTrailing: true,
             onPressed: busy ? null : onClaim,
           ),
         ] else if (claimed) ...[

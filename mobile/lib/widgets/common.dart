@@ -184,8 +184,18 @@ class GoldButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double height;
   final Widget? trailing;
+
+  /// Dodatak (npr. nagrada) odmah uz natpis, sve na sredini — umesto uz desnu ivicu.
+  final bool centerTrailing;
   const GoldButton(
-      {super.key, required this.label, this.subtitle, this.icon, this.onPressed, this.height = 60, this.trailing});
+      {super.key,
+      required this.label,
+      this.subtitle,
+      this.icon,
+      this.onPressed,
+      this.height = 60,
+      this.trailing,
+      this.centerTrailing = false});
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +238,14 @@ class GoldButton extends StatelessWidget {
                               style: const TextStyle(color: goldText, fontSize: 13, fontWeight: FontWeight.w500)),
                       ],
                     ),
-                    if (trailing != null) ...[const SizedBox(width: 8), const Spacer(), trailing!]
+                    if (trailing != null && centerTrailing) ...[
+                      const SizedBox(width: 14),
+                      trailing!
+                    ] else if (trailing != null) ...[
+                      const SizedBox(width: 8),
+                      const Spacer(),
+                      trailing!
+                    ]
                   ]),
             ),
           ),
