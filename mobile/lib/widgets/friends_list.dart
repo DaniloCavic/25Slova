@@ -120,7 +120,7 @@ class _FriendTile extends StatelessWidget {
       _ => ('Van mreže', textMuted),
     };
     final h = Map<String, dynamic>.from(f['h2h'] as Map);
-    final wins = h['wins'] as int, losses = h['losses'] as int, draws = h['draws'] as int;
+    final wins = h['wins'] as int, losses = h['losses'] as int;
     final h2hColor = wins > losses ? success : (wins < losses ? danger : textMain);
     return Panel(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -156,7 +156,7 @@ class _FriendTile extends StatelessWidget {
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
           Text('$wins : $losses', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: h2hColor)),
-          Text(draws > 0 ? 'međusobno · $draws ner.' : 'međusobno', style: TextStyle(color: textMuted, fontSize: 11)),
+          Text('međusobno', style: TextStyle(color: textMuted, fontSize: 11)),
         ]),
         const SizedBox(width: 4),
         Icon(Icons.chevron_right, color: textMuted),
