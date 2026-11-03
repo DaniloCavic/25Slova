@@ -286,7 +286,8 @@ class _TaskCard extends StatelessWidget {
   }
 }
 
-/// Traka napretka sa procentom i brojem (npr. „60% · 3/5“).
+/// Traka napretka: početak (0) — traka sa stanjem u sredini („3 / 5 · 60%“) — cilj (zastavica i broj,
+/// kad je ispunjeno: zelena kvačica).
 class _Progress extends StatelessWidget {
   final int progress;
   final int target;
@@ -294,29 +295,74 @@ class _Progress extends StatelessWidget {
   const _Progress({required this.progress, required this.target, required this.percent});
 
   @override
-  Widget build(BuildContext context) => Row(children: [
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: target == 0 ? 0 : progress / target,
-              minHeight: 12,
-              backgroundColor: isDark ? Colors.black.withOpacity(0.35) : const Color(0xFFDCE5F5),
-              color: percent >= 100 ? success : gold,
+  Widget build(BuildContext context) {
+    final done = percent >= 100;
+    final color = done ? success : gold;
+    final track = isDark ? Colors.black.withOpacity(0.35) : const Color(0xFFDCE5F5);
+    Widget end(Widget child, {required Color border, Color? fill}) => Container(
+          height: 26,
+          constraints: const BoxConstraints(minWidth: 26),
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: fill ?? track,
+            borderRadius: BorderRadius.circular(13),
+            border: Border.all(color: border, width: 1.6),
+          ),
+          child: child,
+        );
+    return Row(children: [
+      end(Text('0', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: textMuted)),
+          border: textMuted.withOpacity(0.5)),
+      const SizedBox(width: 6),
+      Expanded(
+        child: SizedBox(
+          height: 20,
+          child: Stack(alignment: Alignment.center, children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: LinearProgressIndicator(
+                  value: target == 0 ? 0 : progress / target,
+                  backgroundColor: track,
+                  color: color,
+                ),
+              ),
             ),
-          ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '${fmtNum(progress)} / ${fmtNum(target)} · $percent%',
+                maxLines: 1,
+                // Na svetloj (praznoj) traci tamni tekst, inače beli sa senkom.
+                style: !isDark && percent < 50
+                    ? TextStyle(fontWeight: FontWeight.w900, fontSize: 11.5, color: textMain)
+                    : const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 11.5,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(color: Colors.black87, blurRadius: 3),
+                          Shadow(color: Colors.black54, blurRadius: 6)
+                        ],
+                      ),
+              ),
+            ),
+          ]),
         ),
-        const SizedBox(width: 10),
-        SizedBox(
-          width: 118,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerRight,
-            child: Text('$percent% · ${fmtNum(progress)}/${fmtNum(target)}',
-                maxLines: 1, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: textMuted)),
-          ),
-        ),
-      ]);
+      ),
+      const SizedBox(width: 6),
+      done
+          ? end(const Icon(Icons.check_rounded, size: 17, color: Colors.white), border: success, fill: success)
+          : end(
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                Icon(Icons.flag_rounded, size: 14, color: goldAccent),
+                const SizedBox(width: 2),
+                Text(fmtNum(target), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: goldAccent)),
+              ]),
+              border: gold.withOpacity(0.8)),
+    ]);
+  }
 }
 
 /// 1000 → "1.000"
