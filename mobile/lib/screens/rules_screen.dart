@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/common.dart';
+import 'tutorial_screen.dart';
 
 class RulesScreen extends StatelessWidget {
   const RulesScreen({super.key});
@@ -50,6 +51,13 @@ class RulesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          OutlinedButton.icon(
+            icon: const Icon(Icons.school_rounded),
+            label: const Text('Pogledaj kratko uputstvo'),
+            style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(46)),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TutorialScreen())),
+          ),
+          const SizedBox(height: 16),
           for (final (t, body) in sections)
             Padding(
               padding: const EdgeInsets.only(bottom: 14),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'state/app_state.dart';
 import 'theme.dart';
 import 'widgets/announcement.dart';
+import 'widgets/challenge_overlay.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 
@@ -29,8 +30,8 @@ class SlovaApp extends StatelessWidget {
       theme: buildTheme(),
       navigatorKey: app.navigatorKey,
       scaffoldMessengerKey: app.messengerKey,
-      // Dnevna nagrada i medalje se prikazuju preko celog ekrana.
-      builder: (context, child) => AnnouncementOverlay(child: child!),
+      // Dnevna nagrada, medalje i izazovi prijatelja se prikazuju preko celog ekrana.
+      builder: (context, child) => AnnouncementOverlay(child: ChallengeOverlay(child: child!)),
       home: Selector<AppState, AuthStatus>(
         selector: (_, s) => s.status,
         builder: (_, status, __) => switch (status) {

@@ -11,6 +11,7 @@ import 'home_screen.dart' show matchCost;
 import 'private_game_screen.dart';
 import 'waiting_screen.dart';
 import '../sound.dart';
+import '../widgets/share_result.dart';
 
 /// Rezultat partije: obe table (prebacivanje dodirom na karticu igrača) i reči.
 /// Odmah posle partije: „Revanš“, „Igraj ponovo“ i „Nazad na meni“.
@@ -192,6 +193,15 @@ class _ResultScreenState extends State<ResultScreen> {
                 avatar: Text(_lineName(l), style: TextStyle(fontSize: 11, color: textMuted)),
               ),
           ]),
+          if (mine) ...[
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.ios_share_rounded),
+              label: const Text('Podeli rezultat'),
+              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(46)),
+              onPressed: () => showShareResult(context, r),
+            ),
+          ],
           if (!review) ...[
             const SizedBox(height: 6),
             _rematchBlock(app, opp['username'] as String),

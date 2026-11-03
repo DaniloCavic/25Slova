@@ -158,9 +158,53 @@ class _FriendTile extends StatelessWidget {
           Text('$wins : $losses', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: h2hColor)),
           Text('međusobno', style: TextStyle(color: textMuted, fontSize: 11)),
         ]),
-        const SizedBox(width: 4),
-        Icon(Icons.chevron_right, color: textMuted),
+        const SizedBox(width: 10),
+        _ChallengeButton(f),
       ]),
+    );
+  }
+}
+
+/// Malo zlatno dugme „IZAZOVI“ (ne može dok je prijatelj u partiji).
+class _ChallengeButton extends StatefulWidget {
+  final Map<String, dynamic> f;
+  const _ChallengeButton(this.f);
+  @override
+  State<_ChallengeButton> createState() => _ChallengeButtonState();
+}
+
+class _ChallengeButtonState extends State<_ChallengeButton> {
+  bool _busy = false;
+
+  Future<void> _go() async {
+    final app = context.read<AppState>();
+    setState(() => _busy = true);
+    final err = await app.challengeFriend(widget.f['id'] as String);
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (err != null) showError(context, err);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = widget.f['status'] != 'PLAYING' && !_busy;
+    return GestureDetector(
+      onTap: enabled ? _go : null,
+      child: Opacity(
+        opacity: enabled ? 1 : 0.45,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            gradient: goldGradient,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))],
+          ),
+          child: const Column(mainAxisSize: MainAxisSize.min, children: [
+            Icon(Icons.sports_kabaddi_rounded, size: 20, color: goldText),
+            Text('IZAZOVI', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: goldText)),
+          ]),
+        ),
+      ),
     );
   }
 }

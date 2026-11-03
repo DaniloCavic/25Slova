@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../api.dart';
+import '../screens/tutorial_screen.dart';
 import '../config.dart';
 import '../letters.dart';
 import '../push/push.dart';
@@ -112,6 +113,12 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     };
   }
 
+  /// Izazov koji mi je poslao prijatelj (čeka moj odgovor) i izazov koji sam ja poslao.
+  final incomingChallenge = ValueNotifier<Map<String, dynamic>?>(null);
+
+  /// {…izazov, 'status': 'waiting' | 'closed', 'reason': …}
+  final outgoingChallenge = ValueNotifier<Map<String, dynamic>?>(null);
+
   /// Lista prijatelja se promenila (novi prijatelj / uklonjen) — ekrani je ponovo učitavaju.
   final friendsVersion = ValueNotifier<int>(0);
 
@@ -178,6 +185,17 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     refreshTasksBadge();
     _connectSocket();
     _acceptPendingFriend();
+    _maybeShowTutorial();
+  }
+
+  /// Kratko uputstvo — jednom po uređaju, posle prve prijave.
+  Future<void> _maybeShowTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('tutorialSeen') == true) return;
+    await prefs.setBool('tutorialSeen', true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const TutorialScreen()));
+    });
   }
 
   /// Ako je igra otvorena preko linka prijatelja — postajete prijatelji.
@@ -230,6 +248,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     api.token = null;
     user = null;
     match.value = null;
+    incomingChallenge.value = null;
+    outgoingChallenge.value = null;
     waiting = null;
     announcements.value = [];
     _announcedMedals.clear();
@@ -269,6 +289,17 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
       // Povratak u partiju posle prekida veze — vreme je sve vreme teklo.
       final active = data['activeMatch'];
       if (active != null) _openMatch(Map<String, dynamic>.from(active));
+      final ch = data['challenges'];
+      if (ch is Map) {
+        final inc = (ch['incoming'] as List?) ?? const [];
+        final out = (ch['outgoing'] as List?) ?? const [];
+        incomingChallenge.value = inc.isEmpty ? null : Map<String, dynamic>.from(inc.last);
+        if (out.isNotEmpty) {
+          outgoingChallenge.value = {...Map<String, dynamic>.from(out.last), 'status': 'waiting'};
+        } else if (outgoingChallenge.value?['status'] == 'waiting') {
+          outgoingChallenge.value = null;
+        }
+      }
     });
     s.on('auth:error', (data) => toast(data['error'] ?? 'Greška prijave.'));
     s.on('account:blocked', (data) {
@@ -279,6 +310,19 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
       if (user != null) {
         user = {...user!, 'tokens': data['tokens']};
         notifyListeners();
+      }
+    });
+    s.on('challenge:incoming', (data) {
+      incomingChallenge.value = Map<String, dynamic>.from(data);
+      Sound.play(Sfx.turn);
+    });
+    s.on('challenge:closed', (data) {
+      final id = data['id'];
+      if (incomingChallenge.value?['id'] == id) incomingChallenge.value = null;
+      final out = outgoingChallenge.value;
+      if (out != null && out['id'] == id) {
+        final reason = data['reason'];
+        outgoingChallenge.value = reason == null ? null : {...out, 'status': 'closed', 'reason': reason};
       }
     });
     s.on('friends:changed', (data) {
@@ -297,6 +341,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     });
     s.on('match:start', (data) {
       rematch.value = null;
+      incomingChallenge.value = null;
+      outgoingChallenge.value = null;
       Sound.play(Sfx.start);
       _openMatch(Map<String, dynamic>.from(data));
     });
@@ -524,6 +570,31 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     if (st != null && st['matchId'] == matchId && st['status'] != 'waiting' && st['status'] != 'offered') return;
     rematch.value = null;
     await emit('rematch:decline', {'matchId': matchId});
+  }
+
+  /// Izazov prijatelju. Vraća poruku greške ili null.
+  Future<String?> challengeFriend(String friendId) async {
+    final r = await emit('challenge:send', {'friendId': friendId});
+    if (r['ok'] != true) return r['error'];
+    final c = r['challenge'];
+    if (c != null) outgoingChallenge.value = {...Map<String, dynamic>.from(c), 'status': 'waiting'};
+    return null;
+  }
+
+  Future<String?> acceptChallenge(String id) async {
+    final r = await emit('challenge:accept', {'id': id});
+    if (r['ok'] != true) {
+      if (incomingChallenge.value?['id'] == id) incomingChallenge.value = null;
+      return r['error'];
+    }
+    return null;
+  }
+
+  /// Odbij primljeni izazov ili otkaži poslati.
+  Future<void> declineChallenge(String id) async {
+    if (incomingChallenge.value?['id'] == id) incomingChallenge.value = null;
+    if (outgoingChallenge.value?['id'] == id) outgoingChallenge.value = null;
+    await emit('challenge:decline', {'id': id});
   }
 
   Future<void> leaveQueue() async {

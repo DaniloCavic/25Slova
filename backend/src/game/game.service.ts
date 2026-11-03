@@ -58,6 +58,15 @@ interface PrivateGame {
 /** Revanš: posle partije oba igrača imaju ovoliko sekundi da ga zatraže. */
 export const REMATCH_SECONDS = 60;
 
+/** Izazov prijatelju (iz liste prijatelja): čeka se da prijatelj prihvati. */
+interface Challenge {
+  id: string;
+  from: PlayerInfo;
+  to: PlayerInfo;
+  expiresAt: number;
+}
+const CHALLENGE_SECONDS = 60;
+
 interface RematchOffer {
   matchId: string;
   mode: 'RANDOM' | 'PRIVATE';
@@ -87,6 +96,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly privateByCode = new Map<string, PrivateGame>();
   private readonly privateByHost = new Map<string, PrivateGame>();
   private readonly rematches = new Map<string, RematchOffer>();
+  private readonly challenges = new Map<string, Challenge>();
   /** Da li je aplikacija na ekranu, po konekciji (socket id → korisnik, u prvom planu). */
   private readonly presence = new Map<string, { userId: string; foreground: boolean }>();
   private ticker?: NodeJS.Timeout;
@@ -164,6 +174,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   joinQueue(user: User) {
     this.assertFree(user);
     this.dropRematches(user.id);
+    this.dropChallenges(user.id);
     this.queue.set(user.id, { user: this.playerInfo(user), joinedAt: Date.now() });
     this.emitUser(user.id, 'queue:joined', { cost: MATCH_ENTRY_COST });
   }
@@ -219,6 +230,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   async createPrivate(user: User) {
     this.assertFree(user);
     this.dropRematches(user.id);
+    this.dropChallenges(user.id);
     const minutes = this.settings.matchmaking.privateCodeMinutes;
     let code = '';
     do {
@@ -318,7 +330,10 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       return m.id;
     });
 
-    players.forEach((p) => this.dropRematches(p.userId));
+    players.forEach((p) => {
+      this.dropRematches(p.userId);
+      this.dropChallenges(p.userId, 'Prijatelj je ušao u drugu partiju.');
+    });
     const rt: Runtime = { matchId, mode, players, state, ending: false, saving: Promise.resolve() };
     this.matches.set(matchId, rt);
     players.forEach((p) => this.userMatch.set(p.userId, matchId));
@@ -657,6 +672,101 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     }
   }
 
+  // ------------------------------------------------------------------ izazov
+
+  /** Izazov prijatelju: prijatelj dobija poziv u aplikaciji (i obaveštenje na telefonu). */
+  async sendChallenge(user: User, friendId: string) {
+    this.assertFree(user);
+    if (friendId === user.id) throw new GameError('Ne možeš izazvati sam sebe.');
+    if (!(await this.friends.areFriends(user.id, friendId))) throw new GameError('Igrač nije na tvojoj listi prijatelja.');
+    const friend = await this.prisma.user.findFirst({ where: { id: friendId, deletedAt: null, isBlocked: false } });
+    if (!friend) throw new GameError('Igrač ne postoji.');
+    if (this.userMatch.has(friend.id)) throw new GameError(`${friend.username} je trenutno u partiji.`);
+    // Prijatelj je već izazvao mene — odmah počinje partija.
+    const reverse = [...this.challenges.values()].find((c) => c.from.userId === friend.id && c.to.userId === user.id);
+    if (reverse) return this.acceptChallenge(user, reverse.id);
+    this.dropChallenges(user.id);
+    const c: Challenge = {
+      id: `${user.id}:${Date.now()}`,
+      from: this.playerInfo(user),
+      to: this.playerInfo(friend),
+      expiresAt: Date.now() + CHALLENGE_SECONDS * 1000,
+    };
+    this.challenges.set(c.id, c);
+    this.emitUser(friend.id, 'challenge:incoming', this.challengeView(c));
+    if (!this.isActive(friend.id)) {
+      void this.push.send(friend.id, {
+        title: 'Izazov! ⚔️',
+        body: `${user.username} te izaziva na partiju. Imaš ${CHALLENGE_SECONDS} sekundi da prihvatiš.`,
+        tag: `challenge-${user.id}`,
+      });
+    }
+    return { challenge: this.challengeView(c) };
+  }
+
+  async acceptChallenge(user: User, id: string) {
+    const c = this.challenges.get(id);
+    if (!c || c.to.userId !== user.id || c.expiresAt < Date.now()) throw new GameError('Izazov više ne važi.');
+    this.assertFree(user);
+    const from = c.from.userId;
+    if (this.userMatch.has(from) || this.queue.has(from) || this.privateByHost.has(from) || !(await this.isOnline(from))) {
+      this.closeChallenge(c, user.id, '');
+      throw new GameError(`${c.from.username} više nije dostupan.`);
+    }
+    this.challenges.delete(id);
+    try {
+      await this.startMatch([c.from, this.playerInfo(user)], 'PRIVATE');
+    } catch (e) {
+      if (e instanceof InsufficientTokens) {
+        const reason = e.userId === user.id ? `${user.username} nema dovoljno tokena.` : 'Nemate dovoljno tokena.';
+        this.emitUser(from, 'challenge:closed', { id, reason });
+        throw new GameError(e.userId === user.id ? 'Nemate dovoljno tokena.' : `${c.from.username} nema dovoljno tokena.`);
+      }
+      throw e;
+    }
+    return { started: true };
+  }
+
+  /** Odbijanje (prijatelj) ili otkazivanje (onaj ko je izazvao). */
+  declineChallenge(userId: string, id: string) {
+    const c = this.challenges.get(id);
+    if (!c || (c.from.userId !== userId && c.to.userId !== userId)) return;
+    this.closeChallenge(c, userId, c.to.userId === userId ? `${c.to.username} je odbio izazov.` : '');
+  }
+
+  /** Izazovi koji čekaju (posle ponovnog povezivanja). */
+  pendingChallenges(userId: string) {
+    const list = [...this.challenges.values()].filter((c) => c.expiresAt > Date.now());
+    return {
+      incoming: list.filter((c) => c.to.userId === userId).map((c) => this.challengeView(c)),
+      outgoing: list.filter((c) => c.from.userId === userId).map((c) => this.challengeView(c)),
+    };
+  }
+
+  private challengeView(c: Challenge) {
+    return { id: c.id, from: c.from, to: c.to, expiresAt: c.expiresAt };
+  }
+
+  /** Zatvara izazov i javlja drugoj strani (reason se prikazuje onome ko je izazvao). */
+  private closeChallenge(c: Challenge, byUserId: string, reason: string) {
+    this.challenges.delete(c.id);
+    for (const p of [c.from, c.to]) {
+      if (p.userId === byUserId) continue;
+      this.emitUser(p.userId, 'challenge:closed', { id: c.id, ...(p.userId === c.from.userId && reason ? { reason } : {}) });
+    }
+  }
+
+  private dropChallenges(userId: string, reason = '') {
+    for (const c of [...this.challenges.values()]) {
+      if (c.from.userId !== userId && c.to.userId !== userId) continue;
+      this.challenges.delete(c.id);
+      for (const p of [c.from, c.to]) {
+        if (p.userId === userId) continue;
+        this.emitUser(p.userId, 'challenge:closed', { id: c.id, ...(p.userId === c.from.userId && reason ? { reason } : {}) });
+      }
+    }
+  }
+
   // ----------------------------------------------------------------- ostalo
 
   private async tick() {
@@ -665,6 +775,12 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
       if (r.expiresAt >= now) continue;
       this.rematches.delete(r.matchId);
       r.players.forEach((p) => this.emitUser(p.userId, 'rematch:expired', { matchId: r.matchId }));
+    }
+    for (const c of [...this.challenges.values()]) {
+      if (c.expiresAt >= now) continue;
+      this.challenges.delete(c.id);
+      this.emitUser(c.from.userId, 'challenge:closed', { id: c.id, reason: `${c.to.username} nije odgovorio na izazov.` });
+      this.emitUser(c.to.userId, 'challenge:closed', { id: c.id });
     }
     for (const pg of [...this.privateByHost.values()]) {
       if (pg.expiresAt < now) await this.cancelPrivate(pg.host.userId, 'Kod je istekao.').catch(() => undefined);
@@ -676,6 +792,9 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   async onUserOffline(userId: string) {
     this.queue.delete(userId);
     this.dropRematches(userId, 'Protivnik je napustio igru.');
+    for (const c of [...this.challenges.values()]) {
+      if (c.from.userId === userId) this.closeChallenge(c, userId, '');
+    }
     // Privatna partija ostaje otvorena dok kod ne istekne; pridruživanje proverava da li je domaćin povezan.
   }
 

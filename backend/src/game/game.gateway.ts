@@ -44,7 +44,7 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       await socket.join(`user:${user.id}`);
       this.game.setPresence(socket.id, user.id, true);
       const resumed = this.game.resume(user.id);
-      socket.emit('session', { userId: user.id, activeMatch: resumed });
+      socket.emit('session', { userId: user.id, activeMatch: resumed, challenges: this.game.pendingChallenges(user.id) });
     } catch (e) {
       socket.emit('auth:error', { error: (e as Error).message });
       socket.disconnect(true);
@@ -136,6 +136,21 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SubscribeMessage('rematch:decline')
   rematchDecline(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { matchId?: string }) {
     return this.handle(() => this.game.declineRematch(s.data.userId, String(body?.matchId ?? '')));
+  }
+
+  @SubscribeMessage('challenge:send')
+  challengeSend(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { friendId?: string }) {
+    return this.handle(async () => this.game.sendChallenge(await this.user(s), String(body?.friendId ?? '')));
+  }
+
+  @SubscribeMessage('challenge:accept')
+  challengeAccept(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { id?: string }) {
+    return this.handle(async () => this.game.acceptChallenge(await this.user(s), String(body?.id ?? '')));
+  }
+
+  @SubscribeMessage('challenge:decline')
+  challengeDecline(@ConnectedSocket() s: AuthedSocket, @MessageBody() body: { id?: string }) {
+    return this.handle(() => this.game.declineChallenge(s.data.userId, String(body?.id ?? '')));
   }
 
   @SubscribeMessage('match:resign')

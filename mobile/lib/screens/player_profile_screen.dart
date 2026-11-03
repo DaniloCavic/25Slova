@@ -4,6 +4,7 @@ import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/profile_parts.dart';
+import 'home_screen.dart' show matchCost;
 
 /// Profil drugog igrača (otvara se dodirom na igrača na rang listi):
 /// level, bodovi po periodima, učinak, međusobni skor, medalje i poslednjih 10 partija.
@@ -107,6 +108,19 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 StatTile(Icons.cancel, 'Porazi', st['losses'], valueColor: danger),
                 StatTile(Icons.percent, 'Uspeh', '$winRate%'),
               ]),
+              if (u['isFriend'] == true) ...[
+                const SizedBox(height: 14),
+                GoldButton(
+                  label: 'IZAZOVI NA PARTIJU',
+                  icon: Icons.sports_kabaddi_rounded,
+                  height: 56,
+                  trailing: const CostTag(matchCost),
+                  onPressed: () async {
+                    final err = await context.read<AppState>().challengeFriend(widget.userId);
+                    if (err != null && context.mounted) showError(context, err);
+                  },
+                ),
+              ],
               if (u['h2h'] != null) ...[
                 const SizedBox(height: 14),
                 _HeadToHead(Map<String, dynamic>.from(u['h2h'] as Map), u['username'] ?? ''),
