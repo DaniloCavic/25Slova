@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'sfx_stub.dart' if (dart.library.js_interop) 'sfx_web.dart';
 
 /// Zvučni efekti igre (assets/sounds, napravljeni skriptom tool/make_sounds.py).
 enum Sfx { tap, place, turn, tick, lifeLost, start, win, lose, draw, coin, medal }
@@ -39,6 +40,10 @@ class Sound {
 
   static Future<void> play(Sfx s) async {
     if (!enabled) return;
+    if (kIsWeb) {
+      playWebSfx(_file(s).substring(7).replaceAll('.wav', ''), s == Sfx.tick ? 0.6 : 1.0);
+      return;
+    }
     try {
       final players = _pool.putIfAbsent(s, () {
         return List.generate(_voices(s), (_) {

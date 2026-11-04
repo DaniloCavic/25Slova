@@ -164,10 +164,16 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     return { userId: u.id, username: u.username, avatarUrl: u.avatarUrl, level: levelForCents(u.totalPoints) };
   }
 
-  private assertFree(user: User) {
+  /**
+   * `startsMatch`: partija počinje odmah (prihvatanje izazova, revanš, ulazak preko koda) —
+   * igrač tiho izlazi iz reda čekanja, a aplikacija odmah dobija „match:start“
+   * (bez „queue:left“, da ekran čekanja ne bi zatvarao ekran partije).
+   */
+  private assertFree(user: User, startsMatch = false) {
     if (this.userMatch.has(user.id)) throw new GameError('Već ste u partiji.');
     // Ko je ostao u redu čekanja (npr. posle izazova), izlazi iz njega — nova igra ima prednost.
-    this.leaveQueue(user.id);
+    if (startsMatch) this.queue.delete(user.id);
+    else this.leaveQueue(user.id);
     if (this.privateByHost.has(user.id)) throw new GameError('Već čekate igrača za privatnu partiju.');
     if (user.tokens < MATCH_ENTRY_COST) throw new GameError(`Za partiju je potrebno ${MATCH_ENTRY_COST} tokena.`);
   }
@@ -275,7 +281,7 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     const pg = this.privateByCode.get(code);
     if (!pg || pg.expiresAt < Date.now()) throw new GameError('Kod ne postoji ili je istekao.');
     if (pg.host.userId === user.id) throw new GameError('Ne možete igrati sami protiv sebe.');
-    this.assertFree(user);
+    this.assertFree(user, true);
     if (!(await this.isOnline(pg.host.userId))) throw new GameError('Igrač koji je kreirao partiju nije trenutno povezan.');
     this.privateByCode.delete(code);
     this.privateByHost.delete(pg.host.userId);
@@ -718,16 +724,21 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
   async acceptChallenge(user: User, id: string) {
     const c = this.challenges.get(id);
     if (!c || c.to.userId !== user.id || c.expiresAt < Date.now()) throw new GameError('Izazov više ne važi.');
-    this.assertFree(user);
+    const wasQueued = this.queue.has(user.id);
+    this.assertFree(user, true);
+    // Ako partija ipak ne počne, aplikacija mora da zna da igrač više nije u redu.
+    const leftQueue = () => wasQueued && this.emitUser(user.id, 'queue:left', {});
     const from = c.from.userId;
     if (this.userMatch.has(from) || this.queue.has(from) || this.privateByHost.has(from) || !(await this.isOnline(from))) {
       this.closeChallenge(c, user.id, '');
+      leftQueue();
       throw new GameError(`${c.from.username} više nije dostupan.`);
     }
     this.challenges.delete(id);
     try {
       await this.startMatch([c.from, this.playerInfo(user)], 'PRIVATE');
     } catch (e) {
+      leftQueue();
       if (e instanceof InsufficientTokens) {
         const reason = e.userId === user.id ? `${user.username} nema dovoljno tokena.` : 'Nemate dovoljno tokena.';
         this.emitUser(from, 'challenge:closed', { id, reason });

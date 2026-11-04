@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/challenge_overlay.dart' show PopupCard;
 
 /// Zadaci: dnevni (sa glavnim zadatkom — 4 reči na jednoj tabli), nedeljni i mesečni.
 class TasksScreen extends StatefulWidget {
@@ -174,7 +175,7 @@ class _MainCard extends StatelessWidget {
             style: TextStyle(color: textMuted, fontSize: 13, height: 1.35)),
         const SizedBox(height: 12),
         Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [
-          for (final w in words) _WordTiles(w['word'] as String, done: w['done'] == true),
+          for (final w in words) WordTiles(w['word'] as String, done: w['done'] == true),
         ]),
         const SizedBox(height: 12),
         _Progress(progress: main['progress'] as int, target: main['target'] as int, percent: main['percent'] as int),
@@ -200,10 +201,10 @@ class _MainCard extends StatelessWidget {
 }
 
 /// Reč kao niz pločica (kao na tabli); zelena ivica kad je složena.
-class _WordTiles extends StatelessWidget {
+class WordTiles extends StatelessWidget {
   final String word;
   final bool done;
-  const _WordTiles(this.word, {required this.done});
+  const WordTiles(this.word, {super.key, required this.done});
 
   @override
   Widget build(BuildContext context) {
@@ -403,4 +404,96 @@ class _ClaimedLabel extends StatelessWidget {
         const SizedBox(width: 4),
         Text('Nagrada preuzeta', style: TextStyle(color: success, fontWeight: FontWeight.w800)),
       ]);
+}
+
+// ------------------------------------------------------------------ u partiji
+
+/// 5 redova, 5 kolona i 2 dijagonale (indeksi polja), kao na serveru.
+final List<List<int>> _lines = [
+  for (var r = 0; r < 5; r++) [for (var c = 0; c < 5; c++) r * 5 + c],
+  for (var c = 0; c < 5; c++) [for (var r = 0; r < 5; r++) r * 5 + c],
+  [0, 6, 12, 18, 24],
+  [4, 8, 12, 16, 20],
+];
+
+/// Koje reči (ćirilica) se nalaze na tabli — u bilo kom nizu, u oba smera.
+List<bool> boardHits(List board, List<String> words) {
+  final strings = _lines.expand((l) {
+    final s = l.map((i) => (board[i] as String?) ?? '·').join();
+    return [s, s.split('').reversed.join()];
+  }).toList();
+  return [for (final w in words) strings.any((s) => s.contains(w))];
+}
+
+/// Glavni zadatak u toku partije: reči koje treba složiti i koje su već na ovoj tabli.
+Future<void> showMainTaskPopup(BuildContext context, List board) => showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.6),
+      builder: (_) => _MainTaskPopup(board),
+    );
+
+class _MainTaskPopup extends StatefulWidget {
+  final List board;
+  const _MainTaskPopup(this.board);
+  @override
+  State<_MainTaskPopup> createState() => _MainTaskPopupState();
+}
+
+class _MainTaskPopupState extends State<_MainTaskPopup> {
+  late final Future<dynamic> _f = context.read<AppState>().api.get('/tasks');
+
+  @override
+  Widget build(BuildContext context) => Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        insetPadding: const EdgeInsets.symmetric(vertical: 24),
+        child: PopupCard(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Icon(Icons.star_rounded, color: gold, size: 28),
+            const SizedBox(width: 6),
+            Text('GLAVNI ZADATAK',
+                style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900, color: textMain, letterSpacing: 0.5)),
+          ]),
+          const SizedBox(height: 4),
+          Text('Složi sve 4 reči na jednoj tabli', style: TextStyle(color: textMuted, fontSize: 13)),
+          const SizedBox(height: 14),
+          FutureBuilder(
+            future: _f,
+            builder: (context, snap) {
+              if (snap.hasError) return Text('${snap.error}', style: TextStyle(color: textMuted));
+              if (!snap.hasData) {
+                return const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator());
+              }
+              final main = Map<String, dynamic>.from((snap.data as Map)['day']['main'] as Map);
+              final words = (main['words'] as List).cast<Map>();
+              final done = main['done'] == true;
+              // Tabla se prati uživo dok je prozor otvoren.
+              return ValueListenableBuilder<Map<String, dynamic>?>(
+                valueListenable: context.read<AppState>().match,
+                builder: (context, m, _) {
+                  final board = m == null ? widget.board : (m['me'] as Map)['board'] as List;
+                  final hits = boardHits(board, [for (final w in words) '${w['cyr'] ?? ''}']);
+                  final n = hits.where((h) => h).length;
+                  return Column(children: [
+                    Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [
+                      for (var i = 0; i < words.length; i++) WordTiles(words[i]['word'] as String, done: hits[i]),
+                    ]),
+                    const SizedBox(height: 14),
+                    _Progress(progress: n, target: words.length, percent: words.isEmpty ? 0 : n * 100 ~/ words.length),
+                    const SizedBox(height: 6),
+                    Text(
+                        done
+                            ? 'Glavni zadatak je danas već ispunjen!'
+                            : 'Na ovoj tabli: $n od ${words.length} reči · nagrada ${main['reward']} T',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: done ? success : textMuted, fontSize: 13, fontWeight: FontWeight.w700)),
+                  ]);
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 6),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Zatvori')),
+        ]),
+      );
 }

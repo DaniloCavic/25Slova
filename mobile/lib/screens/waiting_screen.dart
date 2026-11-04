@@ -36,7 +36,9 @@ class _WaitingScreenState extends State<WaitingScreen> {
     } else {
       await app.leaveQueue();
     }
-    if (mounted) Navigator.pop(context);
+    if (!mounted) return;
+    final route = ModalRoute.of(context);
+    if (route != null && route.isActive) Navigator.of(context).removeRoute(route);
   }
 
   @override
@@ -45,9 +47,11 @@ class _WaitingScreenState extends State<WaitingScreen> {
     final isPrivate = app.waiting == 'private';
     final waited = DateTime.now().difference(_start).inSeconds;
     if (app.waiting == null) {
-      // Otkazano ili isteklo — vrati se nazad.
+      // Otkazano ili isteklo — ukloni samo ovaj ekran (nikad ekran partije koji je možda upravo otvoren).
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && app.match.value == null) Navigator.maybePop(context);
+        if (!mounted || app.match.value != null) return;
+        final route = ModalRoute.of(context);
+        if (route != null && route.isActive) Navigator.of(context).removeRoute(route);
       });
     }
     final remaining = app.privateExpiresAt == null

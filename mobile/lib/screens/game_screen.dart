@@ -8,6 +8,7 @@ import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/board.dart';
 import '../widgets/common.dart';
+import 'tasks_screen.dart' show showMainTaskPopup;
 import '../widgets/letter_picker.dart';
 import '../sound.dart';
 
@@ -189,6 +190,17 @@ class _GameScreenState extends State<GameScreen> {
             showBack: false,
             actions: [
               if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
+              IconButton(
+                tooltip: 'Glavni zadatak',
+                onPressed: () => showMainTaskPopup(context, me['board'] as List),
+                icon: Container(
+                  width: 28,
+                  height: 28,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: 2)),
+                  child: const Text('Z', style: TextStyle(color: gold, fontWeight: FontWeight.w900, fontSize: 15)),
+                ),
+              ),
               IconButton(tooltip: 'Predaj', icon: const Icon(Icons.flag_outlined), onPressed: () => _resign(app)),
             ],
             body: LifeLostOverlay(

@@ -101,6 +101,59 @@
       }
     };
   </script>
+  <script>
+    // Zvučni efekti preko Web Audio (bez <audio> elemenata) — iPhone tada ne prikazuje
+    // „plejer“ na zaključanom ekranu i zvuci ne prekidaju muziku.
+    window.slovaSfx = {
+      names: ['tap', 'place', 'turn', 'tick', 'life_lost', 'start', 'win', 'lose', 'draw', 'coin', 'medal'],
+      ctx: null,
+      buf: {},
+      _context: function () {
+        if (!this.ctx) {
+          // Safari: kratki zvuci igre („ambient“) — mešaju se sa muzikom, bez plejera na zaključanom ekranu.
+          try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch (_) {}
+          var C = window.AudioContext || window.webkitAudioContext;
+          if (!C) return null;
+          this.ctx = new C();
+          this.preload();
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        return this.ctx;
+      },
+      preload: function () {
+        var self = this;
+        self.names.forEach(function (n) {
+          if (self.buf[n] !== undefined) return;
+          self.buf[n] = null;
+          fetch('assets/assets/sounds/' + n + '.wav')
+            .then(function (r) { return r.arrayBuffer(); })
+            .then(function (a) {
+              return new Promise(function (ok, fail) { self.ctx.decodeAudioData(a, ok, fail); });
+            })
+            .then(function (b) { self.buf[n] = b; })
+            .catch(function () { delete self.buf[n]; });
+        });
+      },
+      play: function (name, volume) {
+        try {
+          var c = this._context();
+          var b = c && this.buf[name];
+          if (!b) return;
+          var src = c.createBufferSource();
+          src.buffer = b;
+          var g = c.createGain();
+          g.gain.value = volume;
+          src.connect(g);
+          g.connect(c.destination);
+          src.start(0);
+        } catch (_) {}
+      }
+    };
+    // iPhone dozvoljava zvuk tek posle dodira — tada se otključava i učitava.
+    ['pointerdown', 'touchend', 'keydown'].forEach(function (ev) {
+      document.addEventListener(ev, function () { window.slovaSfx._context(); }, { capture: true, passive: true });
+    });
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

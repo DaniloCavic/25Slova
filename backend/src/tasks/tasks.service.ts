@@ -333,7 +333,7 @@ export class TasksService {
       day: {
         key: dk,
         endsAt: nextChange(now, dayKey, 50),
-        main: { ...main, words: challenge.map((w, i) => ({ word: toLatin(w).toLowerCase(), done: bestHits[i] })) },
+        main: { ...main, words: challenge.map((w, i) => ({ word: toLatin(w).toLowerCase(), cyr: w, done: bestHits[i] })) },
         tasks: day,
       },
       week: { key: wk, endsAt: nextChange(now, weekKey, 8 * 24 + 2), tasks: weekly },
