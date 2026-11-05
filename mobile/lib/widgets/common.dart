@@ -464,7 +464,10 @@ class TokenChip extends StatelessWidget {
 
 class CoinIcon extends StatelessWidget {
   final double size;
-  const CoinIcon({super.key, this.size = 24});
+
+  /// Plavi novčić (ikonica menija u svetlom režimu).
+  final bool blue;
+  const CoinIcon({super.key, this.size = 24, this.blue = false});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -472,11 +475,13 @@ class CoinIcon extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: goldGradient,
-          border: Border.all(color: const Color(0xFFB87800), width: 1.5),
+          gradient: blue ? blueGradient : goldGradient,
+          border: Border.all(color: blue ? const Color(0xFF1C4FA8) : const Color(0xFFB87800), width: 1.5),
         ),
         alignment: Alignment.center,
-        child: Text('T', style: TextStyle(color: goldText, fontWeight: FontWeight.w900, fontSize: size * 0.5)),
+        child: Text('T',
+            style: TextStyle(
+                color: blue ? Colors.white : goldText, fontWeight: FontWeight.w900, fontSize: size * 0.5)),
       );
 }
 

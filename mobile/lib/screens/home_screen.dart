@@ -141,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                         MenuTile(
                             Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
                         MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen()),
-                            iconWidget: const CoinIcon(size: 34)),
+                            iconWidget: CoinIcon(size: 34, blue: !isDark)),
                         MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
                         MenuTile(Icons.info_outline, 'Pravila igre', () => _go(context, const RulesScreen())),
                         MenuTile(Icons.group_add, 'Pozovi prijatelje', () => shareInviteLink(context)),
