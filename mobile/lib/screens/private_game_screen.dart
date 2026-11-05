@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../widgets/keyboard_fix.dart';
 import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -18,7 +19,7 @@ class PrivateGameScreen extends StatefulWidget {
   State<PrivateGameScreen> createState() => _PrivateGameScreenState();
 }
 
-class _PrivateGameScreenState extends State<PrivateGameScreen> {
+class _PrivateGameScreenState extends State<PrivateGameScreen> with KeyboardFix<PrivateGameScreen> {
   bool _sendTab = true;
   bool _busy = false;
   final _code = TextEditingController();

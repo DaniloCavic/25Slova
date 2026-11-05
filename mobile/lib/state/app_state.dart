@@ -176,6 +176,14 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> setThemeMode(String mode) async {
     _applyTheme(mode);
     notifyListeners();
+    // Boje su globalne (isDark), pa se svi ekrani ponovo iscrtavaju — ali ostaju otvoreni
+    // (ranije se cela aplikacija pravila iz početka, što je na iPhone-u zamrzavalo igru).
+    void rebuild(Element e) {
+      e.markNeedsBuild();
+      e.visitChildren(rebuild);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(rebuild);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('themeMode', mode);
   }

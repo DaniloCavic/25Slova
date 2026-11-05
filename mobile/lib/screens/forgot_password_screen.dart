@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/keyboard_fix.dart';
 import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
@@ -10,7 +11,7 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with KeyboardFix<ForgotPasswordScreen> {
   final _email = TextEditingController();
   final _code = TextEditingController();
   final _password = TextEditingController();

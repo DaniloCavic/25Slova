@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/keyboard_fix.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -48,7 +49,7 @@ class _Board extends StatefulWidget {
   State<_Board> createState() => _BoardState();
 }
 
-class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
+class _BoardState extends State<_Board> with KeyboardFix<_Board>, AutomaticKeepAliveClientMixin {
   final _search = TextEditingController();
   Timer? _debounce;
   late Future<dynamic> _f;

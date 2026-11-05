@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/keyboard_fix.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -12,7 +13,7 @@ class DictionaryScreen extends StatefulWidget {
   State<DictionaryScreen> createState() => _DictionaryScreenState();
 }
 
-class _DictionaryScreenState extends State<DictionaryScreen> {
+class _DictionaryScreenState extends State<DictionaryScreen> with KeyboardFix<DictionaryScreen> {
   final _search = TextEditingController();
   final _scroll = ScrollController();
   Timer? _debounce;
@@ -251,7 +252,7 @@ class _SuggestSheet extends StatefulWidget {
   State<_SuggestSheet> createState() => _SuggestSheetState();
 }
 
-class _SuggestSheetState extends State<_SuggestSheet> {
+class _SuggestSheetState extends State<_SuggestSheet> with KeyboardFix<_SuggestSheet> {
   late final _word = TextEditingController(text: widget.initial);
   final _note = TextEditingController();
   String? _error;

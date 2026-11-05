@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/keyboard_fix.dart';
 import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
@@ -10,7 +11,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<RegisterScreen> {
   final _form = GlobalKey<FormState>();
   final _username = TextEditingController();
   final _fullName = TextEditingController();

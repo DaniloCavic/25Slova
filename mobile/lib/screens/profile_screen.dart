@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import '../widgets/keyboard_fix.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -184,7 +185,7 @@ class _PasswordDialog extends StatefulWidget {
   State<_PasswordDialog> createState() => _PasswordDialogState();
 }
 
-class _PasswordDialogState extends State<_PasswordDialog> {
+class _PasswordDialogState extends State<_PasswordDialog> with KeyboardFix<_PasswordDialog> {
   final _current = TextEditingController();
   final _next = TextEditingController();
   String? _error;
@@ -236,7 +237,7 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> with KeyboardFix<EditProfileScreen> {
   late final Map<String, dynamic> u = context.read<AppState>().user ?? {};
   late final _username = TextEditingController(text: u['username']);
   late final _fullName = TextEditingController(text: u['fullName']);
