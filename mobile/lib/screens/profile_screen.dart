@@ -283,7 +283,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         TextField(controller: _fullName, decoration: const InputDecoration(labelText: 'Ime i prezime')),
         gap,
         DropdownButtonFormField<String>(
-          value: _gender,
+          initialValue: _gender,
           decoration: const InputDecoration(labelText: 'Pol'),
           items: const [
             DropdownMenuItem(value: 'MALE', child: Text('Muški')),

@@ -56,10 +56,10 @@ class BoardGrid extends StatelessWidget {
               );
             } else if (isSel) {
               deco = BoxDecoration(
-                color: cellSelected.withOpacity(0.25),
+                color: cellSelected.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: cellSelected, width: 2.5),
-                boxShadow: [BoxShadow(color: cellSelected.withOpacity(0.5), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: cellSelected.withValues(alpha: 0.5), blurRadius: 10)],
               );
               textColor = Colors.white;
             } else {
@@ -77,8 +77,8 @@ class BoardGrid extends StatelessWidget {
                   width: isWord ? 3 : 1.2,
                 ),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.35), offset: const Offset(0, 3), blurRadius: 4),
-                  if (isWord) BoxShadow(color: success.withOpacity(0.45), blurRadius: 8),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.35), offset: const Offset(0, 3), blurRadius: 4),
+                  if (isWord) BoxShadow(color: success.withValues(alpha: 0.45), blurRadius: 8),
                 ],
               );
             }

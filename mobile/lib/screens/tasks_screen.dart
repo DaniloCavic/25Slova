@@ -299,7 +299,7 @@ class _Progress extends StatelessWidget {
   Widget build(BuildContext context) {
     final done = percent >= 100;
     final color = done ? success : gold;
-    final track = isDark ? Colors.black.withOpacity(0.35) : const Color(0xFFDCE5F5);
+    final track = isDark ? Colors.black.withValues(alpha: 0.35) : const Color(0xFFDCE5F5);
     Widget end(Widget child, {required Color border, Color? fill}) => Container(
           height: 26,
           constraints: const BoxConstraints(minWidth: 26),
@@ -314,7 +314,7 @@ class _Progress extends StatelessWidget {
         );
     return Row(children: [
       end(Text('0', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: textMuted)),
-          border: textMuted.withOpacity(0.5)),
+          border: textMuted.withValues(alpha: 0.5)),
       const SizedBox(width: 6),
       Expanded(
         child: SizedBox(
@@ -386,9 +386,9 @@ class _Reward extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 3, 4, 3),
       decoration: BoxDecoration(
-        color: isDark ? Colors.black.withOpacity(0.3) : const Color(0xFFFFF4D6),
+        color: isDark ? Colors.black.withValues(alpha: 0.3) : const Color(0xFFFFF4D6),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: gold.withOpacity(0.85), width: 1.6),
+        border: Border.all(color: gold.withValues(alpha: 0.85), width: 1.6),
       ),
       child: row,
     );
@@ -428,7 +428,7 @@ List<bool> boardHits(List board, List<String> words) {
 /// Glavni zadatak u toku partije: reči koje treba složiti i koje su već na ovoj tabli.
 Future<void> showMainTaskPopup(BuildContext context, List board) => showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       builder: (_) => _MainTaskPopup(board),
     );
 

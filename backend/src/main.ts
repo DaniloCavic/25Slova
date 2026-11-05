@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 import { UPLOAD_DIR } from './users/users.service';
 import { ensureAdmin } from './seed-admin';
 import { PrismaService } from './prisma/prisma.service';
+import { assetLinks, deleteAccountPage, privacyPage } from './legal/pages';
 
 async function bootstrap() {
   if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET nije podešen.');
@@ -30,6 +31,15 @@ async function bootstrap() {
   );
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   app.useStaticAssets(UPLOAD_DIR, { prefix: '/uploads' });
+
+  // Stranice za Google Play: politika privatnosti i brisanje naloga.
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.method !== 'GET') return next();
+    if (req.path === '/privatnost') return res.type('html').send(privacyPage());
+    if (req.path === '/brisanje-naloga') return res.type('html').send(deleteAccountPage());
+    if (req.path === '/.well-known/assetlinks.json') return res.json(assetLinks());
+    next();
+  });
 
   // Admin panel (React build) se servira na /admin ako je izgrađen.
   const adminDist = path.resolve(process.env.ADMIN_DIST || path.join(__dirname, '..', '..', 'admin', 'dist'));

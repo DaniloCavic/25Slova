@@ -52,7 +52,7 @@ class MedalsSection extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Column(children: [
                   Icon(Icons.military_tech,
-                      size: 40, color: count(place) > 0 ? medalColor(place) : textMuted.withOpacity(0.35)),
+                      size: 40, color: count(place) > 0 ? medalColor(place) : textMuted.withValues(alpha: 0.35)),
                   Text(['Zlatne', 'Srebrne', 'Bronzane'][place - 1], style: TextStyle(fontSize: 12, color: textMuted)),
                   Text('${count(place)}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
                 ]),

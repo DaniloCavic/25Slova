@@ -66,7 +66,7 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
             final t = _show.value;
             final scale = 0.5 + 0.5 * Curves.easeOutBack.transform(t);
             return Material(
-              color: Colors.black.withOpacity(0.62 * t),
+              color: Colors.black.withValues(alpha: 0.62 * t),
               child: Center(
                 child: Opacity(
                   opacity: Curves.easeOut.transform(t).clamp(0.0, 1.0),
@@ -98,7 +98,7 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
           ),
           borderRadius: BorderRadius.circular(26),
           border: Border.all(color: accent, width: 2.5),
-          boxShadow: [BoxShadow(color: accent.withOpacity(0.55), blurRadius: 36, spreadRadius: 2)],
+          boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.55), blurRadius: 36, spreadRadius: 2)],
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           SizedBox(
@@ -155,7 +155,7 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
     return _card(
       accent: color,
       hero: Icon(Icons.military_tech, size: 130, color: color, shadows: [
-        Shadow(color: color.withOpacity(0.8), blurRadius: 24),
+        Shadow(color: color.withValues(alpha: 0.8), blurRadius: 24),
         const Shadow(color: Colors.black45, blurRadius: 8, offset: Offset(0, 3)),
       ]),
       children: [
@@ -196,11 +196,11 @@ class _RaysPainter extends CustomPainter {
     final c = size.center(Offset.zero);
     final r = size.width / 2;
     final glow = Paint()
-      ..shader = RadialGradient(colors: [color.withOpacity(0.55), color.withOpacity(0)])
+      ..shader = RadialGradient(colors: [color.withValues(alpha: 0.55), color.withValues(alpha: 0)])
           .createShader(Rect.fromCircle(center: c, radius: r));
     canvas.drawCircle(c, r, glow);
     final ray = Paint()
-      ..shader = RadialGradient(colors: [color.withOpacity(0.45), color.withOpacity(0)])
+      ..shader = RadialGradient(colors: [color.withValues(alpha: 0.45), color.withValues(alpha: 0)])
           .createShader(Rect.fromCircle(center: c, radius: r));
     const n = 12;
     for (var i = 0; i < n; i++) {

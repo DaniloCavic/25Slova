@@ -86,7 +86,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               width: i == _page ? 22 : 8,
               height: 8,
               decoration: BoxDecoration(
-                color: i == _page ? gold : textMuted.withOpacity(0.4),
+                color: i == _page ? gold : textMuted.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -133,7 +133,7 @@ class _Tile extends StatelessWidget {
                 border: Border.all(color: word ? success : const Color(0xFFFFE9A6), width: word ? 3 : 1.2),
                 boxShadow: [
                   const BoxShadow(color: Colors.black26, offset: Offset(0, 3), blurRadius: 4),
-                  if (word) BoxShadow(color: success.withOpacity(0.5), blurRadius: 8),
+                  if (word) BoxShadow(color: success.withValues(alpha: 0.5), blurRadius: 8),
                 ],
               ),
         child: letter == null
@@ -198,7 +198,7 @@ class _WordDemo extends StatelessWidget {
         const SizedBox(height: 10),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-          decoration: BoxDecoration(color: success.withOpacity(0.18), borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(color: success.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(20)),
           child: Text('STROG = 5 poena', style: TextStyle(color: success, fontWeight: FontWeight.w900, fontSize: 16)),
         ),
       ]);
@@ -217,7 +217,7 @@ class _LivesDemo extends StatelessWidget {
               value: 0.3,
               strokeWidth: 10,
               color: danger,
-              backgroundColor: textMuted.withOpacity(0.2),
+              backgroundColor: textMuted.withValues(alpha: 0.2),
             ),
           ),
           const Text('10', style: TextStyle(fontSize: 46, fontWeight: FontWeight.w900, color: danger)),
@@ -233,7 +233,7 @@ class _RewardDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
         Icon(Icons.emoji_events_rounded, size: 120, color: gold, shadows: [
-          Shadow(color: gold.withOpacity(0.6), blurRadius: 24),
+          Shadow(color: gold.withValues(alpha: 0.6), blurRadius: 24),
         ]),
         const SizedBox(width: 10),
         const Column(mainAxisSize: MainAxisSize.min, children: [

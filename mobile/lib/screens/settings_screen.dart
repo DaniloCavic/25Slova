@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../config.dart';
 import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
@@ -15,17 +17,17 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const ScreenTitle('Podešavanja')),
       body: ListView(children: [
         const ListTile(title: Text('Izgled', style: TextStyle(fontWeight: FontWeight.bold))),
-        for (final (mode, label, icon) in [
-          ('dark', 'Tamni režim', Icons.dark_mode),
-          ('light', 'Svetli režim', Icons.light_mode),
-        ])
-          RadioListTile<String>(
-            title: Text(label),
-            secondary: Icon(icon),
-            value: mode,
-            groupValue: app.themeMode,
-            onChanged: (m) => app.setThemeMode(m!),
-          ),
+        RadioGroup<String>(
+          groupValue: app.themeMode,
+          onChanged: (m) => app.setThemeMode(m!),
+          child: Column(children: [
+            for (final (mode, label, icon) in [
+              ('dark', 'Tamni režim', Icons.dark_mode),
+              ('light', 'Svetli režim', Icons.light_mode),
+            ])
+              RadioListTile<String>(title: Text(label), secondary: Icon(icon), value: mode),
+          ]),
+        ),
         const Divider(),
         const _PushTile(),
         const _SoundTile(),
@@ -35,10 +37,11 @@ class SettingsScreen extends StatelessWidget {
           title: const Text('Pravila igre'),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RulesScreen())),
         ),
-        const ListTile(
-          leading: Icon(Icons.privacy_tip_outlined),
-          title: Text('Politika privatnosti i uslovi korišćenja'),
-          subtitle: Text('Biće objavljeni pre izlaska u prodavnice.'),
+        ListTile(
+          leading: const Icon(Icons.privacy_tip_outlined),
+          title: const Text('Politika privatnosti'),
+          trailing: const Icon(Icons.open_in_new, size: 18),
+          onTap: () => launchUrl(Uri.parse('$productionUrl/privatnost'), mode: LaunchMode.externalApplication),
         ),
         const ListTile(
           leading: Icon(Icons.support_agent),

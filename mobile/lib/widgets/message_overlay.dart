@@ -86,7 +86,7 @@ class _MessageOverlayState extends State<MessageOverlay> with SingleTickerProvid
                       border: Border.all(color: m.error ? danger : gold, width: 2.2),
                       boxShadow: [
                         const BoxShadow(color: Colors.black54, blurRadius: 24, offset: Offset(0, 6)),
-                        BoxShadow(color: (m.error ? danger : gold).withOpacity(0.35), blurRadius: 22),
+                        BoxShadow(color: (m.error ? danger : gold).withValues(alpha: 0.35), blurRadius: 22),
                       ],
                     ),
                     child: Column(mainAxisSize: MainAxisSize.min, children: [

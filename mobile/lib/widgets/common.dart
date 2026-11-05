@@ -211,7 +211,7 @@ class GoldButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: const Color(0xFFFFE9A6), width: 1.5),
           boxShadow: enabled
-              ? [BoxShadow(color: goldDeep.withOpacity(0.45), blurRadius: 16, offset: const Offset(0, 5))]
+              ? [BoxShadow(color: goldDeep.withValues(alpha: 0.45), blurRadius: 16, offset: const Offset(0, 5))]
               : null,
         ),
         child: Material(
@@ -391,7 +391,7 @@ class Lives extends StatelessWidget {
         children: [
           for (var i = 0; i < 3; i++)
             Icon(i < lives ? Icons.favorite : Icons.favorite_border,
-                color: i < lives ? danger : textMuted.withOpacity(0.5), size: size),
+                color: i < lives ? danger : textMuted.withValues(alpha: 0.5), size: size),
         ],
       );
 }
@@ -509,7 +509,7 @@ class LevelBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: value.toDouble(),
             minHeight: 9,
-            backgroundColor: Colors.black.withOpacity(0.35),
+            backgroundColor: Colors.black.withValues(alpha: 0.35),
             color: gold,
           ),
         ),
@@ -555,10 +555,10 @@ class CostTag extends StatelessWidget {
               ? [const Color(0x40FFFFFF), const Color(0x1A8A5A00)]
               : [const Color(0x33FFFFFF), const Color(0x330A1530)],
         ),
-        border: Border.all(color: onGold ? const Color(0xCC8A5A00) : Colors.white.withOpacity(0.55), width: 1.6),
+        border: Border.all(color: onGold ? const Color(0xCC8A5A00) : Colors.white.withValues(alpha: 0.55), width: 1.6),
         boxShadow: [
           BoxShadow(
-              color: (onGold ? const Color(0xFF8A5A00) : Colors.black).withOpacity(0.25),
+              color: (onGold ? const Color(0xFF8A5A00) : Colors.black).withValues(alpha: 0.25),
               blurRadius: 6,
               offset: const Offset(0, 2)),
         ],
@@ -594,7 +594,7 @@ class SlovaLogo extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(8 * size),
               border: Border.all(color: const Color(0xFFC79A4B), width: 1.5),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.4), offset: Offset(0, 4 * size), blurRadius: 6)],
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.4), offset: Offset(0, 4 * size), blurRadius: 6)],
             ),
             child: Text(l, style: TextStyle(fontSize: 30 * size, fontWeight: FontWeight.w900, color: goldText)),
           ),
@@ -746,7 +746,7 @@ class LevelTable extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 4),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
             decoration: BoxDecoration(
-              color: level == current ? gold.withOpacity(0.18) : panel,
+              color: level == current ? gold.withValues(alpha: 0.18) : panel,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: level == current ? gold : panelBorder),
             ),

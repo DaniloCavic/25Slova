@@ -123,7 +123,7 @@ class _GameScreenState extends State<GameScreen> {
     );
     final avatar = Container(
       decoration: active
-          ? BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: gold.withOpacity(0.7), blurRadius: 12)])
+          ? BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: gold.withValues(alpha: 0.7), blurRadius: 12)])
           : null,
       child: UserAvatar(url: p['avatarUrl'], name: p['username'] ?? '', radius: 22, ring: active),
     );
@@ -345,7 +345,7 @@ class _LifeLostOverlayState extends State<LifeLostOverlay> with SingleTickerProv
               final scale = t < 0.12 ? 0.6 + 0.4 * Curves.easeOutBack.transform(t / 0.12) : 1.0;
               final e = _event!;
               return Container(
-                color: Colors.black.withOpacity(0.45 * opacity),
+                color: Colors.black.withValues(alpha: 0.45 * opacity),
                 alignment: Alignment.center,
                 child: Opacity(
                   opacity: opacity.clamp(0.0, 1.0),
@@ -358,7 +358,7 @@ class _LifeLostOverlayState extends State<LifeLostOverlay> with SingleTickerProv
                         color: panel,
                         borderRadius: BorderRadius.circular(22),
                         border: Border.all(color: danger, width: 2.5),
-                        boxShadow: [BoxShadow(color: danger.withOpacity(0.5), blurRadius: 30)],
+                        boxShadow: [BoxShadow(color: danger.withValues(alpha: 0.5), blurRadius: 30)],
                       ),
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         const Icon(Icons.heart_broken, color: danger, size: 72),

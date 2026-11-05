@@ -69,7 +69,7 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                     margin: const EdgeInsets.only(bottom: 4),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2ECC71).withOpacity(0.18),
+                      color: const Color(0xFF2ECC71).withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: const Color(0xFF2ECC71)),
                     ),

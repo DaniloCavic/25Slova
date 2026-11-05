@@ -10,7 +10,7 @@ COPY admin/ ./
 RUN npm run build
 
 # Web verzija igre (za iPhone i pregledač), servira se na /igra
-FROM ghcr.io/cirruslabs/flutter:3.24.5 AS web
+FROM ghcr.io/cirruslabs/flutter:3.35.7 AS web
 WORKDIR /app/mobile
 COPY mobile/pubspec.yaml mobile/pubspec.lock ./
 RUN flutter pub get

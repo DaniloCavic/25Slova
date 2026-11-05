@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:app_links/app_links.dart';
 import '../api.dart';
 import '../screens/tutorial_screen.dart';
 import '../config.dart';
@@ -126,8 +128,20 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     await Sound.init();
     final prefs = await SharedPreferences.getInstance();
     // Lični link za poziv: …/igra/?prijatelj=<id>. Pamti se dok se igrač ne prijavi ili registruje.
-    final inviter = Uri.base.queryParameters['prijatelj'];
-    if (inviter != null && inviter.isNotEmpty) await prefs.setString('pendingFriend', inviter);
+    // Web: adresa stranice; Android: link otvoren u aplikaciji (App Links).
+    if (kIsWeb) {
+      await _rememberInviter(Uri.base);
+    } else {
+      try {
+        final links = AppLinks();
+        final first = await links.getInitialLink();
+        if (first != null) await _rememberInviter(first);
+        links.uriLinkStream.listen((uri) async {
+          await _rememberInviter(uri);
+          if (status == AuthStatus.loggedIn) _acceptPendingFriend();
+        });
+      } catch (_) {}
+    }
     _applyTheme(prefs.getString('themeMode') ?? 'dark');
     final token = prefs.getString('token');
     if (token == null) {
@@ -200,6 +214,13 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const TutorialScreen()));
     });
+  }
+
+  Future<void> _rememberInviter(Uri uri) async {
+    final inviter = uri.queryParameters['prijatelj'];
+    if (inviter == null || inviter.isEmpty) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('pendingFriend', inviter);
   }
 
   /// Ako je igra otvorena preko linka prijatelja — postajete prijatelji.

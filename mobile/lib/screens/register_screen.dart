@@ -93,24 +93,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             gap,
             const Text('Pol *'),
-            Row(children: [
-              Expanded(
-                child: RadioListTile<String>(
-                  title: const Text('Muški'),
-                  value: 'MALE',
-                  groupValue: _gender,
-                  onChanged: (v) => setState(() => _gender = v),
-                ),
-              ),
-              Expanded(
-                child: RadioListTile<String>(
-                  title: const Text('Ženski'),
-                  value: 'FEMALE',
-                  groupValue: _gender,
-                  onChanged: (v) => setState(() => _gender = v),
-                ),
-              ),
-            ]),
+            RadioGroup<String>(
+              groupValue: _gender,
+              onChanged: (v) => setState(() => _gender = v),
+              child: const Row(children: [
+                Expanded(child: RadioListTile<String>(title: Text('Muški'), value: 'MALE')),
+                Expanded(child: RadioListTile<String>(title: Text('Ženski'), value: 'FEMALE')),
+              ]),
+            ),
             OutlinedButton.icon(
               onPressed: _pickDate,
               icon: const Icon(Icons.cake_outlined),

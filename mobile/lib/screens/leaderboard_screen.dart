@@ -190,7 +190,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         gradient: first
             ? (isDark
-                ? LinearGradient(colors: [const Color(0xFF8A6A12).withOpacity(0.9), const Color(0xFF3B3410)])
+                ? LinearGradient(colors: [const Color(0xFF8A6A12).withValues(alpha: 0.9), const Color(0xFF3B3410)])
                 : const LinearGradient(colors: [Color(0xFFFFF1C4), Color(0xFFFFE08A)]))
             : null,
         color: highlight ? panelLight : null,
@@ -208,7 +208,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
                         shape: BoxShape.circle,
                         color: medalColor(rank),
                         border: Border.all(color: Colors.white70, width: 2),
-                        boxShadow: [BoxShadow(color: medalColor(rank).withOpacity(0.6), blurRadius: 8)],
+                        boxShadow: [BoxShadow(color: medalColor(rank).withValues(alpha: 0.6), blurRadius: 8)],
                       ),
                       child: Text('$rank',
                           style: const TextStyle(fontWeight: FontWeight.w900, color: goldText, fontSize: 16)),

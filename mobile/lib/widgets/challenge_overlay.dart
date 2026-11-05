@@ -74,7 +74,7 @@ class _ChallengeOverlayState extends State<ChallengeOverlay> {
       if (card != null)
         Positioned.fill(
           child: Material(
-            color: Colors.black.withOpacity(0.6),
+            color: Colors.black.withValues(alpha: 0.6),
             child: Center(child: SingleChildScrollView(child: card)),
           ),
         ),
@@ -172,7 +172,7 @@ class PopupCard extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(26),
           border: Border.all(color: gold, width: 2.5),
-          boxShadow: [BoxShadow(color: gold.withOpacity(0.45), blurRadius: 30, spreadRadius: 1)],
+          boxShadow: [BoxShadow(color: gold.withValues(alpha: 0.45), blurRadius: 30, spreadRadius: 1)],
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: children),
       );

@@ -132,9 +132,13 @@ export class UsersService {
         googleId: null,
         appleId: null,
         avatarUrl: null,
+        tokens: 0,
         deletedAt: new Date(),
       },
     });
+    // Lista prijatelja i oznake uređaja za obaveštenja se brišu sa nalogom.
+    await this.prisma.friendship.deleteMany({ where: { OR: [{ userId }, { friendId: userId }] } });
+    await this.prisma.pushSubscription.deleteMany({ where: { userId } });
     return { ok: true };
   }
 

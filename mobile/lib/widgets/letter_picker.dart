@@ -40,7 +40,7 @@ class LetterPicker extends StatelessWidget {
                 border:
                     Border.all(color: selected == l ? const Color(0xFFFFE9A6) : const Color(0xFFB9C3D6), width: 1.2),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.35), offset: const Offset(0, 2), blurRadius: 2)
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.35), offset: const Offset(0, 2), blurRadius: 2)
                 ],
               ),
               child: FittedBox(

@@ -147,7 +147,7 @@ ThemeData buildTheme() {
       titleTextStyle: TextStyle(
           fontFamily: appFontFamily, fontFeatures: _lnum, fontSize: 20, fontWeight: FontWeight.w700, color: textMain),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: panel,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -199,7 +199,7 @@ ThemeData buildTheme() {
     ),
     textButtonTheme:
         TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: isDark ? gold : const Color(0xFFB87800))),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: Colors.white,
       unselectedLabelColor: textMuted,
       indicatorSize: TabBarIndicatorSize.tab,
@@ -211,7 +211,7 @@ ThemeData buildTheme() {
       contentTextStyle: TextStyle(fontFamily: appFontFamily, fontFeatures: _lnum, color: textMain),
       behavior: SnackBarBehavior.floating,
     ),
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: panel,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: panelBorder)),
     ),

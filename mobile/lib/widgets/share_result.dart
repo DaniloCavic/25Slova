@@ -16,7 +16,7 @@ import 'common.dart';
 /// i deljenje preko sistemskog menija.
 Future<void> showShareResult(BuildContext context, Map<String, dynamic> result) => showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.75),
+      barrierColor: Colors.black.withValues(alpha: 0.75),
       builder: (_) => _ShareDialog(result),
     );
 
@@ -128,7 +128,7 @@ class ResultCard extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.black.withOpacity(0.25), const Color(0xEE0B1A3C), const Color(0xF20B1A3C)],
+              colors: [Colors.black.withValues(alpha: 0.25), const Color(0xEE0B1A3C), const Color(0xF20B1A3C)],
               stops: const [0, 0.32, 1],
             ),
           ),
@@ -183,7 +183,7 @@ class ResultCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.12),
+                        color: Colors.white.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.white24),
                       ),

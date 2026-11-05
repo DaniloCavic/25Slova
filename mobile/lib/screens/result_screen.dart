@@ -294,7 +294,7 @@ class _ResultScreenState extends State<ResultScreen> {
           if (s?['status'] != 'offered' || left <= 0) return const SizedBox.shrink();
           return Positioned.fill(
             child: Material(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withValues(alpha: 0.6),
               child: Center(
                 child: PopupCard(children: [
                   Icon(Icons.replay_circle_filled_rounded, size: 64, color: goldAccent),
