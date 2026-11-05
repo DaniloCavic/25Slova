@@ -12,6 +12,7 @@ const _txLabels = {
   'PURCHASE': 'Kupovina',
   'ADMIN_ADJUST': 'Izmena (podrška)',
   'SIGNUP_BONUS': 'Bonus',
+  'TASK_REWARD': 'Nagrada za zadatak',
 };
 
 class TokensScreen extends StatefulWidget {

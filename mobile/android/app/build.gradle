@@ -1,3 +1,11 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "com.google.gms.google-services"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 // Ključ za potpisivanje (Google Play): android/key.properties lokalno, ili promenljive
 // ANDROID_KEYSTORE_PATH / ANDROID_KEYSTORE_PASSWORD / ANDROID_KEY_ALIAS / ANDROID_KEY_PASSWORD u GitHub Actions.
 // Bez ključa build se potpisuje debug ključem (za probne APK-ove).
@@ -10,13 +18,6 @@ def signingValue = { String prop, String env -> keystoreProperties.getProperty(p
 def releaseStoreFile = signingValue("storeFile", "ANDROID_KEYSTORE_PATH")
 def hasReleaseKey = releaseStoreFile != null && file(releaseStoreFile).exists()
 
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "com.google.gms.google-services"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
-}
 
 android {
     namespace = "rs.slova25.slova25"

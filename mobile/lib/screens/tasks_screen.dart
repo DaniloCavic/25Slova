@@ -200,7 +200,7 @@ class _MainCard extends StatelessWidget {
   }
 }
 
-/// Reč kao niz pločica (kao na tabli); zelena ivica kad je složena.
+/// Reč kao niz pločica (kao na tabli); kad je složena, pločice postaju zelene.
 class WordTiles extends StatelessWidget {
   final String word;
   final bool done;
@@ -209,34 +209,33 @@ class WordTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final letters = RegExp(r'lj|nj|dž|.').allMatches(word).map((m) => m.group(0)!).toList();
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: done ? success : Colors.transparent, width: 2),
-      ),
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         for (final l in letters)
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             width: 30,
             height: 34,
             margin: const EdgeInsets.symmetric(horizontal: 1.5),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFFFF3CF), Color(0xFFFFD36A)],
+                colors: done
+                    ? const [Color(0xFF6BE39A), Color(0xFF22A85A)]
+                    : const [Color(0xFFFFF3CF), Color(0xFFFFD36A)],
               ),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2B54A)),
+              border: Border.all(color: done ? const Color(0xFF1C8A4A) : const Color(0xFFE2B54A)),
+              boxShadow: done ? [BoxShadow(color: success.withValues(alpha: 0.45), blurRadius: 6)] : null,
             ),
             child: FittedBox(
               child: Text(l.length > 1 ? l[0].toUpperCase() + l.substring(1) : l.toUpperCase(),
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: goldText)),
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: done ? Colors.white : goldText)),
             ),
           ),
-        if (done) ...[const SizedBox(width: 4), Icon(Icons.check_circle, color: success, size: 20)],
       ]),
     );
   }
