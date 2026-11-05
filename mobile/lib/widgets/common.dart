@@ -849,3 +849,47 @@ class PillTabs extends StatelessWidget {
         ]),
       );
 }
+
+/// Kruna (ikonica „Najbolja tabla“) — nacrtana po uzoru na krunu iz logoa.
+class CrownIcon extends StatelessWidget {
+  final double size;
+  final Color? color;
+  const CrownIcon({super.key, this.size = 34, this.color});
+
+  @override
+  Widget build(BuildContext context) =>
+      CustomPaint(size: Size.square(size), painter: _CrownPainter(color ?? (isDark ? gold : brandBlue)));
+}
+
+class _CrownPainter extends CustomPainter {
+  final Color color;
+  _CrownPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width, h = size.height;
+    final paint = Paint()..color = color;
+    // Telo krune: tri zupca, između njih udubljenja.
+    final body = Path()
+      ..moveTo(w * 0.10, h * 0.34)
+      ..lineTo(w * 0.32, h * 0.56)
+      ..lineTo(w * 0.50, h * 0.24)
+      ..lineTo(w * 0.68, h * 0.56)
+      ..lineTo(w * 0.90, h * 0.34)
+      ..lineTo(w * 0.82, h * 0.74)
+      ..lineTo(w * 0.18, h * 0.74)
+      ..close();
+    canvas.drawPath(body, paint);
+    // Obruč.
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(Rect.fromLTRB(w * 0.17, h * 0.78, w * 0.83, h * 0.88), Radius.circular(h * 0.03)),
+        paint);
+    // Kuglice na vrhovima zubaca.
+    for (final o in [Offset(w * 0.10, h * 0.30), Offset(w * 0.50, h * 0.19), Offset(w * 0.90, h * 0.30)]) {
+      canvas.drawCircle(o, w * 0.075, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_CrownPainter old) => old.color != color;
+}

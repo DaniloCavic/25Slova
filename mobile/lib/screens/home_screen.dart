@@ -134,12 +134,12 @@ class HomeScreen extends StatelessWidget {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.75,
                       children: [
-                        MenuTile(Icons.emoji_events, 'Rang liste', () => _go(context, const LeaderboardScreen())),
-                        MenuTile(Icons.task_alt, 'Zadaci', () => _go(context, const TasksScreen()),
+                        MenuTile(Icons.leaderboard, 'Rang liste', () => _go(context, const LeaderboardScreen())),
+                        MenuTile(Icons.rocket_launch, 'Zadaci', () => _go(context, const TasksScreen()),
                             badge: app.tasksClaimable),
                         MenuTile(Icons.manage_search, 'Rečnik', () => _go(context, const DictionaryScreen())),
-                        MenuTile(
-                            Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen())),
+                        MenuTile(Icons.grid_view_rounded, 'Najbolja tabla', () => _go(context, const BestBoardScreen()),
+                            iconWidget: const CrownIcon(size: 38)),
                         MenuTile(Icons.monetization_on, 'Tokeni', () => _go(context, const TokensScreen()),
                             iconWidget: CoinIcon(size: 34, blue: !isDark)),
                         MenuTile(Icons.person, 'Moj profil', () => _go(context, const ProfileScreen())),
