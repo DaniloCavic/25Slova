@@ -329,13 +329,14 @@ class MenuTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  final Color iconColor;
+  /// Boja ikonice; podrazumevano zlatna u tamnom, plava u svetlom režimu.
+  final Color? iconColor;
   final Widget? iconWidget;
 
   /// Crveni broj u uglu (npr. nagrade koje čekaju); 0 = bez broja.
   final int badge;
   const MenuTile(this.icon, this.label, this.onTap,
-      {super.key, this.iconColor = gold, this.iconWidget, this.badge = 0});
+      {super.key, this.iconColor, this.iconWidget, this.badge = 0});
 
   @override
   Widget build(BuildContext context) => Stack(clipBehavior: Clip.none, children: [
@@ -344,7 +345,7 @@ class MenuTile extends StatelessWidget {
             onTap: onTap,
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              iconWidget ?? Icon(icon, color: iconColor, size: 34),
+              iconWidget ?? Icon(icon, color: iconColor ?? (isDark ? gold : brandBlue), size: 34),
               const SizedBox(height: 8),
               Flexible(
                 child: FittedBox(
