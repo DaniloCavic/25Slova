@@ -34,25 +34,35 @@ jobs:
       - name: Ključ za potpisivanje
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-            echo "Potpisuje se ključem za Google Play."
-          else
+          if [ -z "$KEYSTORE_B64" ]; then
             echo "::warning::Nema ključa (ANDROID_KEYSTORE_BASE64) — potpisuje se probnim ključem."
+            exit 0
           fi
+          # Razmaci i novi redovi koji se slučajno nalepe pri kopiranju se uklanjaju.
+          clean() { printf %s "$1" | tr -d ' \r\n\t'; }
+          KS_PASS=$(clean "$KS_PASS"); KEY_PASS=$(clean "$KEY_PASS"); KEY_ALIAS=$(clean "$KEY_ALIAS")
+          [ -z "$KEY_PASS" ] && KEY_PASS="$KS_PASS"
+          [ -z "$KEY_ALIAS" ] && KEY_ALIAS=upload
+          echo "::add-mask::$KS_PASS"; echo "::add-mask::$KEY_PASS"
+          clean "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks" || true
+          if ! keytool -list -keystore "$RUNNER_TEMP/upload.jks" -storepass "$KS_PASS" -alias "$KEY_ALIAS" > /dev/null 2>&1; then
+            echo "::error::Ključ iz GitHub secreta ne može da se otvori (pogrešna lozinka ili nepotpun ANDROID_KEYSTORE_BASE64). Ova verzija je potpisana probnim ključem."
+            exit 0
+          fi
+          {
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks"
+            echo "ANDROID_KEYSTORE_PASSWORD=$KS_PASS"
+            echo "ANDROID_KEY_PASSWORD=$KEY_PASS"
+            echo "ANDROID_KEY_ALIAS=$KEY_ALIAS"
+          } >> "$GITHUB_ENV"
+          echo "Potpisuje se ključem za Google Play."
       # Broj verzije raste sa svakim pokretanjem (Google Play traži veći broj za svaku novu verziju).
       - run: flutter build apk --release --build-number=${{ github.run_number }}
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - run: flutter build appbundle --release --build-number=${{ github.run_number }}
-        env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       - name: Preimenuj
         run: |
           cp build/app/outputs/flutter-apk/app-release.apk build/25slova.apk
