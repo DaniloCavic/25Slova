@@ -33,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
         const _SoundTile(),
         const Divider(),
         ListTile(
-          leading: const Icon(Icons.menu_book),
+          leading: const Icon(Icons.info_outline),
           title: const Text('Pravila igre'),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RulesScreen())),
         ),
