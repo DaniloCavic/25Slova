@@ -10,6 +10,7 @@ import '../config.dart';
 import '../letters.dart';
 import '../push/push.dart';
 import '../push/push_fcm.dart';
+import '../crash.dart';
 import '../theme.dart';
 import '../screens/game_screen.dart';
 import '../screens/result_screen.dart';
@@ -204,6 +205,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   void _onSession(Map<String, dynamic> u, Map<String, dynamic>? daily) {
     user = u;
+    setCrashUser(u['username'] as String?);
     status = AuthStatus.loggedIn;
     notifyListeners();
     _announceDaily(daily);

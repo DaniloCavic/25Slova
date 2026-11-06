@@ -9,7 +9,7 @@ bool _ready = false;
 
 Future<FirebaseMessaging> _messaging() async {
   if (!_ready) {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) await Firebase.initializeApp();
     _ready = true;
   }
   return FirebaseMessaging.instance;
