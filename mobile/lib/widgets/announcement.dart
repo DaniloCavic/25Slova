@@ -134,14 +134,16 @@ class _AnnouncementOverlayState extends State<AnnouncementOverlay> with TickerPr
               )),
         ]),
         children: [
-          Text(a['type'] == 'task' ? 'ZADATAK ISPUNJEN!' : 'DNEVNA NAGRADA',
+          Text(switch (a['type']) { 'task' => 'ZADATAK ISPUNJEN!', 'invite' => 'NAGRADA ZA POZIV!', _ => 'DNEVNA NAGRADA' },
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: textMain, letterSpacing: 0.5)),
           const SizedBox(height: 6),
           Text(
-              a['type'] == 'task'
-                  ? '${a['title']}\n${a['amount']} tokena je dodato na tvoj račun.'
-                  : '${a['amount']} tokena je dodato na tvoj račun.\nVrati se i sutra po još!',
+              switch (a['type']) {
+                'task' => '${a['title']}\n${a['amount']} tokena je dodato na tvoj račun.',
+                'invite' => '${a['text']}\n${a['amount']} tokena je dodato na tvoj račun.',
+                _ => '${a['amount']} tokena je dodato na tvoj račun.\nVrati se i sutra po još!',
+              },
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15, color: textMuted, height: 1.35)),
         ],

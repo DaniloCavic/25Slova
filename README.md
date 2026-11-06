@@ -36,6 +36,7 @@ Telefon samo prikazuje stanje i šalje poteze, pa se igra ne može prevariti men
 - E-mail i telefon se ne prikazuju drugim igračima.
 - Profil drugog igrača (dodir na igrača na rang listi): level, bodovi po periodima, partije/pobede/porazi, medalje i poslednjih 10 partija.
 - **Prijatelji**: lični link iz „Pozovi prijatelje“ (`/igra/?prijatelj=<id>`) — ko ga otvori i prijavi se, postaje prijatelj; privatna partija preko koda takođe automatski pravi prijateljstvo. Lista na ekranu „Igraj sa prijateljem“: u partiji / na mreži / van mreže, međusobni skor, dodir → profil (sa međusobnim skorom i „Ukloni iz prijatelja“).
+- **Nagrada za poziv**: novi igrač (nalog mlađi od 48 h) koji dođe preko ličnog linka i onaj ko ga je pozvao dobijaju po 30 tokena (jednom po nalogu, najviše 20 nagrađenih poziva mesečno po igraču).
 - **Izazovi**: dugme pored prijatelja (i na njegovom profilu) — prijatelj dobija poziv preko celog ekrana i obaveštenje na telefonu; ima 60 s da prihvati, partija počinje odmah.
 - **Podeli rezultat**: posle partije slika 9:16 (ishod, rezultat, tabla i reči) preko sistemskog menija (Viber, WhatsApp, Instagram…), sa ličnim linkom za poziv.
 - **Uputstvo**: 5 kratkih strana posle prve prijave; ponovo iz „Pravila igre“.

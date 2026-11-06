@@ -10,6 +10,7 @@ const TX_LABELS: Record<string, string> = {
   ADMIN_ADJUST: 'Admin izmene',
   SIGNUP_BONUS: 'Bonus za registraciju',
   TASK_REWARD: 'Nagrade za zadatke',
+  INVITE_REWARD: 'Nagrade za pozive',
 };
 
 export function Dashboard() {

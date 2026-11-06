@@ -28,6 +28,7 @@ enum TokenTxType {
   ADMIN_ADJUST
   SIGNUP_BONUS
   TASK_REWARD
+  INVITE_REWARD
 }
 
 enum PointsReason {

@@ -14,7 +14,7 @@ void shareInviteLink(BuildContext context) {
   final link = '$productionUrl/igra/?prijatelj=${me?['id'] ?? ''}';
   final box = context.findRenderObject() as RenderBox?;
   Share.share(
-    'Hajde da igramo 25 Slova — igru rečima na srpskom! Otvori $link, prijavi se i bićemo prijatelji u igri.',
+    'Hajde da igramo 25 Slova — igru rečima na srpskom! Otvori $link i napravi nalog: oboje dobijamo po 30 tokena, a u igri smo odmah prijatelji.',
     subject: '25 Slova',
     sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
   );

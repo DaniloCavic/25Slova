@@ -129,6 +129,10 @@ export class GameService implements OnApplicationBootstrap, OnModuleDestroy {
     this.server = server;
     this.friends.onChange = (userId, friendName, isNew) =>
       this.emitUser(userId, 'friends:changed', { friend: friendName, isNew });
+    this.friends.onInviteReward = (userId, friendName, amount) => {
+      this.emitUser(userId, 'invite:reward', { friend: friendName, amount });
+      void this.sendTokenBalance(userId);
+    };
   }
 
   private emitUser(userId: string, event: string, payload: unknown) {

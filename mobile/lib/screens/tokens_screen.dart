@@ -13,6 +13,7 @@ const _txLabels = {
   'ADMIN_ADJUST': 'Izmena (podrška)',
   'SIGNUP_BONUS': 'Bonus',
   'TASK_REWARD': 'Nagrada za zadatak',
+  'INVITE_REWARD': 'Nagrada za poziv',
 };
 
 class TokensScreen extends StatefulWidget {

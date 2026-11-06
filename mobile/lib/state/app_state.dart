@@ -241,7 +241,17 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     try {
       final r = Map<String, dynamic>.from(await api.post('/friends/link', {'inviterId': inviter}));
       friendsVersion.value++;
-      if (r['isNew'] == true) toast('${r['friend']['username']} ti je sada prijatelj!');
+      final reward = (r['reward'] as num?)?.toInt() ?? 0;
+      if (reward > 0) {
+        _announce({
+          'type': 'invite',
+          'amount': reward,
+          'text': '${r['friend']['username']} te je pozvao u igru — sada ste i prijatelji.',
+        });
+        refreshMe();
+      } else if (r['isNew'] == true) {
+        toast('${r['friend']['username']} ti je sada prijatelj!');
+      }
     } catch (_) {}
   }
 
@@ -358,6 +368,11 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
         outgoingChallenge.value = reason == null ? null : {...out, 'status': 'closed', 'reason': reason};
       }
     });
+    s.on('invite:reward', (data) => _announce({
+          'type': 'invite',
+          'amount': data['amount'],
+          'text': '${data['friend']} se pridružio igri preko tvog linka!',
+        }));
     s.on('friends:changed', (data) {
       friendsVersion.value++;
       if (data['isNew'] == true && '${data['friend']}'.isNotEmpty) toast('${data['friend']} ti je sada prijatelj!');
