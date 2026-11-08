@@ -111,7 +111,7 @@ class GameScaffold extends StatelessWidget {
       );
 }
 
-/// Naslov ekrana: velika slova, kontura (outline) — isti stil na svim ekranima.
+/// Naslov ekrana: velika slova, isti font kao u celoj igri — isti stil na svim ekranima.
 class ScreenTitle extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -119,24 +119,19 @@ class ScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Samo kontura slova, unutrašnjost providna (vidi se pozadina).
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: Text(
         text.toUpperCase(),
         maxLines: 1,
         style: TextStyle(
-          // Naslov ostaje u prethodnom (sistemskom) fontu, ne u Raleway.
-          fontFamily: 'Roboto',
+          // Isti font kao u celoj igri (Raleway), velika slova.
+          fontFamily: 'Raleway',
           fontSize: fontSize,
           fontWeight: FontWeight.w900,
           letterSpacing: 1.6,
           height: 1.1,
-          foreground: Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1.0
-            ..strokeJoin = StrokeJoin.round
-            ..color = isDark ? Colors.white : const Color(0xFF1E4FA8),
+          color: isDark ? Colors.white : const Color(0xFF1E4FA8),
         ),
       ),
     );

@@ -138,7 +138,7 @@ class ResultCard extends StatelessWidget {
           child: Column(children: [
             const Text('25 SLOVA',
                 style: TextStyle(
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   color: gold,
                   fontSize: 30,
                   fontWeight: FontWeight.w900,

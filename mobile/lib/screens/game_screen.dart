@@ -196,7 +196,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
             actions: [
               if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
-              IconButton(tooltip: 'Predaj', icon: const Icon(Icons.exit_to_app), onPressed: () => _resign(app)),
+              IconButton(tooltip: 'Predaj', icon: const Icon(Icons.exit_to_app, color: Color(0xFFFF5A5F)), onPressed: () => _resign(app)),
             ],
             body: LifeLostOverlay(
                 lifeLost: app.lifeLost,
