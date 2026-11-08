@@ -87,16 +87,21 @@ class GameScaffold extends StatelessWidget {
   final List<Widget>? actions;
   final bool showBack;
   final PreferredSizeWidget? bottom;
-  const GameScaffold({super.key, this.title, required this.body, this.actions, this.showBack = true, this.bottom});
+
+  /// Dugme levo od naslova (umesto strelice nazad).
+  final Widget? leading;
+  const GameScaffold(
+      {super.key, this.title, required this.body, this.actions, this.showBack = true, this.bottom, this.leading});
 
   @override
   Widget build(BuildContext context) => AppBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: title == null && actions == null && !showBack
+          appBar: title == null && actions == null && !showBack && leading == null
               ? null
               : AppBar(
                   title: title == null ? null : ScreenTitle(title!),
+                  leading: leading,
                   automaticallyImplyLeading: showBack,
                   actions: actions,
                   bottom: bottom,

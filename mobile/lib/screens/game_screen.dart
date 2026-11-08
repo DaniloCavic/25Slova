@@ -188,9 +188,8 @@ class _GameScreenState extends State<GameScreen> {
           child: GameScaffold(
             title: initialLettersLabel(initial),
             showBack: false,
-            actions: [
-              if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
-              IconButton(
+            // Glavni zadatak levo, predaja desno.
+            leading: IconButton(
                 tooltip: 'Glavni zadatak',
                 onPressed: () => showMainTaskPopup(context, me['board'] as List),
                 icon: Container(
@@ -201,6 +200,8 @@ class _GameScreenState extends State<GameScreen> {
                   child: const Text('Z', style: TextStyle(color: gold, fontWeight: FontWeight.w900, fontSize: 15)),
                 ),
               ),
+            actions: [
+              if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
               IconButton(tooltip: 'Predaj', icon: const Icon(Icons.flag_outlined), onPressed: () => _resign(app)),
             ],
             body: LifeLostOverlay(
