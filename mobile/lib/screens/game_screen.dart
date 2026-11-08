@@ -192,17 +192,11 @@ class _GameScreenState extends State<GameScreen> {
             leading: IconButton(
                 tooltip: 'Glavni zadatak',
                 onPressed: () => showMainTaskPopup(context, me['board'] as List),
-                icon: Container(
-                  width: 28,
-                  height: 28,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: 2)),
-                  child: const Text('Z', style: TextStyle(color: gold, fontWeight: FontWeight.w900, fontSize: 15)),
-                ),
+                icon: const Icon(Icons.lightbulb, color: gold),
               ),
             actions: [
               if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
-              IconButton(tooltip: 'Predaj', icon: const Icon(Icons.flag_outlined), onPressed: () => _resign(app)),
+              IconButton(tooltip: 'Predaj', icon: const Icon(Icons.exit_to_app), onPressed: () => _resign(app)),
             ],
             body: LifeLostOverlay(
                 lifeLost: app.lifeLost,
