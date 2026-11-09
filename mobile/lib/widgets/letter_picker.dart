@@ -21,7 +21,7 @@ class LetterPicker extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 5,
       crossAxisSpacing: 5,
-      childAspectRatio: 0.85,
+      childAspectRatio: 0.95,
       children: [
         for (final l in letters)
           GestureDetector(

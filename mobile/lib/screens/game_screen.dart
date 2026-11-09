@@ -202,85 +202,105 @@ class _GameScreenState extends State<GameScreen> {
                 lifeLost: app.lifeLost,
                 child: SafeArea(
                   top: false,
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 16),
-                    children: [
-                      Panel(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        child: Row(children: [
-                          _player(me, active: myTurn, alignRight: false),
-                          TimerRing(seconds: secs, fraction: left / turnMs, urgent: secs <= 10),
-                          _player(opp, active: !myTurn, alignRight: true),
-                        ]),
-                      ),
-                      const SizedBox(height: 10),
-                      Panel(
-                        gradient: myTurn ? blueGradient : null,
-                        borderColor: myTurn ? const Color(0xFF4F80E0) : panelBorder,
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                        child: Text(status,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800, color: myTurn ? Colors.white : textMuted)),
-                      ),
-                      const SizedBox(height: 10),
-                      Center(
-                        child: BoardGrid(
-                          board: me['board'] as List,
-                          script: script,
-                          initialCells: Set<int>.from(m['initialCells'] as List),
-                          selected: _cell,
-                          previewLetter: choose ? _letter : current,
-                          onTap: myTurn
-                              ? (i) {
-                                  Sound.play(Sfx.tap);
-                                  setState(() => _cell = i);
-                                }
-                              : null,
+                  // Bez skrolovanja: sve staje na ekran, tabla zauzima prostor koji ostane.
+                  // Donji deo (slova i dugme) uvek zauzima isto mesto, pa tabla ne skače između poteza.
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Panel(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          child: Row(children: [
+                            _player(me, active: myTurn, alignRight: false),
+                            TimerRing(seconds: secs, fraction: left / turnMs, urgent: secs <= 10),
+                            _player(opp, active: !myTurn, alignRight: true),
+                          ]),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(children: [
-                        Text('${opp['username']}: ${opp['filled']}/25',
-                            style: TextStyle(color: textMuted, fontSize: 13)),
-                        const Spacer(),
-                        Text('Potez ${(myPlaced + 1).clamp(1, totalMoves)}/$totalMoves',
-                            style: const TextStyle(fontWeight: FontWeight.w700)),
-                      ]),
-                      const SizedBox(height: 10),
-                      if (myTurn && choose)
-                        LetterPicker(
-                            script: script,
-                            selected: _letter,
-                            onPick: (l) {
-                              Sound.play(Sfx.tap);
-                              setState(() => _letter = l);
-                            }),
-                      if (myTurn && !choose)
-                        Center(
-                          child: Container(
-                            width: 76,
-                            height: 76,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              gradient: goldGradient,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: const Color(0xFFFFE9A6), width: 2),
+                        const SizedBox(height: 8),
+                        Panel(
+                          gradient: myTurn ? blueGradient : null,
+                          borderColor: myTurn ? const Color(0xFF4F80E0) : panelBorder,
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                          child: Text(status,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w800, color: myTurn ? Colors.white : textMuted)),
+                        ),
+                        const SizedBox(height: 8),
+                        Expanded(
+                          child: LayoutBuilder(
+                            builder: (context, c) => Center(
+                              child: BoardGrid(
+                                board: me['board'] as List,
+                                script: script,
+                                initialCells: Set<int>.from(m['initialCells'] as List),
+                                selected: _cell,
+                                previewLetter: choose ? _letter : current,
+                                maxSize: c.maxHeight < c.maxWidth ? c.maxHeight : c.maxWidth,
+                                onTap: myTurn
+                                    ? (i) {
+                                        Sound.play(Sfx.tap);
+                                        setState(() => _cell = i);
+                                      }
+                                    : null,
+                              ),
                             ),
-                            child: Text(showLetter(current, script),
-                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: goldText)),
                           ),
                         ),
-                      const SizedBox(height: 14),
-                      if (myTurn)
-                        GoldButton(
-                          label: _cell == null
-                              ? 'IZABERI POLJE'
-                              : (choose && _letter == null ? 'IZABERI SLOVO' : 'POTVRDI'),
-                          height: 58,
-                          onPressed: canConfirm ? () => _confirm(app, m) : null,
+                        const SizedBox(height: 6),
+                        Row(children: [
+                          Text('${opp['username']}: ${opp['filled']}/25',
+                              style: TextStyle(color: textMuted, fontSize: 13)),
+                          const Spacer(),
+                          Text('Potez ${(myPlaced + 1).clamp(1, totalMoves)}/$totalMoves',
+                              style: const TextStyle(fontWeight: FontWeight.w700)),
+                        ]),
+                        const SizedBox(height: 8),
+                        Stack(alignment: Alignment.center, children: [
+                          Visibility(
+                            visible: myTurn && choose,
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            child: LetterPicker(
+                                script: script,
+                                selected: _letter,
+                                onPick: (l) {
+                                  Sound.play(Sfx.tap);
+                                  setState(() => _letter = l);
+                                }),
+                          ),
+                          if (myTurn && !choose)
+                            Container(
+                              width: 76,
+                              height: 76,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                gradient: goldGradient,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(color: const Color(0xFFFFE9A6), width: 2),
+                              ),
+                              child: Text(showLetter(current, script),
+                                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: goldText)),
+                            ),
+                        ]),
+                        const SizedBox(height: 10),
+                        Visibility(
+                          visible: myTurn,
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: GoldButton(
+                            label: _cell == null
+                                ? 'IZABERI POLJE'
+                                : (choose && _letter == null ? 'IZABERI SLOVO' : 'POTVRDI'),
+                            height: 56,
+                            onPressed: canConfirm ? () => _confirm(app, m) : null,
+                          ),
                         ),
-                    ],
+                      ],
+                    ),
                   ),
                 )),
           ),
