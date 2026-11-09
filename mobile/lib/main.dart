@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'crash.dart';
 import 'state/app_state.dart';
@@ -11,6 +13,8 @@ import 'screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Igra radi samo uspravno (telefon se ne okreće).
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initCrashReporting();
   final state = AppState()..init();
   runApp(ChangeNotifierProvider.value(value: state, child: const SlovaApp()));
@@ -38,7 +42,7 @@ class SlovaApp extends StatelessWidget {
       builder: (context, child) => GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: MessageOverlay(child: AnnouncementOverlay(child: ChallengeOverlay(child: child!))),
+        child: _PortraitOnly(child: MessageOverlay(child: AnnouncementOverlay(child: ChallengeOverlay(child: child!)))),
       ),
       home: Selector<AppState, AuthStatus>(
         selector: (_, s) => s.status,
@@ -49,5 +53,39 @@ class SlovaApp extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+/// Web (iPhone ne dozvoljava zaključavanje): kad se telefon okrene vodoravno, igra traži da se vrati uspravno.
+class _PortraitOnly extends StatelessWidget {
+  final Widget child;
+  const _PortraitOnly({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final phoneLandscape = kIsWeb && mq.orientation == Orientation.landscape && mq.size.shortestSide < 500;
+    return Stack(children: [
+      child,
+      if (phoneLandscape)
+        const Positioned.fill(
+          child: ColoredBox(
+            color: Color(0xFF0B1A3C),
+            child: Center(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Icon(Icons.screen_rotation_rounded, size: 64, color: gold),
+                SizedBox(height: 14),
+                Text('Okreni telefon uspravno',
+                    style: TextStyle(
+                        fontFamily: 'Raleway',
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        decoration: TextDecoration.none)),
+              ]),
+            ),
+          ),
+        ),
+    ]);
   }
 }
