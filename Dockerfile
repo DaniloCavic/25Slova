@@ -15,7 +15,7 @@ WORKDIR /app/mobile
 COPY mobile/pubspec.yaml mobile/pubspec.lock ./
 RUN flutter pub get
 COPY mobile/ ./
-RUN flutter build web --release --base-href /igra/
+RUN flutter build web --wasm --release --base-href /igra/
 
 FROM base AS backend
 WORKDIR /app/backend

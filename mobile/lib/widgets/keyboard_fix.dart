@@ -5,7 +5,7 @@ import '../push/push.dart' show iosStandalone;
 /// iPhone (igra na početnom ekranu) otvara tastaturu samo za pravo HTML polje za unos.
 /// Dok je ekran sa poljem za unos otvoren, uključujemo pristupačnost (semantics) — tada su
 /// polja prava HTML polja. Na ostalim ekranima je isključena, da skrolovanje i promena
-/// izgleda ostanu brzi.
+/// izgleda ostanu brzi. Namerno nije na rang listi (najviše se skroluje).
 mixin KeyboardFix<T extends StatefulWidget> on State<T> {
   SemanticsHandle? _keyboardFix;
 
