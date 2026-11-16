@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/app_text_field.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -94,7 +95,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
     return Column(children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
-        child: TextField(
+        child: AppTextField(
           controller: _search,
           onChanged: (v) {
             setState(() {}); // osveži dugme za brisanje

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with KeyboardFix<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _login = TextEditingController();
   final _password = TextEditingController();
   bool _busy = false;
@@ -52,14 +52,14 @@ class _LoginScreenState extends State<LoginScreen> with KeyboardFix<LoginScreen>
                   children: [
                     const _Logo(),
                     const SizedBox(height: 32),
-                    TextField(
+                    AppTextField(
                       controller: _login,
                       decoration: const InputDecoration(labelText: 'Korisničko ime ili e-mail'),
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
                     ),
                     const SizedBox(height: 12),
-                    TextField(
+                    AppTextField(
                       controller: _password,
                       decoration: const InputDecoration(labelText: 'Lozinka'),
                       obscureText: true,

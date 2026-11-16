@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
@@ -11,7 +11,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _form = GlobalKey<FormState>();
   final _username = TextEditingController();
   final _fullName = TextEditingController();
@@ -80,13 +80,13 @@ class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<Regist
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            TextFormField(
+            AppTextFormField(
               controller: _username,
               decoration: const InputDecoration(labelText: 'Korisničko ime *', helperText: 'Najmanje 5 znakova'),
               validator: (v) => (v ?? '').trim().length < 5 ? 'Korisničko ime mora imati najmanje 5 znakova.' : null,
             ),
             gap,
-            TextFormField(
+            AppTextFormField(
               controller: _fullName,
               decoration: const InputDecoration(labelText: 'Ime i prezime *'),
               textCapitalization: TextCapitalization.words,
@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<Regist
                   : '${_birthDate!.day}.${_birthDate!.month}.${_birthDate!.year}.'),
             ),
             gap,
-            TextFormField(
+            AppTextFormField(
               controller: _email,
               decoration: const InputDecoration(labelText: 'E-mail *'),
               keyboardType: TextInputType.emailAddress,
@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<Regist
                   RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch((v ?? '').trim()) ? null : 'E-mail nije ispravan.',
             ),
             gap,
-            TextFormField(
+            AppTextFormField(
               controller: _phone,
               decoration: const InputDecoration(labelText: 'Broj telefona', hintText: '+381 6x xxx xxxx'),
               keyboardType: TextInputType.phone,
@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<Regist
               },
             ),
             gap,
-            TextFormField(
+            AppTextFormField(
               controller: _password,
               decoration: const InputDecoration(labelText: 'Lozinka *', helperText: 'Najmanje 8 znakova, slovo i broj'),
               obscureText: true,
@@ -143,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> with KeyboardFix<Regist
               },
             ),
             gap,
-            TextFormField(
+            AppTextFormField(
               controller: _password2,
               decoration: const InputDecoration(labelText: 'Potvrda lozinke *'),
               obscureText: true,

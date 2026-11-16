@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../widgets/common.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
@@ -11,7 +11,7 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with KeyboardFix<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _email = TextEditingController();
   final _code = TextEditingController();
   final _password = TextEditingController();
@@ -45,7 +45,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Keyboa
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          TextField(
+          AppTextField(
             controller: _email,
             decoration: const InputDecoration(labelText: 'E-mail naloga'),
             keyboardType: TextInputType.emailAddress,
@@ -67,13 +67,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Keyboa
               child: const Text('Pošalji kod'),
             )
           else ...[
-            TextField(
+            AppTextField(
               controller: _code,
               decoration: const InputDecoration(labelText: 'Kod iz e-maila (6 cifara)'),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
-            TextField(
+            AppTextField(
               controller: _password,
               decoration: const InputDecoration(labelText: 'Nova lozinka'),
               obscureText: true,

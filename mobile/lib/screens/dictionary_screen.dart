@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -13,7 +13,7 @@ class DictionaryScreen extends StatefulWidget {
   State<DictionaryScreen> createState() => _DictionaryScreenState();
 }
 
-class _DictionaryScreenState extends State<DictionaryScreen> with KeyboardFix<DictionaryScreen> {
+class _DictionaryScreenState extends State<DictionaryScreen> {
   final _search = TextEditingController();
   final _scroll = ScrollController();
   Timer? _debounce;
@@ -107,7 +107,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> with KeyboardFix<Di
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-          child: TextField(
+          child: AppTextField(
             controller: _search,
             onChanged: _onSearch,
             textInputAction: TextInputAction.search,
@@ -252,7 +252,7 @@ class _SuggestSheet extends StatefulWidget {
   State<_SuggestSheet> createState() => _SuggestSheetState();
 }
 
-class _SuggestSheetState extends State<_SuggestSheet> with KeyboardFix<_SuggestSheet> {
+class _SuggestSheetState extends State<_SuggestSheet> {
   late final _word = TextEditingController(text: widget.initial);
   final _note = TextEditingController();
   String? _error;
@@ -292,14 +292,14 @@ class _SuggestSheetState extends State<_SuggestSheet> with KeyboardFix<_SuggestS
             style: TextStyle(color: textMuted, fontSize: 13),
           ),
           const SizedBox(height: 14),
-          TextField(
+          AppTextField(
             controller: _word,
             autofocus: widget.initial.isEmpty,
             textCapitalization: TextCapitalization.characters,
             decoration: const InputDecoration(labelText: 'Reč', prefixIcon: Icon(Icons.spellcheck)),
           ),
           const SizedBox(height: 10),
-          TextField(
+          AppTextField(
             controller: _note,
             maxLength: 200,
             decoration: const InputDecoration(labelText: 'Značenje ili napomena (nije obavezno)'),

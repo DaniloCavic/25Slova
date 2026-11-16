@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../config.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
@@ -19,7 +19,7 @@ class PrivateGameScreen extends StatefulWidget {
   State<PrivateGameScreen> createState() => _PrivateGameScreenState();
 }
 
-class _PrivateGameScreenState extends State<PrivateGameScreen> with KeyboardFix<PrivateGameScreen> {
+class _PrivateGameScreenState extends State<PrivateGameScreen> {
   bool _sendTab = true;
   bool _busy = false;
   final _code = TextEditingController();
@@ -175,7 +175,7 @@ class _PrivateGameScreenState extends State<PrivateGameScreen> with KeyboardFix<
             const Text('Upiši kod koji ti je prijatelj poslao:',
                 textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
             const SizedBox(height: 12),
-            TextField(
+            AppTextField(
               controller: _code,
               textAlign: TextAlign.center,
               maxLength: 6,

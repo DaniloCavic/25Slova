@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../widgets/keyboard_fix.dart';
+import '../widgets/app_text_field.dart';
 import '../state/app_state.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -185,7 +185,7 @@ class _PasswordDialog extends StatefulWidget {
   State<_PasswordDialog> createState() => _PasswordDialogState();
 }
 
-class _PasswordDialogState extends State<_PasswordDialog> with KeyboardFix<_PasswordDialog> {
+class _PasswordDialogState extends State<_PasswordDialog> {
   final _current = TextEditingController();
   final _next = TextEditingController();
   String? _error;
@@ -198,12 +198,12 @@ class _PasswordDialogState extends State<_PasswordDialog> with KeyboardFix<_Pass
       title: const Text('Promena lozinke'),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         if (hasPassword)
-          TextField(
+          AppTextField(
               controller: _current,
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Trenutna lozinka')),
         const SizedBox(height: 8),
-        TextField(controller: _next, obscureText: true, decoration: const InputDecoration(labelText: 'Nova lozinka')),
+        AppTextField(controller: _next, obscureText: true, decoration: const InputDecoration(labelText: 'Nova lozinka')),
         if (_error != null)
           Padding(
               padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: const TextStyle(color: brandRed))),
@@ -237,7 +237,7 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> with KeyboardFix<EditProfileScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   late final Map<String, dynamic> u = context.read<AppState>().user ?? {};
   late final _username = TextEditingController(text: u['username']);
   late final _fullName = TextEditingController(text: u['fullName']);
@@ -279,9 +279,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> with KeyboardFix<
     return Scaffold(
       appBar: AppBar(title: const ScreenTitle('Lični podaci')),
       body: ListView(padding: const EdgeInsets.all(20), children: [
-        TextField(controller: _username, decoration: const InputDecoration(labelText: 'Korisničko ime')),
+        AppTextField(controller: _username, decoration: const InputDecoration(labelText: 'Korisničko ime')),
         gap,
-        TextField(controller: _fullName, decoration: const InputDecoration(labelText: 'Ime i prezime')),
+        AppTextField(controller: _fullName, decoration: const InputDecoration(labelText: 'Ime i prezime')),
         gap,
         DropdownButtonFormField<String>(
           initialValue: _gender,
@@ -307,12 +307,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> with KeyboardFix<
           },
         ),
         gap,
-        TextField(
+        AppTextField(
             controller: _email,
             decoration: const InputDecoration(labelText: 'E-mail'),
             keyboardType: TextInputType.emailAddress),
         gap,
-        TextField(
+        AppTextField(
             controller: _phone,
             decoration: const InputDecoration(labelText: 'Telefon'),
             keyboardType: TextInputType.phone),
