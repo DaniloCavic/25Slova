@@ -192,7 +192,7 @@ class _GameScreenState extends State<GameScreen> {
             leading: IconButton(
                 tooltip: 'Glavni zadatak',
                 onPressed: () => showMainTaskPopup(context, me['board'] as List),
-                icon: const Icon(Icons.lightbulb, color: gold),
+                icon: const Icon(Icons.rocket_launch, color: gold),
               ),
             actions: [
               if (!app.socketConnected) const Icon(Icons.cloud_off, color: Colors.orangeAccent),
