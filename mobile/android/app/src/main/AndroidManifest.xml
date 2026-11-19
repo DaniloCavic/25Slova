@@ -1,5 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Igra je uspravna, ali to nije uslov za instalaciju (Google Play to inače računa kao obavezan hardver). -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false"/>
+    <!-- Igra ne koristi advertising ID (bez reklama); ako ga neka biblioteka doda, uklanja se. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
     <application
         android:label="25 Slova"
         android:name="${applicationName}"
