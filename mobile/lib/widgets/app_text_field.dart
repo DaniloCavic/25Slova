@@ -5,7 +5,7 @@ import 'native_input_stub.dart' if (dart.library.js_interop) 'native_input_web.d
 
 /// Polje za unos. Svuda je obično Flutter polje, osim na iPhone-u kad je igra dodata na
 /// početni ekran: tamo je unutra pravo HTML polje, jer iPhone inače ume da ne otvori tastaturu.
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
   final InputDecoration? decoration;
   final bool obscureText;
@@ -40,32 +40,56 @@ class AppTextField extends StatelessWidget {
   });
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  /// Lozinka je sakrivena dok se ne dodirne oko.
+  late bool _hidden = widget.obscureText;
+
+  /// Polje za lozinku dobija dugme „oko“ (prikaži / sakrij).
+  InputDecoration? get _decoration {
+    final d = widget.decoration;
+    if (!widget.obscureText || d?.suffixIcon != null) return d;
+    return (d ?? const InputDecoration()).copyWith(
+      suffixIcon: IconButton(
+        tooltip: _hidden ? 'Prikaži lozinku' : 'Sakrij lozinku',
+        icon: Icon(_hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+        onPressed: () => setState(() => _hidden = !_hidden),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final f = widget;
     if (!iosStandalone()) {
       return TextField(
-        controller: controller,
-        decoration: decoration,
-        obscureText: obscureText,
-        autocorrect: autocorrect,
-        autofocus: autofocus,
-        enabled: enabled,
-        keyboardType: keyboardType,
-        textInputAction: textInputAction,
-        textCapitalization: textCapitalization,
-        maxLength: maxLength,
-        style: style,
-        textAlign: textAlign,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
+        controller: f.controller,
+        decoration: _decoration,
+        obscureText: _hidden,
+        autocorrect: f.autocorrect,
+        autofocus: f.autofocus,
+        enabled: f.enabled,
+        keyboardType: f.keyboardType,
+        textInputAction: f.textInputAction,
+        textCapitalization: f.textCapitalization,
+        maxLength: f.maxLength,
+        style: f.style,
+        textAlign: f.textAlign,
+        onChanged: f.onChanged,
+        onSubmitted: f.onSubmitted,
       );
     }
-    return _IosField(this);
+    return _IosField(f, decoration: _decoration, obscure: _hidden);
   }
 }
 
 class _IosField extends StatefulWidget {
   final AppTextField f;
-  const _IosField(this.f);
+  final InputDecoration? decoration;
+  final bool obscure;
+  const _IosField(this.f, {required this.decoration, required this.obscure});
   @override
   State<_IosField> createState() => _IosFieldState();
 }
@@ -98,7 +122,7 @@ class _IosFieldState extends State<_IosField> {
     final theme = Theme.of(context);
     final style = theme.textTheme.titleMedium!.copyWith(color: textMain).merge(f.style);
     final fontSize = (style.fontSize ?? 16) < 16 ? 16.0 : style.fontSize!;
-    final deco = (f.decoration ?? const InputDecoration())
+    final deco = (widget.decoration ?? const InputDecoration())
         .applyDefaults(theme.inputDecorationTheme)
         .copyWith(counterText: '');
     return InputDecorator(
@@ -111,7 +135,7 @@ class _IosFieldState extends State<_IosField> {
         child: NativeInput(
           controller: _c,
           style: style.copyWith(fontSize: fontSize),
-          obscure: f.obscureText,
+          obscure: widget.obscure,
           keyboardType: f.keyboardType,
           maxLength: f.maxLength,
           textAlign: f.textAlign,
@@ -149,29 +173,16 @@ class AppTextFormField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    if (!iosStandalone()) {
-      return TextFormField(
-        controller: controller,
-        decoration: decoration,
-        obscureText: obscureText,
-        autocorrect: autocorrect,
-        keyboardType: keyboardType,
-        textCapitalization: textCapitalization,
-        validator: validator,
+  Widget build(BuildContext context) => FormField<String>(
+        validator: (_) => validator?.call(controller?.text ?? ''),
+        builder: (state) => AppTextField(
+          controller: controller,
+          decoration: (decoration ?? const InputDecoration()).copyWith(errorText: state.errorText),
+          obscureText: obscureText,
+          autocorrect: autocorrect,
+          keyboardType: keyboardType,
+          textCapitalization: textCapitalization,
+          onChanged: state.didChange,
+        ),
       );
-    }
-    return FormField<String>(
-      validator: (_) => validator?.call(controller?.text ?? ''),
-      builder: (state) => AppTextField(
-        controller: controller,
-        decoration: (decoration ?? const InputDecoration()).copyWith(errorText: state.errorText),
-        obscureText: obscureText,
-        autocorrect: autocorrect,
-        keyboardType: keyboardType,
-        textCapitalization: textCapitalization,
-        onChanged: state.didChange,
-      ),
-    );
-  }
 }

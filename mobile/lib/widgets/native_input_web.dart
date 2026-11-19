@@ -52,6 +52,13 @@ class _NativeInputState extends State<NativeInput> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(NativeInput old) {
+    super.didUpdateWidget(old);
+    // Oko za lozinku: menja vrstu polja (sakriveno / vidljivo) bez gubljenja teksta.
+    if (old.obscure != widget.obscure) _el?.type = widget.obscure ? 'password' : 'text';
+  }
+
   void _fromController() {
     final el = _el;
     if (el != null && el.value != widget.controller.text) el.value = widget.controller.text;
