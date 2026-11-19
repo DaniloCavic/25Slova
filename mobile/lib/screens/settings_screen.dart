@@ -43,10 +43,12 @@ class SettingsScreen extends StatelessWidget {
           trailing: const Icon(Icons.open_in_new, size: 18),
           onTap: () => launchUrl(Uri.parse('$productionUrl/privatnost'), mode: LaunchMode.externalApplication),
         ),
-        const ListTile(
-          leading: Icon(Icons.support_agent),
-          title: Text('Podrška'),
-          subtitle: Text('podrska@25slova.rs'),
+        ListTile(
+          leading: const Icon(Icons.support_agent),
+          title: const Text('Podrška'),
+          subtitle: const Text('podrska.25slova@gmail.com'),
+          trailing: const Icon(Icons.mail_outline, size: 18),
+          onTap: () => launchUrl(Uri.parse('mailto:podrska.25slova@gmail.com?subject=25%20Slova')),
         ),
         const Divider(),
         ListTile(

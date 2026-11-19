@@ -2,7 +2,7 @@
  * Javne stranice koje traži Google Play: politika privatnosti (/privatnost)
  * i brisanje naloga preko weba (/brisanje-naloga).
  */
-const email = () => process.env.SUPPORT_EMAIL || 'podrska@25slova.rs';
+const email = () => process.env.SUPPORT_EMAIL || 'podrska.25slova@gmail.com';
 
 const layout = (title: string, body: string) => `<!doctype html>
 <html lang="sr">
