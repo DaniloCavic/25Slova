@@ -130,23 +130,27 @@ class _IosFieldState extends State<_IosField> {
       isEmpty: _c.text.isEmpty && !_focused,
       isFocused: _focused,
       textAlign: f.textAlign,
-      child: SizedBox(
-        height: fontSize * 1.45,
-        child: NativeInput(
-          controller: _c,
-          style: style.copyWith(fontSize: fontSize),
-          obscure: widget.obscure,
-          keyboardType: f.keyboardType,
-          maxLength: f.maxLength,
-          textAlign: f.textAlign,
-          capitalization: f.textCapitalization,
-          autocorrect: f.autocorrect,
-          enabled: f.enabled ?? true,
-          onChanged: f.onChanged,
-          onSubmitted: f.onSubmitted,
-          onFocus: (v) => setState(() => _focused = v),
+      // Nevidljiv tekst daje polju „osnovnu liniju“ — tada su natpis (hint) i kucani tekst
+      // poravnati po sredini, kao u običnom polju.
+      child: Stack(children: [
+        Opacity(opacity: 0, child: Text('Ag', style: style.copyWith(fontSize: fontSize, height: 1.4))),
+        Positioned.fill(
+          child: NativeInput(
+            controller: _c,
+            style: style.copyWith(fontSize: fontSize),
+            obscure: widget.obscure,
+            keyboardType: f.keyboardType,
+            maxLength: f.maxLength,
+            textAlign: f.textAlign,
+            capitalization: f.textCapitalization,
+            autocorrect: f.autocorrect,
+            enabled: f.enabled ?? true,
+            onChanged: f.onChanged,
+            onSubmitted: f.onSubmitted,
+            onFocus: (v) => setState(() => _focused = v),
+          ),
         ),
-      ),
+      ]),
     );
   }
 }
