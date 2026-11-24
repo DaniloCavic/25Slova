@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -172,6 +173,14 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     themeMode = mode;
     pal = mode == 'light' ? lightPalette : darkPalette;
     themeVersion++;
+    // Traka sa satom u boji vrha ekrana (web: theme-color; Android: providna traka, ikonice po režimu).
+    final top = bgTop.toARGB32() & 0xFFFFFF;
+    setStatusBarColor('#${top.toRadixString(16).padLeft(6, '0')}');
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: mode == 'light' ? Brightness.dark : Brightness.light,
+      statusBarBrightness: mode == 'light' ? Brightness.light : Brightness.dark,
+    ));
   }
 
   Future<void> setThemeMode(String mode) async {

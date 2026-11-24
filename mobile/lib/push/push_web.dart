@@ -1,5 +1,15 @@
 import 'dart:js_interop';
 
+@JS('slovaPush.theme')
+external void _theme(String hex);
+
+/// Boja trake sa satom (prati režim igre).
+void setStatusBarColor(String hex) {
+  try {
+    _theme(hex);
+  } catch (_) {}
+}
+
 @JS('slovaPush.iosStandalone')
 external bool _iosStandalone();
 

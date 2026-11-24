@@ -22,7 +22,10 @@
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <!-- Boja trake sa satom (iPhone / Android pregledač) — menja je igra prema režimu (slovaTheme). -->
+  <meta name="theme-color" content="#14306A">
+  <style>html, body { background: #14306A; }</style>
   <meta name="apple-mobile-web-app-title" content="25 Slova">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
@@ -95,6 +98,15 @@
         var standalone = navigator.standalone === true ||
           (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
         return ios && standalone;
+      },
+      // Boja trake sa satom i pozadine iza igre — prati tamni / svetli režim.
+      theme: function (hex) {
+        try {
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', hex);
+          document.documentElement.style.background = hex;
+          document.body.style.background = hex;
+        } catch (_) {}
       },
       vibrate: function (pattern) {
         try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (_) {}

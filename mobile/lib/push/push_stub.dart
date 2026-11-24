@@ -10,3 +10,5 @@ Future<String> pushSubscribe(String vapidKey, {bool ask = false}) async => '';
 Future<String> pushSubscribeOnFirstTap(String vapidKey) async => '';
 
 bool iosStandalone() => false;
+
+void setStatusBarColor(String hex) {}

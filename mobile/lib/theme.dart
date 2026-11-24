@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Boje koje zavise od režima (tamni / svetli).
 class AppPalette {
@@ -139,6 +140,12 @@ ThemeData buildTheme() {
     scaffoldBackgroundColor: bgBottom,
     textTheme: _liningFigures(base.textTheme.apply(bodyColor: textMain, displayColor: textMain)),
     appBarTheme: AppBarTheme(
+      // Traka sa satom: providna, ikonice tamne u svetlom i svetle u tamnom režimu.
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
       backgroundColor: Colors.transparent,
       foregroundColor: textMain,
       elevation: 0,

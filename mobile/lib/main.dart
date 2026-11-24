@@ -32,7 +32,7 @@ class SlovaApp extends StatelessWidget {
     return MaterialApp(
       title: '25 Slova',
       // Boja trake sa satom i baterijom (iPhone / web) — ista tamnoplava u oba režima.
-      color: const Color(0xFF102552),
+      color: bgTop,
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
       navigatorKey: app.navigatorKey,
