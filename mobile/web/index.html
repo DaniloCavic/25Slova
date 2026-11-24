@@ -26,6 +26,18 @@
   <!-- Boja trake sa satom (iPhone / Android pregledač) — menja je igra prema režimu (slovaTheme). -->
   <meta name="theme-color" content="#14306A">
   <style>html, body { background: #14306A; }</style>
+  <script>
+    // iPhone boju trake čita odmah pri otvaranju — zato je postavljamo pre nego što se igra učita,
+    // prema poslednjem izabranom režimu (Flutter ga čuva u localStorage).
+    (function () {
+      try {
+        var light = localStorage.getItem('flutter.themeMode') === '"light"';
+        var c = light ? '#F4F7FD' : '#14306A';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', c);
+        document.write('<style>html, body { background: ' + c + '; }</style>');
+      } catch (_) {}
+    })();
+  </script>
   <meta name="apple-mobile-web-app-title" content="25 Slova">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
@@ -102,8 +114,11 @@
       // Boja trake sa satom i pozadine iza igre — prati tamni / svetli režim.
       theme: function (hex) {
         try {
-          var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', hex);
+          var old = document.querySelector('meta[name="theme-color"]');
+          var m = document.createElement('meta');
+          m.name = 'theme-color';
+          m.content = hex;
+          if (old) old.parentNode.replaceChild(m, old); else document.head.appendChild(m);
           document.documentElement.style.background = hex;
           document.body.style.background = hex;
         } catch (_) {}
