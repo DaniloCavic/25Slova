@@ -118,6 +118,8 @@ export function deleteAccountPage() {
 
 /** Otisci ključeva kojima je potpisana Android aplikacija (ključ za otpremanje + Google Play ključ). */
 const UPLOAD_KEY_SHA256 = '31:BB:9F:75:5F:3D:9A:32:7C:0C:1A:B5:1D:ED:3C:DC:92:80:E7:CE:B0:46:BF:36:96:63:B2:68:51:BA:9D:34';
+/** Google Play ključ (Play App Signing) — njime je potpisana igra instalirana iz Play prodavnice. */
+const PLAY_SIGNING_SHA256 = 'C6:12:4F:6F:D1:CD:66:E9:7B:C8:B6:2A:22:47:0B:47:49:E7:76:D8:43:66:F9:EC:81:F6:8D:6F:45:48:31:26';
 
 /** /.well-known/assetlinks.json — Android otvara linkove igre direktno u aplikaciji. */
 export function assetLinks() {
@@ -131,7 +133,7 @@ export function assetLinks() {
       target: {
         namespace: 'android_app',
         package_name: 'rs.slova25.slova25',
-        sha256_cert_fingerprints: [...new Set([UPLOAD_KEY_SHA256, ...extra])],
+        sha256_cert_fingerprints: [...new Set([PLAY_SIGNING_SHA256, UPLOAD_KEY_SHA256, ...extra])],
       },
     },
   ];
